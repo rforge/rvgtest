@@ -1,0 +1,9 @@
+export(rvgt.ftable)
+S3method(plot, rvgt.ftable)
+
+export(rvgt.chisq, rvgt.Mtest)
+export(plot.rvgt.htest)
+S3method(plot, rvgt.htest)
+
+export(rvgt.pertadd, rvgt.pertsub)
+
