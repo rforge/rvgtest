@@ -54,11 +54,11 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots, breaks = 101)
   The argument \code{rep} allows to create multiple such arrays of bin
   counts and store these in one table. Thus has two advantages:
   \itemize{
-    \item{--}{It allows for huge total sample sizes that would otherwise
-      exceed the available memory, and}
-    \item{--}{it can be used to visualize test results for increasing
-      sample sizes, or}
-    \item{--}{allows for a two-level test.}
+    \item It allows for huge total sample sizes that would otherwise
+    exceed the available memory, and
+    \item it can be used to visualize test results for increasing
+    sample sizes, or
+    \item allows for a two-level test.
   }
 }
 

@@ -17,8 +17,8 @@
   \tabular{ll}{
     Package: \tab rvgtest\cr
     Type:    \tab Package\cr
-    Version: \tab 0.2           \cr
-    Date:    \tab 2009-9-29     \cr
+    Version: \tab 0.2.1         \cr
+    Date:    \tab 2009-10-28    \cr
     License: \tab GPL 2 or later\cr
     LazyLoad:\tab yes\cr
   }
@@ -28,11 +28,12 @@
   Thus it provides functions to visualize and test for possible
   defects. There are three mean reasons for such defects and errors:
   \enumerate{
-    \item{1.}{Error in the design of algorithms -- The proof for theorem
-      that claims the correctness of the algorithm is wrong.}
-    \item{2.}{Implementation errors -- Mistakes in computer programs.}
-    \item{3.}{Limitations of floating point arithmetic and round off
-      errors in implementations of these algorithms in real world computers.}
+    \item Error in the design of algorithms -- The proof for theorem
+    that claims the correctness of the algorithm is wrong.
+    \item Implementation errors -- Mistakes in computer programs.
+    \item Limitations of floating point arithmetic and round off
+    errors in implementations of these algorithms in real world
+    computers.
   }
   Of course testing software is a self-evident part of software
   engineering. Implementation errors usually result in large deviations
@@ -64,18 +65,17 @@
 
   Hence we have implemented a three step procedure:
   \enumerate{
-    \item{1.}{Create tables that can hold the information of huge random
-      samples.}
-    \item{2.}{Perform some test for the null hypothesis on these tables.}
-    \item{3.}{Visualize these tables as well the results of the tests.}
+    \item Create tables that can hold the information of huge random samples.
+    \item Perform some test for the null hypothesis on these tables.
+    \item Visualize these tables as well the results of the tests.
   }
 
   The advantages of this procedure are:
   \itemize{
-    \item{--}{Huge total sample sizes are possible (only limited by
-      available runtime but not by memory).}
-    \item{--}{Can run multiple tests on the same random sample.}
-    \item{--}{Inspect data visually.}
+    \item Huge total sample sizes are possible (only limited by
+    available runtime but not by memory).
+    \item Can run multiple tests on the same random sample.
+    \item Inspect data visually.
   }
   
   In addition there are also some random functions for introducing
