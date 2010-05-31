@@ -1,7 +1,7 @@
 \name{Perturbation}
 \Rdversion{1.1}
-\alias{rvgt.pertadd}
-\alias{rvgt.pertsub}
+\alias{pertadd}
+\alias{pertsub}
 
 \title{Generate Random Variates from a Perturbed RVG}
 
@@ -12,8 +12,8 @@
 }
 
 \usage{
-rvgt.pertadd(n, rdist = rnorm, \dots, min = 0, max = 1, p = 0.001)
-rvgt.pertsub(n, rdist = rnorm, \dots, min = 0, max = 1, p = 0.001)
+pertadd(n, rdist = rnorm, \dots, min = 0, max = 1, p = 0.001)
+pertsub(n, rdist = rnorm, \dots, min = 0, max = 1, p = 0.001)
 }
 
 \arguments{
@@ -25,12 +25,12 @@ rvgt.pertsub(n, rdist = rnorm, \dots, min = 0, max = 1, p = 0.001)
 }
 
 \details{
-  \code{rvgt.pertadd} generates random variates from a mixture of
+  \code{pertadd} generates random variates from a mixture of
   \code{rdist} and a uniform distribution on the interval
   (\code{min},\code{max}). The uniform distribution is chosen with
   probability \code{p}.
 
-  \code{rvgt.pertsub} generates random variates from the \code{rdist} but
+  \code{pertsub} generates random variates from the \code{rdist} but
   rejects all points in the interval (\code{min},\code{max}) with
   probability \code{p}.
   
@@ -53,25 +53,25 @@ rvgt.pertsub(n, rdist = rnorm, \dots, min = 0, max = 1, p = 0.001)
 
 \examples{
 ## Generating random sample with default settings
-x <- rvgt.pertadd(n=1000)
-y <- rvgt.pertsub(n=1000)
+x <- pertadd(n=1000)
+y <- pertsub(n=1000)
 
 ## Generating random sample, with parent distribution as exponential.
-x <- rvgt.pertadd(n=1000, rdist=rexp, rate=2, min=2, max=3, p=0.005)
-y <- rvgt.pertsub(n=1000, rdist=rexp, rate=2, min=2, max=3, p=0.005)
+x <- pertadd(n=1000, rdist=rexp, rate=2, min=2, max=3, p=0.005)
+y <- pertsub(n=1000, rdist=rexp, rate=2, min=2, max=3, p=0.005)
 
 ## Conducting chi-square test on random variates generated from function
-## rvgt.pertsub with parent distribution as exponential.
+## pertsub with parent distribution as exponential.
 ft <- rvgt.ftable(n=1e4,rep=10,
-                  rdist=function(n){rvgt.pertsub(n,rdist=rexp,p=0.1)},
+                  rdist=function(n){pertsub(n,rdist=rexp,p=0.1)},
                   qdist=qexp,breaks=1001)
 plot(ft)
 rvgt.chisq(ft)
 
 ## Conducting chi-square test on random variates generated from function
-## rvgt.pertadd with parent distribution as Weibull,shape=1,scale=2.
+## pertadd with parent distribution as Weibull,shape=1,scale=2.
 ft <- rvgt.ftable(n=1e4,rep=10,
-                  rdist=function(n,...){rvgt.pertadd(n,rdist=rweibull,...,p=0.05)},
+                  rdist=function(n,...){pertadd(n,rdist=rweibull,...,p=0.05)},
                   qdist=qweibull,shape=1,scale=2)
 plot(ft)
 rvgt.chisq(ft)

@@ -7,7 +7,7 @@
 ##
 ## --------------------------------------------------------------------------
 
-rvgt.pertadd <- function(n, rdist=rnorm, ..., min=0, max=1, p=0.001)
+pertadd <- function(n, rdist=rnorm, ..., min=0, max=1, p=0.001)
 
   ## ------------------------------------------------------------------------
   ## Function to generate random variates from a mixture of
@@ -31,7 +31,7 @@ rvgt.pertadd <- function(n, rdist=rnorm, ..., min=0, max=1, p=0.001)
 
 ## --------------------------------------------------------------------------
 
-rvgt.pertsub <- function(n, rdist=rnorm, ..., min=0, max=1, p=0.001)
+pertsub <- function(n, rdist=rnorm, ..., min=0, max=1, p=0.001)
 
   ## ------------------------------------------------------------------------
   ## Function to generate random variates from parent distribution
