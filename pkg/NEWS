@@ -1,0 +1,25 @@
+
+Version 0.3.0: 2010-05-31
+
+	- added new functions for analysing numerical errors of
+	  approximate inverse distribution functions:
+
+	  . uerror()
+	  . xerror()
+	  . plot.ierror()
+
+	- function rvgt.ftable():
+
+	  . argument 'breaks' now accepts vector of break points
+	  . new argument 'exactu'
+	  
+	- renamed functions:
+	  
+	  . rvgt.pertadd() --> pertadd()
+	  . rvgt.pertsub() --> pertsub()
+ 
+
+Version 0.2.1: 2009-10-28
+
+	- first public release
+
