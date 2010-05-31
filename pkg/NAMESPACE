@@ -5,5 +5,9 @@ export(rvgt.chisq, rvgt.Mtest)
 export(plot.rvgt.htest)
 S3method(plot, rvgt.htest)
 
-export(rvgt.pertadd, rvgt.pertsub)
+export(uerror, xerror)
+export(plot.rvgt.ierror)
+S3method(plot, rvgt.ierror)
+
+export(pertadd, pertsub)
 
