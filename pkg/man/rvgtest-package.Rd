@@ -9,16 +9,14 @@
 
 \description{
   Suite for testing non-uniform random variate generator.
-
-  EXPERIMENTAL PACKAGE!
 }
 
 \details{
   \tabular{ll}{
     Package: \tab rvgtest\cr
     Type:    \tab Package\cr
-    Version: \tab 0.2.1         \cr
-    Date:    \tab 2009-10-28    \cr
+    Version: \tab 0.3.0         \cr
+    Date:    \tab 2010-05-31    \cr
     License: \tab GPL 2 or later\cr
     LazyLoad:\tab yes\cr
   }
@@ -51,7 +49,7 @@
   is no problem to generate a sample of beta distributed random variates
   with shape parameters 0.001 using
   \code{rbeta(n=100, shape1=0.001, shape2=0.001)}.
-  However, due the limit resultion of floating point numbers it behaves
+  However, due the limited resultion of floating point numbers it behaves
   like a discrete distribution (especially near 1). It is not a priori
   clear whether such errors influence ones simulation results.
 
@@ -92,8 +90,8 @@
   (see \code{\link{plot.rvgt.ftable}}, \code{\link{plot.rvgt.htest}} for
   the respective syntax of call).
 
-  Perturbation of RVGs: \code{\link{rvgt.pertadd}},
-  \code{\link{rvgt.pertsub}}.
+  Perturbation of RVGs: \code{\link{pertadd}},
+  \code{\link{pertsub}}.
 }
 
 \author{
