@@ -29,7 +29,11 @@ rvgt.chisq <- function (ftable)
   
   ## number of bins
   nbins <- ncol(table)
- 
+
+  ## probabilities under null hypothesis
+  ubreaks <- ftable$ubreaks
+  p0 <- ubreaks[-1] - ubreaks[-(nbins+1)]
+  
   ## Vector to store p-values.
   pval <- numeric(r)
   
@@ -39,9 +43,9 @@ rvgt.chisq <- function (ftable)
   ## compute p-values of cumulative frequencies
   for (i in 1:r) {
     fcum <- fcum + table[i,]
-    pval[i] <- chisq.test(fcum)$p.value
+    pval[i] <- chisq.test(fcum,p=p0)$p.value
   }
-
+  
   ## return result as object of class "rvgt.htest"
   result <- list (type="chisq", n=n, rep=r, breaks=nbins+1, pval=pval)
   class(result) <- "rvgt.htest"

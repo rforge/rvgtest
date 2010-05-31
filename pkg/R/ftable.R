@@ -4,7 +4,8 @@
 ##
 ## --------------------------------------------------------------------------
 
-rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ..., breaks=101)
+rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
+                         breaks=101, exactu=FALSE, plot=FALSE)
 
   ## ------------------------------------------------------------------------
   ## Create RVG frequency table for random variates generator.
@@ -16,13 +17,26 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ..., breaks=101)
   ## qdist  : Quantile function of distribution
   ## pdist  : Cumulative distribution function of distribution
   ## ....   : Parameters of distribution
-  ## breaks : Number of breaks of histogram (see also R base function hist)
+  ## breaks : A single number giving the number of cells of histogram; or
+  ##          a vector giving the breakpoints between histogram cells
+  ##          (in u-scale)
+  ## exactu : Whether exact locatoon of break points in u-scale must be used.
+  ##          If FALSE, then break points are slightly moved in order of
+  ##          faster runtimes (this does not effect correctness of the
+  ##          frequency table.)
+  ##          If TRUE this might be quite slow unless 'qdist' is given
+  ##          (only if the number break points are given,
+  ##          not a vector of breaks points.) 
+  ## plot   : Whether to plot a histogram
   ## ------------------------------------------------------------------------
   ## return:
-  ## (rep x (breaks-1))-matrix of frequencies where each row contains
+  ## (rep x (#breaks-1))-matrix of frequencies where each row contains
   ##   frequencies of sample of size n
   ## ------------------------------------------------------------------------
 {
+  
+  ## --- check arguments ----------------------------------------------------
+
   ## sample size
   if (!is.numeric(n) || n<1 || n!=round(n))
     stop ("Invalid argument 'n'.")
@@ -30,15 +44,6 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ..., breaks=101)
   ## number of repetitions
   if (!is.numeric(rep) || rep<1 || rep!=round(rep))
     stop ("Invalid argument 'rep'.")
-
-  ## number of break points
-  if (!is.numeric(breaks) || !all(breaks>=1) || !all(breaks==round(breaks)))
-    stop ("Invalid argument 'breaks'.")
-  if (length(breaks) > 1)
-    stop ("Cannot handle list of break points. Use number of break points instead.")
-  if (breaks < 3) 
-    stop (paste("Number of break points too small:",breaks))
-  nbreaks <- breaks
 
   ## random variate generator
   if( missing(rdist) || !is.function(rdist))
@@ -53,18 +58,56 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ..., breaks=101)
   if( !missing(pdist) && !is.function(pdist))
     stop ("Argument 'pdist' invalid.")
 
-  
-  ## number of bins
-  nbins <- nbreaks-1
-  
-  ## equidistributed break points for uniform scale
-  ubreaks <- (0:(nbreaks-1))/nbins
+  ## break points
+  if (!is.numeric(breaks) || length(breaks) < 1)
+    stop ("Invalid argument 'breaks'.")
 
-  ## break points for x scale
-  if (missing(qdist)) 
-    xbreaks <- rep(NA,nbins)
-  else
+  ## use exact location of break points
+  if (!is.logical(exactu))
+    stop ("Argument 'exactu' must be boolean.")
+  
+  ## --- compute break points in u-scale ------------------------------------
+  
+  ## case: number of break points
+  if (length(breaks) == 1) {
+    breaks <- as.integer(breaks)
+    if (breaks < 3) 
+      stop (paste("Number of break points too small:",breaks))
+
+    ## number of bins
+    nbins <- breaks-1
+    ## equidistributed break points for uniform scale
+    ubreaks <- (0:nbins)/nbins
+  }
+
+  ## case: vector of break points (in u-scale)
+  else {
+    if (length(breaks) < 3) 
+      stop (paste("Number of break points too small:",breaks))
+    if (min(breaks)<0 || max(breaks)>1)
+      stop ("break points out of range")
+    ## number of bins
+    nbins <- length(breaks)-1
+    ## the break points must be sorted
+    ubreaks <- sort(breaks)
+    ## differences must be strictly positive
+    probs = ubreaks[-1] - ubreaks[-length(ubreaks)]
+    if (!all(probs>0))
+      stop ("break points invalid: length of histogram cells must not be 0")
+    ## first and last break point must be 0 and 1, resp.
+    ubreaks[1] <- 0
+    ubreaks[length(ubreaks)] <- 1
+  }
+
+  ## --- compute break points in x-scale ------------------------------------
+
+  ## do we have a quantile function?
+  if (!missing(qdist))
     xbreaks <- qdist(ubreaks,...)
+  else
+    xbreaks <- rep(NA,nbins+1)
+
+  ## --- compute frequency tables -------------------------------------------
 
   ## table for storing frequencies
   count <- matrix(0,nrow=rep,ncol=nbins)
@@ -73,7 +116,17 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ..., breaks=101)
   for (i in 1:rep) {
     ## random sample of size n
     x <- rdist(n,...)
-         
+
+    ## it is faster to have break points in x-scale.
+    ## if allowed we use the empirial quantiles of the first sample
+    ## and recompute the break points in u-scale.
+    if (i==1 && !isTRUE(exactu) && all(is.na(xbreaks))) {
+      xbreaks <- quantile(x, probs=ubreaks, na.rm=TRUE)
+      xbreaks[1] <- -Inf
+      xbreaks[nbins+1] <- Inf
+      ubreaks <- pdist(xbreaks,...)
+    }
+
     ## get row
     if (!all(is.na(xbreaks))) {
       ## we can construct the histogram using the x-values
@@ -90,11 +143,19 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ..., breaks=101)
     }
   }
         
+  ## --- prepare result -----------------------------------------------------
+
   ## return result as object of class "rvgt.ftable"
   ftable <- list(n=n,rep=rep,ubreaks=ubreaks,xbreaks=xbreaks,count=count)
   class(ftable) <- "rvgt.ftable"
 
-  return(ftable)
+  ## plot histogram
+  if( isTRUE(plot) ) {
+    plot(ftable)
+  }
+
+  ## return frequency table
+  return(invisible(ftable))
 }
 
 ## --------------------------------------------------------------------------

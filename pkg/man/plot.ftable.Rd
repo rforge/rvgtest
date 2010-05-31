@@ -1,4 +1,3 @@
-
 \name{plot.rvgt.ftable}
 \Rdversion{1.1}
 \alias{plot.rvgt.ftable}
@@ -27,7 +26,7 @@
   2 times the confidence intervals for the frequencies.
   Thus it visualizes significant deviations from the unifrom
   distributions. The critical values for significance level \code{alpha}
-  are marked by a red dashed line.
+  are marked by a red (dashed) line.
 
   \code{rows} is either a number or a vector of numbers that indicate
   the rows of RVG tabel \code{x} which are merged (cumulated) for the
@@ -39,7 +38,10 @@
   Josef Leydold \email{josef.leydold@wu.ac.at}
 }
 
-\seealso{\code{\link{rvgt.ftable}}}
+\seealso{
+  \code{\link{rvgt.ftable}} for creating the frequency table;
+  \code{\link{hist}} for the height of the drawn rectangle.
+}
 
 \examples{
 ## Create a frequency table for normal distribution and show histogram.

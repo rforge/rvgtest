@@ -35,12 +35,13 @@ rvgt.Mtest <- function(ftable)
   ## number of bins
   nbins <- ncol(table)
  
-  ## Vector to store p-values.
+  ## probabilities under null hypothesis
+  ubreaks <- ftable$ubreaks
+  p0 <- ubreaks[-1] - ubreaks[-(nbins+1)]
+  
+  ## vector to store p-values.
   pval <- numeric(r)
   
-  ## Probability value under null hypothesis
-  p0 <- (1/nbins)
-
   ## array for computing cumulative frequencies
   fcum <- numeric(nbins)
   

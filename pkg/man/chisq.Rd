@@ -20,7 +20,9 @@ rvgt.chisq(ftable)
   \code{rvgt.chisq} performs aa chi-square goodness-of-fit test
   on the bin counts of the RVG frequency tables created by means of
   \code{\link{rvgt.ftable}}.
-  The null hypothesis is that the bin counts are uniformly distributed.
+  The null hypothesis is that the bin counts are distributed according
+  to the expected probabilities (i.e., proportional to the lengths of
+  the histogram cells).
 
   If the \code{ftable} contains the bin counts for more than one
   repetitions then the test is repeated with column sums of increasing
