@@ -64,7 +64,10 @@ plot.rvgt.htest <- function (x, alpha=0.001, ...)
     r <- res[[i]]$r
     n <- res[[i]]$n
     tss <- (1:r) * n
-    lines(tss,logp,type="l",col=lc[i])
+    if (length(logp)>1)
+      lines(tss,logp,type="l",col=lc[i])
+    else
+      points(tss[1],logp[1],col=lc[i])
     if (nplots>1)
       text(x=tss[1],y=logp[1],pos=2,col=lc[i],
            label=paste(" [",i,"]",sep=""))
