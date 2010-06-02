@@ -14,7 +14,7 @@
 }
 
 \usage{
-uerror(n, aqdist, pdist, \dots, udom=c(0,1),
+uerror(n, aqdist, pdist, \dots, udomain=c(0,1),
        res=1000, tails=FALSE, plot=FALSE)
 }
 
@@ -24,7 +24,7 @@ uerror(n, aqdist, pdist, \dots, udom=c(0,1),
     function) for the distribution.}
   \item{pdist}{cumulative distribution function for distribution.}
   \item{\dots }{parameters to be passed to \code{pdist}.}
-  \item{udom}{domain for u.}
+  \item{udomain}{domain for u.}
   \item{res}{resolution (number of intervals).}
   \item{tails}{logical. If \code{TRUE}, then the tail regions are
   treated more accurately. However, this doubles the given sample size.}
@@ -54,7 +54,7 @@ uerror(n, aqdist, pdist, \dots, udom=c(0,1),
   Thus we save memory and it is much faster to plot and compare u-errors
   for different methods or distributions.
 
-  Using argument \code{udom} it is possible to restrict the domain of
+  Using argument \code{udomain} it is possible to restrict the domain of
   \eqn{u}.
   
   When \code{tails=TRUE} we use additional \code{n} points for the first
@@ -68,7 +68,7 @@ uerror(n, aqdist, pdist, \dots, udom=c(0,1),
   \item{n}{sample size.}
   \item{res}{resolution (number of intervals).}
   \item{kind}{kind of error (string).}
-  \item{udom}{domain for u.}
+  \item{udomain}{domain for u.}
   \item{min}{an array of minimum u-errors (of length \code{res}).}
   \item{lqr}{an array of lower quartile of u-errors (of length \code{res}).}
   \item{med}{an array of median u-errors (of length \code{res}).}
@@ -120,7 +120,7 @@ uerrg <- uerror(n=1e5, aqdist=aq, pdist=pgamma, shape=2,
 ## Compute u-error for a subdomain of a beta distribution
 aq <- function(u) { qbeta(u,shape1=2,shape2=5) }
 uerrb <- uerror(n=1e5, aqdist=aq, pdist=pbeta, shape1=2, shape2=5,
-                udom=c(0.6,0.65), plot=TRUE)
+                udomain=c(0.6,0.65), plot=TRUE)
 
 ## Show all u-errors in one plot
 plot.rvgt.ierror(list(uerrn,uerrg,uerrb))

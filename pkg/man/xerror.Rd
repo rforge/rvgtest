@@ -14,7 +14,7 @@
 }
 
 \usage{
-xerror(n, aqdist, qdist, \dots, udom=c(0,1),
+xerror(n, aqdist, qdist, \dots, udomain=c(0,1),
        res=1000, kind=c("abs","rel"),tails=FALSE, plot=FALSE)
 }
 
@@ -24,7 +24,7 @@ xerror(n, aqdist, qdist, \dots, udom=c(0,1),
     function) for the distribution.}
   \item{qdist}{(Exact) quatile function of distribution.}
   \item{\dots }{parameters to be passed to \code{pdist}.}
-  \item{udom}{domain for u.}
+  \item{udomain}{domain for u.}
   \item{res}{resolution (number of intervals).}
   \item{kind}{kind of x-error.}
   \item{tails}{logical. If \code{TRUE}, then the tail regions are
@@ -56,7 +56,7 @@ xerror(n, aqdist, qdist, \dots, udom=c(0,1),
   Thus we save memory and it is much faster to plot and compare x-errors
   for different methods or distributions.
 
-  Using argument \code{udom} it is possible to restrict the domain of
+  Using argument \code{udomain} it is possible to restrict the domain of
   \eqn{u}.
   
   When \code{tails=TRUE} we use additional \code{n} points for the first

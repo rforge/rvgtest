@@ -20,7 +20,7 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
 
   if (!missing(tol)) {
     tol <- as.numeric(tol)
-    if (tol < 0 )
+    if (tol <= 0 )
       stop ("Invalid argument 'tol'.")
   }
   
@@ -58,8 +58,8 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
   umin <- 1
   umax <- 0
   for (i in 1:nplots) {
-    umin <- min(umin,ierr[[i]]$udom[1])
-    umax <- max(umax,ierr[[i]]$udom[2])
+    umin <- min(umin,ierr[[i]]$udomain[1])
+    umax <- max(umax,ierr[[i]]$udomain[2])
   }
 
   ## create plotting aera with labels
@@ -75,8 +75,8 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
 
     for (i in 1:nplots) {
       res <- ierr[[i]]$res
-      umin <- max(0,ierr[[i]]$udom[1])
-      umax <- min(1,ierr[[i]]$udom[2])
+      umin <- max(0,ierr[[i]]$udomain[1])
+      umax <- min(1,ierr[[i]]$udomain[2])
       length <- (umax-umin) / res
       u <- umin + length * ((1:res)-0.5)
 
@@ -93,8 +93,8 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
     res <- ierr[[1]]$res
 
     ## domain
-    umin <- max(0,ierr[[1]]$udom[1])
-    umax <- min(1,ierr[[1]]$udom[2])
+    umin <- max(0,ierr[[1]]$udomain[1])
+    umax <- min(1,ierr[[1]]$udomain[2])
 
     ## u values
     length <- (umax-umin) / res

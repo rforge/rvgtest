@@ -4,7 +4,7 @@
 ##
 ## --------------------------------------------------------------------------
 
-uerror <- function (n, aqdist, pdist, ..., udom=c(0,1),
+uerror <- function (n, aqdist, pdist, ..., udomain=c(0,1),
                     res=1000, tails=FALSE, plot=FALSE)
 
   ## ------------------------------------------------------------------------
@@ -14,7 +14,7 @@ uerror <- function (n, aqdist, pdist, ..., udom=c(0,1),
   ## aqdist : Approximate inverse distribution function (quantile function)
   ## pdist  : Cumulative distribution function of distribution
   ## ....   : Parameters of distribution
-  ## udom   : domain for u
+  ## udomain: domain for u
   ## res    : Resolution of table (number of intervals in [0,1] for which 
   ##          quantiles a sample of u-errors are computed and stored) 
   ## tails  : if TRUE, then the tail regions are treated more accurately
@@ -27,8 +27,8 @@ uerror <- function (n, aqdist, pdist, ..., udom=c(0,1),
   ## ------------------------------------------------------------------------
 {
   ## sample size
-  if (!is.numeric(n) || n<1 || n!=round(n))
-    stop ("Invalid argument 'n'.")
+  if (missing(n) || !is.numeric(n) || n<1 || n!=round(n))
+    stop ("Argument 'n' missing or invalid.")
 
   ## resolution
   if (!is.numeric(res) || res<1 || res!=round(res))
@@ -43,10 +43,10 @@ uerror <- function (n, aqdist, pdist, ..., udom=c(0,1),
     stop ("Argument 'pdist' missing or invalid.")
 
   ## domain
-  umin <- max(0,udom[1])
-  umax <- min(1,udom[2])
+  umin <- max(0,udomain[1])
+  umax <- min(1,udomain[2])
   if( umin>=umax) 
-    stop ("Invalid argument 'udom'.")
+    stop ("Invalid argument 'udomain'.")
 
   ## we do not treat tails more accurately
   ## when a smaller domain is given
@@ -104,7 +104,7 @@ uerror <- function (n, aqdist, pdist, ..., udom=c(0,1),
   }
   
   ## return result as object of class "rvgt.ierror"
-  uerror <- list( n=n, res=res, udom=c(umin,umax), kind="u-error",
+  uerror <- list( n=n, res=res, udomain=c(umin,umax), kind="u-error",
                   min=ue.min, lqr=ue.lqr, med=ue.med, uqr=ue.uqr, max=ue.max )
   class(uerror) <- "rvgt.ierror"
   
