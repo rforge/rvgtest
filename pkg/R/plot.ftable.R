@@ -18,7 +18,7 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
   ## ------------------------------------------------------------------------
 {
   ## check arguments
-  if (alpha <= 0 || alpha > 0.1)
+  if (alpha <= 0 || alpha > 0.11)
     stop ("Invalid argument 'alpha'.")
 
   ## get table

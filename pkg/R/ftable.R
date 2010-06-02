@@ -38,8 +38,8 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## --- check arguments ----------------------------------------------------
 
   ## sample size
-  if (!is.numeric(n) || n<1 || n!=round(n))
-    stop ("Invalid argument 'n'.")
+  if (missing(n) || !is.numeric(n) || n<1 || n!=round(n))
+    stop ("Argument 'n' missing or invalid.")
 
   ## number of repetitions
   if (!is.numeric(rep) || rep<1 || rep!=round(rep))
@@ -72,7 +72,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   if (length(breaks) == 1) {
     breaks <- as.integer(breaks)
     if (breaks < 3) 
-      stop (paste("Number of break points too small:",breaks))
+      stop (paste("Number of break points too small (less than 3):",breaks))
 
     ## number of bins
     nbins <- breaks-1
@@ -83,9 +83,9 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## case: vector of break points (in u-scale)
   else {
     if (length(breaks) < 3) 
-      stop (paste("Number of break points too small:",breaks))
+      stop (paste("Number of break points too small (less than 3):",length(breaks)))
     if (min(breaks)<0 || max(breaks)>1)
-      stop ("break points out of range")
+      stop ("break points out of range [0,1]")
     ## number of bins
     nbins <- length(breaks)-1
     ## the break points must be sorted
@@ -122,6 +122,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     ## and recompute the break points in u-scale.
     if (i==1 && !isTRUE(exactu) && all(is.na(xbreaks))) {
       xbreaks <- quantile(x, probs=ubreaks, na.rm=TRUE)
+      names(xbreaks) <- NULL
       xbreaks[1] <- -Inf
       xbreaks[nbins+1] <- Inf
       ubreaks <- pdist(xbreaks,...)

@@ -21,7 +21,7 @@ rvgt.Mtest <- function(ftable)
 {
   ## check arguments
   if (missing(ftable) || class(ftable) != "rvgt.ftable")
-    stop ("Invalid argument 'ftable'.")
+    stop ("Argument 'ftable' missing or invalid.")
 
   ## get table
   table <- ftable$count

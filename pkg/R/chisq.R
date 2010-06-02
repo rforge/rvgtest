@@ -16,7 +16,7 @@ rvgt.chisq <- function (ftable)
 { 
   ## check arguments
   if (missing(ftable) || class(ftable) != "rvgt.ftable")
-    stop ("Invalid argument 'ftable'.")
+    stop ("Argument 'ftable' missing or invalid.")
 
   ## get table
   table <- ftable$count
@@ -55,6 +55,9 @@ rvgt.chisq <- function (ftable)
 
 ## --------------------------------------------------------------------------
 
+## EXPERIMENTAL code
+## Not exported!
+
 rvgt.chisq.level2 <- function (ftable)
 
   ## ------------------------------------------------------------------------
@@ -79,7 +82,7 @@ rvgt.chisq.level2 <- function (ftable)
 { 
   ## check arguments
   if (missing(ftable) || class(ftable) != "rvgt.ftable")
-    stop ("Invalid argument 'ftable'.")
+    stop ("Argument 'ftable' missing or invalid.")
 
   ## get table
   table <- ftable$count

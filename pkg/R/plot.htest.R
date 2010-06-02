@@ -14,10 +14,10 @@ plot.rvgt.htest <- function (x, alpha=0.001, ...)
   ## ------------------------------------------------------------------------
 {
   ## check arguments
-  if (!is.list(x))
-    stop ("Invalid argument 'x'.")
+  if (missing(x) || !is.list(x))
+    stop ("Argument 'x' missing or invalid.")
 
-  if (alpha <= 0 || alpha > 0.1)
+  if (alpha <= 0 || alpha > 0.11)
     stop ("Invalid argument 'alpha'.")
 
   ## we have two cases:
