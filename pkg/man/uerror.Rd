@@ -98,28 +98,33 @@ uerror(n, aqdist, pdist, \dots, udomain=c(0,1),
 }
 
 \examples{
-## Create a table of u-errors for a generator for the normal
-## distribution using the R built-in quantile function.
-aq <- function(u) { qnorm(u) }
+## Create a table of u-errors for spline interpolation of
+## the inverse CDF of the standard normal distribution.
+aqn <- splinefun(x=pnorm((-100:100)*0.05), y=(-100:100)*0.05,
+                method="monoH.FC")
 ## Use a sample of size of 10^5 random variates.
-uerr <- uerror(n=1e5, aqdist=aq, pdist=pnorm)
+uerrn <- uerror(n=1e5, aqdist=aqn, pdist=pnorm)
 
 ## Plot u-errors
-plot(uerr)
+plot(uerrn)
 
 ## Investigate tails more accurately, and use
 ## a resolution of 1000 intervals.
-uerrn <- uerror(n=1e5, aqdist=aq, pdist=pnorm, res=1000, tails=TRUE)
+uerrn <- uerror(n=1e5, aqdist=aqn, pdist=pnorm, res=1000, tails=TRUE)
+
 
 ## Same for a gamma distribution.
 ## But this time we immediately plot the error.
-aq <- function(u) { qgamma(u,shape=2) }
-uerrg <- uerror(n=1e5, aqdist=aq, pdist=pgamma, shape=2,
-                res=1000, plot=TRUE)
+aqg <- splinefun(x=pgamma((0:500)*0.1,shape=5),
+                y=(0:500)*0.1, method="monoH.FC")
+uerrg <- uerror(n=1e5, aqdist=aqg, pdist=pgamma, shape=5,
+                plot=TRUE)
+
 
 ## Compute u-error for a subdomain of a beta distribution
-aq <- function(u) { qbeta(u,shape1=2,shape2=5) }
-uerrb <- uerror(n=1e5, aqdist=aq, pdist=pbeta, shape1=2, shape2=5,
+aqb <- splinefun(x=pbeta((0:100)*0.01,shape1=2,shape2=5),
+                y=(0:100)*0.01, method="monoH.FC")
+uerrb <- uerror(n=1e5, aqdist=aqb, pdist=pbeta, shape1=2, shape2=5,
                 udomain=c(0.6,0.65), plot=TRUE)
 
 ## Show all u-errors in one plot
