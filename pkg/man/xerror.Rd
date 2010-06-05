@@ -89,19 +89,20 @@ xerror(n, aqdist, qdist, \dots, udomain=c(0,1),
 }
 
 \examples{
-## Create a table of absolute x-errors for a generator for the normal
-## distribution using a quantile function with errors.
-aq <- function(u) { qnorm(u) + runif(1,max=1.e-10) }
+## Create a table of absolute x-errors for spline interpolation of
+## the inverse CDF of the standard normal distribution.
+aq <- splinefun(x=pnorm((-100:100)*0.05), y=(-100:100)*0.05,
+                method="monoH.FC")
 ## Use a sample of size of 10^5 random variates.
 xerr <- xerror(n=1e5, aqdist=aq, qdist=qnorm, kind="abs")
 
 ## Plot x-errors
 plot(xerr)
 
+
 ## Same for the relative error.
 ## But this time we use a resolution of 500, and
 ## we immediately plot the error.
-aq <- function(u) { qnorm(u) * runif(1,min=1,max=1+1.e-10) }
 xerr <- xerror(n=1e5, aqdist=aq, qdist=qnorm,
                res=500, kind="rel", plot=TRUE)
 
