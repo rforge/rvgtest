@@ -170,7 +170,7 @@
 RNGkind(normal.kind="Buggy Kinderman-Ramage")
 
 ## Create table of bin counts.
-## Use a sample of size of 20 times 10^5 random variates.
+## Use a sample of 20 times 10^5 random variates.
 table <- rvgt.ftable(n=1e5, rep=20, rdist=rnorm, qdist=qnorm)
 
 ## Plot histogram for (cumulated) data
