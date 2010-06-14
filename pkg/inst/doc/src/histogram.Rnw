@@ -47,7 +47,7 @@ The advantages of this procedure are obvious:
 Here is a simple example (see the corresponding help pages for
 details, the plots are shown in Figs.~\ref{fig:pval-norm-1} and
 \ref{fig:hist-norm-1}):
-<<>>=
+<<fig=FALSE>>=
 ## -- Normal distribution
 ## Create frequency table.
 ## We use a sample of 20 times 10^5 random variates.
@@ -90,7 +90,7 @@ plot(tr)
 
 % ...........................................................................
 
-\subsection{Creating the frequency table}
+\subsection{Creating the Frequency Table}
 
 Computing the bin counts of a histogram usually is straightforward.
 For our purpose the following should be kept in mind:
@@ -137,7 +137,7 @@ Thus we have implemented the following variants:
 \end{enumerate}
 The next example shows the difference between Variant 1 and 3
 (see Fig.~\ref{fig:hist-norm-2}):
-<<>>=
+<<fig=FALSE>>=
 ## Create and plot frequency table.
 ## Variant 1
 ft1 <- rvgt.ftable(n=1e4, rep=10, rdist=rnorm, qdist=qnorm, plot=TRUE)
@@ -160,7 +160,7 @@ plot(ft2)
 
 % ...........................................................................
 
-\subsection{Goodness-of-Fit Test}
+\subsection{Goodness-of-Fit Tests}
 
 Once the frequency table is available one can run one or more
 goodness-of-fit tests on it.
@@ -199,17 +199,14 @@ plot.rvgt.htest(list(res.chisq, res.mtest))
 
 % ...........................................................................
 
-\subsection{Defective Random Variate Generators}
+\subsection{A Defective Random Variate Generator}
 
-The power is an important feature of a test. We need to know which
-deviation from the theoretical distribution can be detected and at
-which sample size will the defect become significant.
-Fortunately, \R\ provides a defective normal random variate generator
+\R\ provides a defective normal random variate generator
 called \code{"Buggy Kinderman-Ramage"}\footnote{See
   \citep{Tirler;etal:2004a} for some background.}.
 So let us run our routines on this generator (see
 Figs.~\ref{fig:hist-buggynorm-1} and \ref{fig:pval-buggynorm-1}):
-<<>>=
+<<fig=FALSE>>=
 ## Use a buggy Gaussian random variate generator
 RNGkind(normal.kind="Buggy Kinderman-Ramage")
 
@@ -249,6 +246,52 @@ plot.rvgt.htest(list(res.chisq, res.mtest))
     chisquare test [1,red] and M-test [2,cyan].}
   \label{fig:pval-buggynorm-1}
 \end{figure}
+
+The effect of increasing sample can be visualized by the following
+piece of code (see Fig.~\ref{fig:hist-buggynorm-2})
+<<eval=FALSE>>=
+## Create frequency table for buggy generator.
+RNGkind(normal.kind="Buggy Kinderman-Ramage")
+ft <- rvgt.ftable(n=1e5, rep=50, rdist=rnorm, qdist=qnorm)
+
+## Now plot histograms for the respective sample sizes 
+## 1e5, 10*1e5, and 50*1e5.
+plot(ft,rows=1)
+plot(ft,rows=1:10)
+plot(ft,rows=1:50)
+@ 
+
+\begin{figure}
+  \centering
+\vspace*{-1.5cm}\par
+<<hist-buggynorm-2a,fig=TRUE,height=4,echo=FALSE>>=
+plot(ft,rows=1)
+@ 
+\vspace*{-2cm}\par
+<<hist-buggynorm-2b,fig=TRUE,height=4,echo=FALSE>>=
+plot(ft,rows=1:10)
+@ 
+\vspace*{-2cm}\par
+<<hist-buggynorm-2c,fig=TRUE,height=4,echo=FALSE>>=
+plot(ft,rows=1:50)
+@ 
+\vspace*{-1.cm}\par
+  \caption{Histogram of a defectiv sample of normal distributed random
+    variates (\code{"Buggy Kinderman-Ramage"}) for increasing sample
+    sizes.}
+  \label{fig:hist-buggynorm-2}
+\end{figure}
+
+% ...........................................................................
+
+\subsection{Perturbate a Random Variate Generator}
+
+The power is an important feature of a test. We need to know which
+deviation from the theoretical distribution can be detected and at
+which sample size will the defect become significant.
+Thus we have added functions \code{pertadd()} and \code{pertsub()} to
+pertubate existing random variate generators. Thus one can investigate
+the influence known deviations. 
 
 % ---------------------------------------------------------------------------
 
