@@ -10,6 +10,9 @@
   generators. Thus a histogram is computed and the bin counts are stored
   in an array which can be used to visualize possible defects of the
   pseudo-random variate generator and run goodness-of-fit tests.
+
+  Currently the function only works for generators for continuous
+  univariate distribution.
 }
 
 \usage{
@@ -20,7 +23,7 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
 \arguments{
   \item{n}{sample size for one repetition.}
   \item{rep}{number of repetitions.}
-  \item{rdist}{random variate generator for a distribution.}
+  \item{rdist}{random variate generator for a continuous univariate distribution.}
   \item{qdist}{quantile function for the distribution.}
   \item{pdist}{cumulative distribution function for distribution.}
   \item{\dots }{parameters to be passed to \code{rdist}, \code{qdist}

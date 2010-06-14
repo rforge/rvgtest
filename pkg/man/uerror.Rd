@@ -11,6 +11,9 @@
   distribution). Thus the domain of the inverse distribution function is
   partitioned into intervals for which maxima, minima and some other
   quantiles of the u-errors are computed. 
+
+  Currently the function only works for generators for continuous
+  univariate distribution.
 }
 
 \usage{
@@ -21,7 +24,7 @@ uerror(n, aqdist, pdist, \dots, udomain=c(0,1),
 \arguments{
   \item{n}{sample size for one repetition.}
   \item{aqdist}{approximate inverse distribution function (quantile
-    function) for the distribution.}
+    function) for a continuous univariate distribution.}
   \item{pdist}{cumulative distribution function for distribution.}
   \item{\dots }{parameters to be passed to \code{pdist}.}
   \item{udomain}{domain for u.}

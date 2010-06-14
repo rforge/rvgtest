@@ -5,6 +5,6 @@ Version: 0.3.0
 Date: 2010-05-31
 Author: Josef Leydold and Sougata Chaudhuri <sgtchaudhuri@gmail.com>
 Maintainer: Josef Leydold <josef.leydold@wu.ac.at>
-Description: Test suite for non-uniform pseudo-random variate generators
+Description: Test suite for non-uniform pseudo-random number generators.
 License: GPL-2
 URL: http://statmath.wu.ac.at/unuran/
