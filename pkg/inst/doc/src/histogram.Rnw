@@ -1,0 +1,254 @@
+% ---------------------------------------------------------------------------
+
+\section{Goodness-of-Fit Tests based on Histograms}
+\label{sec:histogram}
+
+A frequently used method for testing continuous univariate
+distributions is based on the following strategy:
+Draw a sample, compute a histogram and run a goodness-of-fit test on
+the resulting frequency table. Often the random sample is transformed
+into a sample of uniformly distributed random numbers by means of the
+distribution function. This allows for visual inspection of the
+emprical distribution and tests for uniformity can be applied for all
+distributions.
+
+Generating the random sample and (even worse) the transformation into
+the uniform scale is the most expensive step.
+Moreover, (extremely) large sample sizes may exceed the physical
+memory of the computer and results an extremely long run times due to
+swapping of memory. If the table size even exceeds the virtual memory,
+then computation is aborted.
+
+Thus we have implemented a three step procedure:
+\begin{enumerate}
+\item
+  Create a table of bin frequencies that hold the information of huge
+  random samples. In order to save memory only small samples are drawn
+  at once. This also provides some information about the sample size
+  at which a possible defect becomes statistical significant.
+\item 
+  Perform some goodness-of-fit tests.
+\item 
+  Visualize the frequency table (histogram) as well the results of the
+  GoF tests (plot p-values against sample size).
+\end{enumerate}
+
+The advantages of this procedure are obvious:
+\begin{itemize}
+\item 
+  Huge total sample sizes are possible (only limited by
+  available runtime but not by memory).
+\item 
+  We can run multiple tests on the same random sample.
+\item
+  Inspect data visually.
+\end{itemize}
+
+Here is a simple example (see the corresponding help pages for
+details, the plots are shown in Figs.~\ref{fig:pval-norm-1} and
+\ref{fig:hist-norm-1}):
+<<>>=
+## -- Normal distribution
+## Create frequency table.
+## We use a sample of 20 times 10^5 random variates.
+ft <- rvgt.ftable(n=1e5, rep=20, rdist=rnorm, qdist=qnorm)
+
+## We can visualize this table by drawing the histogram
+## (see Fig. 2)
+plot(ft)
+
+## Perform a chi-square goodness-of-fit test
+tr <- rvgt.chisq(ft)
+tr
+
+## We can visualize the p-values for increasing sample size
+## (see Fig. 3)
+plot(tr)
+@ 
+
+\begin{figure}
+  \centering
+<<hist-norm-1,fig=TRUE,height=4,echo=FALSE>>=
+plot(ft)
+@ 
+  \caption{Histogram of a sample of normal distributed random
+    variates. The green line shows the expected value for each bin
+    height, the red dashed lines show the boundary of the confidence
+    interval.}
+  \label{fig:hist-norm-1}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<pval-norm-1,fig=TRUE,height=4,echo=FALSE>>=
+plot(tr)
+@ 
+  \caption{p-values of a chisquare goodness-of-fit test.
+    p-value is plotted against sample size.}
+  \label{fig:pval-norm-1}
+\end{figure}
+
+% ...........................................................................
+
+\subsection{Creating the frequency table}
+
+Computing the bin counts of a histogram usually is straightforward.
+For our purpose the following should be kept in mind:
+\begin{itemize}
+\item
+  We have to create huge samples. Thus execution time is important.
+  So we should avoid as many computations as possible besides running
+  the random variate generator.
+\item
+  Random variate generators transform uniform random numbers into
+  non-inform ones. Thus break points should be given in the uniform
+  scale. In particular, the bins should have equal probabilities
+  except for the case where we want to test against a particular
+  alternative. 
+\end{itemize}
+
+Thus we have implemented the following variants:
+\begin{enumerate}
+\item 
+  If the quantile function is given, we transform the break points of
+  in $u$-scale into break points into $x$-scale. Thus we only have to
+  draw a random sample. This is the fasted method to create the table.
+  Moreover, the theoretical distribution of the frequences
+  is as requested by the user (e.g., equidistributed).
+  The drawback of this method is, that it requires the quantile
+  function and that it is more sensitive against round-off than the
+  other variants.
+\item
+  If the distribution function is given, we can transform the
+  non-uniform random variates into uniform ones.
+  Obviously this is the most expensive method as the evaluation of
+  distribution functions is usually (much) more expensive than drawing
+  a random number.
+\item 
+  A hybrid of the these two approaches works as follows: Draw one
+  small random sample (i.e., the first of the requested repetitions).
+  Use the requested break points in $u$-scale and compute the
+  corresponding empirical quantiles. This we get break points in
+  $x$-scale as in Variant 1. Then compute the expected probablities
+  for each bin by means of the distribution function.
+  This variant is as fast as Variant 1 but is less sensitive against
+  round-off errors. On the other hand, the bin frequences are slightly
+  changed compared to the requested ones.
+\end{enumerate}
+The next example shows the difference between Variant 1 and 3
+(see Fig.~\ref{fig:hist-norm-2}):
+<<>>=
+## Create and plot frequency table.
+## Variant 1
+ft1 <- rvgt.ftable(n=1e4, rep=10, rdist=rnorm, qdist=qnorm, plot=TRUE)
+## Variant 1
+ft2 <- rvgt.ftable(n=1e4, rep=10, rdist=rnorm, pdist=pnorm, plot=TRUE)
+@ 
+
+\begin{figure}
+  \centering
+<<hist-norm-2a,fig=TRUE,height=4,echo=FALSE>>=
+plot(ft1)
+@ 
+<<hist-norm-2b,fig=TRUE,height=4,echo=FALSE>>=
+plot(ft2)
+@ 
+  \caption{Histogram of a sample of normal distributed random variates.
+    first line: Variant 1. second line: Variant 3.}
+  \label{fig:hist-norm-2}
+\end{figure}
+
+% ...........................................................................
+
+\subsection{Goodness-of-Fit Test}
+
+Once the frequency table is available one can run one or more
+goodness-of-fit tests on it.
+Currently the following tests are implemented:
+\begin{itemize}
+\item Chisquare goodness-of-fit test.
+\item M-Test (adjusted residual test) by \citet{Fuchs;Kenett:1980a}.
+\end{itemize}
+
+The plotting routine allows to compare the result of several tests
+(which need not be for the same random number generator).
+Here is an example that performs the above tests and plots the
+results (see Fig.~\ref{fig:pval-norm-2}):
+<<eval=FALSE>>=
+## Create a frequency table.
+ft <- rvgt.ftable(n=1e5, rep=20, rdist=rnorm, qdist=qnorm)
+## Perform goodness-of-fit tests
+res.chisq <- rvgt.chisq(ft)
+res.mtest <- rvgt.Mtest(ft)
+## Show results in one plot
+plot.rvgt.htest(list(res.chisq, res.mtest))
+@ 
+
+\begin{figure}
+  \centering
+<<pval-norm-2,fig=TRUE,height=4,echo=FALSE>>=
+ft <- rvgt.ftable(n=1e5, rep=20, rdist=rnorm, qdist=qnorm)
+res.chisq <- rvgt.chisq(ft)
+res.mtest <- rvgt.Mtest(ft)
+plot.rvgt.htest(list(res.chisq, res.mtest))
+@ 
+  \caption{p-values for goodness-of-fit tests: chisquare test [1] and
+    M-test [2].}
+  \label{fig:pval-norm-2}
+\end{figure}
+
+% ...........................................................................
+
+\subsection{Defective Random Variate Generators}
+
+The power is an important feature of a test. We need to know which
+deviation from the theoretical distribution can be detected and at
+which sample size will the defect become significant.
+Fortunately, \R\ provides a defective normal random variate generator
+called \code{"Buggy Kinderman-Ramage"}\footnote{See
+  \citep{Tirler;etal:2004a} for some background.}.
+So let us run our routines on this generator (see
+Figs.~\ref{fig:hist-buggynorm-1} and \ref{fig:pval-buggynorm-1}):
+<<>>=
+## Use a buggy Gaussian random variate generator
+RNGkind(normal.kind="Buggy Kinderman-Ramage")
+
+## Create a frequency table.
+ft <- rvgt.ftable(n=1e5, rep=50, rdist=rnorm, qdist=qnorm)
+
+## Plot histogram (see Fig. 6)
+plot(ft)
+
+## Perform goodness-of-fit tests
+res.chisq <- rvgt.chisq(ft)
+res.mtest <- rvgt.Mtest(ft)
+
+## Show results of tests (see Fig. 7)
+plot.rvgt.htest(list(res.chisq, res.mtest))
+@ 
+
+\begin{figure}
+  \centering
+<<hist-buggynorm-1,fig=TRUE,height=4,echo=FALSE>>=
+plot(ft)
+@ 
+  \caption{Histogram of a defectiv sample of normal distributed random
+    variates (\code{"Buggy Kinderman-Ramage"}).}
+  \label{fig:hist-buggynorm-1}
+\end{figure}
+
+\begin{figure}
+  \centering
+<<pval-buggynorm-1,fig=TRUE,height=4,echo=FALSE>>=
+res.chisq <- rvgt.chisq(ft)
+res.mtest <- rvgt.Mtest(ft)
+plot.rvgt.htest(list(res.chisq, res.mtest))
+@ 
+  \caption{p-values for goodness-of-fit tests for the 
+    \code{"Buggy Kinderman-Ramage"} generator:
+    chisquare test [1,red] and M-test [2,cyan].}
+  \label{fig:pval-buggynorm-1}
+\end{figure}
+
+% ---------------------------------------------------------------------------
+
