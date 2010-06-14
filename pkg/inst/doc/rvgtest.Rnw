@@ -50,7 +50,7 @@ abstracton       %% print header "Abstract"
 %% -- R and Sweave ----------------------------------------------------------
 
 %% Sweave
-\SweaveOpts{eval=TRUE,echo=TRUE,eps=FALSE,results=verbatim,keep.source=TRUE,prefix.string=figure}
+\SweaveOpts{eval=TRUE,echo=TRUE,eps=FALSE,results=verbatim,keep.source=TRUE,prefix.string=figures/figure}
 
 %% When R Sweave is used then you must not modify, move or delete
 %% the following line:
