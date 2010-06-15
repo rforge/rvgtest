@@ -172,22 +172,13 @@ set.seed(123456789)
 
 \clearpage
 \SweaveInput{src/intro.Rnw}
+\clearpage
 \SweaveInput{src/histogram.Rnw}
-
 \clearpage
 \SweaveInput{src/inversion.Rnw}
 
 % ---------------------------------------------------------------------------
 % \appendix
-
-% \clearpage
-% \SweaveInput{src/arvag.Rnw}
-% \clearpage
-% \SweaveInput{src/pitfalls.Rnw}
-% \clearpage
-% \SweaveInput{src/glossary.tex}
-
-% ---------------------------------------------------------------------------
 
 \clearpage
 \bibliographystyle{abbrvnat}
