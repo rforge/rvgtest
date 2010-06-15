@@ -121,7 +121,7 @@
 
   Let \eqn{G^{-1}}{G^[-1]} denote the approximate inverse distribution
   function (quantile function) and \eqn{F} the (exact) cumulative
-  distribution. The the following measures for the approximation erros
+  distribution. Then the following measures for the approximation erros
   are implemented:
   \describe{
     \item{u-error:}{
