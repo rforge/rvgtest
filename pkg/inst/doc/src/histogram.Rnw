@@ -40,29 +40,35 @@ The advantages of this procedure are obvious:
   available runtime but not by memory).
 \item 
   We can run multiple tests on the same random sample.
+  Thus we can compare the power of different tests.
 \item
-  Inspect data visually.
+  Inspect data and compare visually.
 \end{itemize}
+
+% ...........................................................................
+
+\clearpage
+\subsection{An Example}
 
 Here is a simple example (see the corresponding help pages for
 details, the plots are shown in Figs.~\ref{fig:pval-norm-1} and
 \ref{fig:hist-norm-1}):
 <<fig=FALSE>>=
-## -- Normal distribution
+##   Normal distribution
+## .......................................................................
+#
 ## Create frequency table.
 ## We use a sample of 20 times 10^5 random variates.
 ft <- rvgt.ftable(n=1e5, rep=20, rdist=rnorm, qdist=qnorm)
-
+#
 ## We can visualize this table by drawing the histogram
-## (see Fig. 2)
 plot(ft)
-
+#
 ## Perform a chi-square goodness-of-fit test
 tr <- rvgt.chisq(ft)
 tr
 
 ## We can visualize the p-values for increasing sample size
-## (see Fig. 3)
 plot(tr)
 @ 
 
@@ -90,6 +96,7 @@ plot(tr)
 
 % ...........................................................................
 
+\clearpage
 \subsection{Creating the Frequency Table}
 
 Computing the bin counts of a histogram usually is straightforward.
@@ -138,10 +145,12 @@ Thus we have implemented the following variants:
 The next example shows the difference between Variant 1 and 3
 (see Fig.~\ref{fig:hist-norm-2}):
 <<fig=FALSE>>=
-## Create and plot frequency table.
-## Variant 1
+##   Create and plot frequency table.
+## .......................................................................
+#
+## Variant 1: use qnorm
 ft1 <- rvgt.ftable(n=1e4, rep=10, rdist=rnorm, qdist=qnorm, plot=TRUE)
-## Variant 1
+## Variant 3: use pnorm
 ft2 <- rvgt.ftable(n=1e4, rep=10, rdist=rnorm, pdist=pnorm, plot=TRUE)
 @ 
 
@@ -160,6 +169,7 @@ plot(ft2)
 
 % ...........................................................................
 
+\clearpage
 \subsection{Goodness-of-Fit Tests}
 
 Once the frequency table is available one can run one or more
@@ -175,16 +185,21 @@ The plotting routine allows to compare the result of several tests
 Here is an example that performs the above tests and plots the
 results (see Fig.~\ref{fig:pval-norm-2}):
 <<eval=FALSE>>=
+##   Perform goodness-of-fit tests
+## .......................................................................
+#
 ## Create a frequency table.
 ft <- rvgt.ftable(n=1e5, rep=20, rdist=rnorm, qdist=qnorm)
+#
 ## Perform goodness-of-fit tests
 res.chisq <- rvgt.chisq(ft)
 res.mtest <- rvgt.Mtest(ft)
+#
 ## Show results in one plot
 plot.rvgt.htest(list(res.chisq, res.mtest))
 @ 
 
-\begin{figure}
+\begin{figure}[h]
   \centering
 <<pval-norm-2,fig=TRUE,height=4,echo=FALSE>>=
 ft <- rvgt.ftable(n=1e5, rep=20, rdist=rnorm, qdist=qnorm)
@@ -199,6 +214,7 @@ plot.rvgt.htest(list(res.chisq, res.mtest))
 
 % ...........................................................................
 
+\clearpage
 \subsection{A Defective Random Variate Generator}
 
 \R\ provides a defective normal random variate generator
@@ -207,21 +223,42 @@ called \code{"Buggy Kinderman-Ramage"}\footnote{See
 So let us run our routines on this generator (see
 Figs.~\ref{fig:hist-buggynorm-1} and \ref{fig:pval-buggynorm-1}):
 <<fig=FALSE>>=
+##   A buggy Gaussian random variate generator
+## .......................................................................
+#
 ## Use a buggy Gaussian random variate generator
 RNGkind(normal.kind="Buggy Kinderman-Ramage")
-
+#
 ## Create a frequency table.
 ft <- rvgt.ftable(n=1e5, rep=50, rdist=rnorm, qdist=qnorm)
-
+#
 ## Plot histogram (see Fig. 6)
 plot(ft)
-
+#
 ## Perform goodness-of-fit tests
 res.chisq <- rvgt.chisq(ft)
 res.mtest <- rvgt.Mtest(ft)
-
+#
 ## Show results of tests (see Fig. 7)
 plot.rvgt.htest(list(res.chisq, res.mtest))
+@ 
+
+The effect of increasing sample can be visualized by the following
+piece of code (see Fig.~\ref{fig:hist-buggynorm-2}):
+
+<<eval=FALSE>>=
+##   Effect of increasing sample sizes
+## .......................................................................
+#
+## Create frequency table for buggy generator.
+RNGkind(normal.kind="Buggy Kinderman-Ramage")
+ft <- rvgt.ftable(n=1e5, rep=50, rdist=rnorm, qdist=qnorm)
+#
+## Now plot histograms for the respective sample sizes 
+## 1e5, 10*1e5, and 50*1e5.
+plot(ft,rows=1)
+plot(ft,rows=1:10)
+plot(ft,rows=1:50)
 @ 
 
 \begin{figure}
@@ -246,20 +283,6 @@ plot.rvgt.htest(list(res.chisq, res.mtest))
     chisquare test [1,red] and M-test [2,cyan].}
   \label{fig:pval-buggynorm-1}
 \end{figure}
-
-The effect of increasing sample can be visualized by the following
-piece of code (see Fig.~\ref{fig:hist-buggynorm-2})
-<<eval=FALSE>>=
-## Create frequency table for buggy generator.
-RNGkind(normal.kind="Buggy Kinderman-Ramage")
-ft <- rvgt.ftable(n=1e5, rep=50, rdist=rnorm, qdist=qnorm)
-
-## Now plot histograms for the respective sample sizes 
-## 1e5, 10*1e5, and 50*1e5.
-plot(ft,rows=1)
-plot(ft,rows=1:10)
-plot(ft,rows=1:50)
-@ 
 
 \begin{figure}
   \centering
