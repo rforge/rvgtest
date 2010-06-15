@@ -143,5 +143,14 @@ for \emph{continuous univariate distributions}:
   inversion.
 \end{itemize}
 
+% ...........................................................................
+
+\subsection{Non-uniform Random variate generation}
+
+The interested reader may find much more information on non-uniform
+random variate generation by the books of \citet{Devroye:1986a} and
+\citet{Hoermann;Leydold;Derflinger:2004a}.
+
+
 % ---------------------------------------------------------------------------
 
