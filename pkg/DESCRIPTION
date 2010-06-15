@@ -1,8 +1,8 @@
 Package: rvgtest
 Type: Package
 Title: Tools for Analyzing Non-Uniform Pseudo-Random Variate Generators
-Version: 0.3.0 
-Date: 2010-05-31
+Version: 0.3.1
+Date: 2010-06-15
 Author: Josef Leydold and Sougata Chaudhuri <sgtchaudhuri@gmail.com>
 Maintainer: Josef Leydold <josef.leydold@wu.ac.at>
 Description: Test suite for non-uniform pseudo-random number generators.
