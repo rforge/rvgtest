@@ -37,7 +37,7 @@ Let $F$ and $F^{-1}$ denote cumulative distribution function (CDF) and
 inverse distribution function (quantile function).
 Let $G^{-1}$ be an approximation for $F^{-1}$.
 
-Then the following measures may be used for describing approximation erros.
+Then the following measures may be used for describing approximation errors.
 \begin{description}
   \item[$u$-error:] \mbox{}\hskip 1em \textbf{[ recommended ]} \\
     $\epsilon_u(u) = |u - F(G^{-1}(u))|$
@@ -47,7 +47,7 @@ Then the following measures may be used for describing approximation erros.
     $\displaystyle\tilde{\epsilon}_x(u) = \frac{|F^{-1}(u) - G^{-1}(u)|}{|F^{-1}(u)|}$
 \end{description}
 
-We have implemented als three errors but we convinced that it is the
+We have implemented also three errors but we convinced that it is the
 $u$-error that is best suited in the framework of Monte Carlo
 simulation (MC) and quasi-Monte Carlo methods (QMC).
 

@@ -9,7 +9,7 @@ Draw a sample, compute a histogram and run a goodness-of-fit test on
 the resulting frequency table. Often the random sample is transformed
 into a sample of uniformly distributed random numbers by means of the
 distribution function. This allows for visual inspection of the
-emprical distribution and tests for uniformity can be applied for all
+empirical distribution and tests for uniformity can be applied for all
 distributions.
 
 Generating the random sample and (even worse) the transformation into
@@ -120,7 +120,7 @@ Thus we have implemented the following variants:
   If the quantile function is given, we transform the break points of
   in $u$-scale into break points into $x$-scale. Thus we only have to
   draw a random sample. This is the fasted method to create the table.
-  Moreover, the theoretical distribution of the frequences
+  Moreover, the theoretical distribution of the frequencies
   is as requested by the user (e.g., equidistributed).
   The drawback of this method is, that it requires the quantile
   function and that it is more sensitive against round-off than the
@@ -136,10 +136,10 @@ Thus we have implemented the following variants:
   small random sample (i.e., the first of the requested repetitions).
   Use the requested break points in $u$-scale and compute the
   corresponding empirical quantiles. This we get break points in
-  $x$-scale as in Variant 1. Then compute the expected probablities
+  $x$-scale as in Variant 1. Then compute the expected probabilities
   for each bin by means of the distribution function.
   This variant is as fast as Variant 1 but is less sensitive against
-  round-off errors. On the other hand, the bin frequences are slightly
+  round-off errors. On the other hand, the bin frequencies are slightly
   changed compared to the requested ones.
 \end{enumerate}
 The next example shows the difference between Variant 1 and 3
@@ -266,7 +266,7 @@ plot(ft,rows=1:50)
 <<hist-buggynorm-1,fig=TRUE,height=4,echo=FALSE>>=
 plot(ft)
 @ 
-  \caption{Histogram of a defectiv sample of normal distributed random
+  \caption{Histogram of a defective sample of normal distributed random
     variates (\code{"Buggy Kinderman-Ramage"}).}
   \label{fig:hist-buggynorm-1}
 \end{figure}
@@ -299,7 +299,7 @@ plot(ft,rows=1:10)
 plot(ft,rows=1:50)
 @ 
 \vspace*{-1.cm}\par
-  \caption{Histogram of a defectiv sample of normal distributed random
+  \caption{Histogram of a defect-iv sample of normal distributed random
     variates (\code{"Buggy Kinderman-Ramage"}) for increasing sample
     sizes.}
   \label{fig:hist-buggynorm-2}
@@ -307,13 +307,13 @@ plot(ft,rows=1:50)
 
 % ...........................................................................
 
-\subsection{Perturbate a Random Variate Generator}
+\subsection{Perturb a Random Variate Generator}
 
 The power is an important feature of a test. We need to know which
 deviation from the theoretical distribution can be detected and at
 which sample size will the defect become significant.
 Thus we have added functions \code{pertadd()} and \code{pertsub()} to
-pertubate existing random variate generators. Thus one can investigate
+perturb existing random variate generators. Thus one can investigate
 the influence known deviations. 
 
 % ---------------------------------------------------------------------------
