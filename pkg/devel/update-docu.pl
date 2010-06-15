@@ -6,7 +6,7 @@ use Getopt::Std;
 
 # --- Constants -------------------------------------------------------------
 
-##my $vignette_file = "./inst/doc/src/version.tex";
+my $vignette_file = "./inst/doc/src/version.tex";
 my $package_Rd_file = "./man/rvgtest-package.Rd";
 
 # --- Usage -----------------------------------------------------------------
@@ -66,7 +66,7 @@ if ($increment) {
     $version = "$major.$minor.".($rev+1);
 
     my $year = 1900 + (localtime(time))[5];
-    my $month = 1 + (localtime(time))[4];
+    my $month = sprintf("%02d", 1 + (localtime(time))[4]);
     my $day = (localtime(time))[3];
 
     $date = "$year-$month-$day";
@@ -90,10 +90,10 @@ print "Date = '$date'  ($longdate)\n";
 
 # --- Update Vignette -------------------------------------------------------
 
-##open VIGNETTE, ">$vignette_file"
-##    or die "Cannot open $vignette_file for writing: $!";
-##print VIGNETTE "\\date{Version $version -- $longdate}\n";
-##close VIGNETTE;
+open VIGNETTE, ">$vignette_file"
+    or die "Cannot open $vignette_file for writing: $!";
+print VIGNETTE "\\date{Version $version -- $longdate}\n";
+close VIGNETTE;
 
 # --- Update DESCRIPTION ----------------------------------------------------
 
