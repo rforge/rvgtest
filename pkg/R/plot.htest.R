@@ -55,7 +55,7 @@ plot.rvgt.htest <- function (x, alpha=0.001, ...)
   
   ## create plotting aera with labels
   plot(xl,yl,xlim=c(0,xl),ylim=c(yl,0),type="n",
-       xlab="sample size", ylab="log(pvalue)", ...)
+       xlab="sample size", ylab="log10(pvalue)", ...)
 
   ## draw lines for each set of p-values
   for (i in 1:nplots) {
