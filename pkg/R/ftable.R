@@ -46,16 +46,18 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     stop ("Invalid argument 'rep'.")
 
   ## random variate generator
-  if( missing(rdist) || !is.function(rdist))
+  if (missing(rdist) || !is.function(rdist))
     stop ("Argument 'rdist' missing or invalid.")
 
   ## quantile and distribution function
-  if( missing(qdist) && missing(pdist) )
+  if (missing(qdist)) qdist <- NULL
+  if (missing(pdist)) pdist <- NULL
+  if (is.null(qdist) && is.null(pdist))
     stop ("Argument 'qdist' or 'pdist' required.")
 
-  if( !missing(qdist) && !is.function(qdist))
+  if (!is.null(qdist) && !is.function(qdist))
     stop ("Argument 'qdist' invalid.")
-  if( !missing(pdist) && !is.function(pdist))
+  if( !is.null(pdist) && !is.function(pdist))
     stop ("Argument 'pdist' invalid.")
 
   ## break points
@@ -102,7 +104,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## --- compute break points in x-scale ------------------------------------
 
   ## do we have a quantile function?
-  if (!missing(qdist))
+  if (!is.null(qdist))
     xbreaks <- qdist(ubreaks,...)
   else
     xbreaks <- rep(NA,nbins+1)

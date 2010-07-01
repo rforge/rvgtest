@@ -1,4 +1,16 @@
 
+Version 0.3.2: 2010-07-01
+
+	- function rvgt.ftable() now also accepts NULL for
+	  arguments 'qdist' and 'pdist'. This is equivalent
+	  to not providing the argument at all.
+
+
+Version 0.3.1: 2010-06-15
+
+	- added vignette.
+
+
 Version 0.3.0: 2010-05-31
 
 	- added new functions for analysing numerical errors of
