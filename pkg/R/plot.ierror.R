@@ -123,3 +123,14 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
 }
 
 ## --------------------------------------------------------------------------
+
+print.rvgt.ierror <- function (x, ...) {
+  cat("\nrvgtest - ierror:\n")
+  cat("   kind of error  =",x$kind,"\n")
+  cat("   sample size    =",x$n,"\n");
+  cat("   u-domain       = (",
+      x$udomain[1],", ",x$udomain[2],")\n",sep="")
+  cat("   max error      =",max(x$max),"\n\n")
+}
+
+## --------------------------------------------------------------------------

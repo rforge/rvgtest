@@ -1,13 +1,16 @@
 export(rvgt.ftable)
 S3method(plot, rvgt.ftable)
+S3method(print, rvgt.ftable)
 
 export(rvgt.chisq, rvgt.Mtest)
 export(plot.rvgt.htest)
 S3method(plot, rvgt.htest)
+S3method(print, rvgt.htest)
 
 export(uerror, xerror)
 export(plot.rvgt.ierror)
 S3method(plot, rvgt.ierror)
+S3method(print, rvgt.ierror)
 
 export(pertadd, pertsub)
 

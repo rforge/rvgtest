@@ -78,3 +78,13 @@ plot.rvgt.htest <- function (x, alpha=0.001, ...)
 }
 
 ## --------------------------------------------------------------------------
+
+print.rvgt.htest <- function (x, ...) {
+  cat("\nrvgtest - test:\n")
+  cat("   type           =",x$type,"\n");
+  cat("   sample size    =",x$n*x$rep,"\n");
+  cat("   # break points =",x$breaks,"\n")
+  cat("   p-value        =",x$pval[length(x$pval)],"\n\n")
+}
+
+## --------------------------------------------------------------------------

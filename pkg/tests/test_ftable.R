@@ -22,23 +22,24 @@ iserror <- function (expr) { is(try(expr), "try-error") }
 ## rvgt.ftable --------------------------------------------------------------
 
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,qdist=qnorm, breaks=51, mean=1,sd=2)
-ft; rm(ft)
+ft
+print.default(ft); rm(ft)
 
 ## ...........................................................................
 ft <- rvgt.ftable(n=1e5,rep=1, rdist=rnorm,pdist=pnorm, exactu=TRUE)
-ft; rm(ft)
+print.default(ft); rm(ft)
 
 ## ...........................................................................
 ft <- rvgt.ftable(n=1e5,rep=1, rdist=rnorm,pdist=pnorm, exactu=FALSE)
-ft; rm(ft)
+print.default(ft); rm(ft)
 
 ## ...........................................................................
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,qdist=qnorm, breaks=1/(1:100))
-ft; rm(ft)
+print.default(ft); rm(ft)
 
 ## ...........................................................................
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,qdist=qnorm, breaks=51, plot=TRUE)
-ft; rm(ft)
+print.default(ft); rm(ft)
 
 
 ## plot.rvgt.ftable ---------------------------------------------------------
@@ -58,11 +59,13 @@ rm(ft)
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,pdist=pnorm)
 ht <- rvgt.chisq(ft)
 ht
+print.default(ht)
 rm(ft,ht)
 
 ft <- rvgt.ftable(n=1e5,rep=1, rdist=rnorm,pdist=pnorm)
 ht <- rvgt.chisq(ft)
 ht
+print.default(ht)
 rm(ft,ht)
 
 
@@ -71,6 +74,7 @@ rm(ft,ht)
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,pdist=pnorm)
 ht <- rvgt.Mtest(ft)
 ht
+print.default(ht)
 rm(ft,ht)
 
 

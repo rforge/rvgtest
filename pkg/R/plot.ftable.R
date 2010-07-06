@@ -103,3 +103,11 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
 }
 
 ## --------------------------------------------------------------------------
+
+print.rvgt.ftable <- function(x, ...) {
+  cat("\nrvgtest - ftable:\n")
+  cat("   sample size    =",x$rep,"*",x$n,"=",x$n*x$rep,"\n");
+  cat("   # break points =",length(x$ubreaks),"\n\n")
+}
+
+## --------------------------------------------------------------------------

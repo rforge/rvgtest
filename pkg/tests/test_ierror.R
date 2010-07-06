@@ -22,29 +22,31 @@ iserror <- function (expr) { is(try(expr), "try-error") }
 ## uerror -------------------------------------------------------------------
 
 ue <- uerror(n=1e4, aqdist=qnorm, pdist=pnorm)
+ue
 rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm)
-ue; rm(ue)
+ue
+print.default(ue); rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm, tails=TRUE)
-ue; rm(ue)
+print.default(ue); rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm, udomain=c(0,0.1))
-ue; rm(ue)
+print.default(ue); rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=function(u){qgamma(u,shape=2)},
              pdist=pgamma, shape=2, udomain=c(0,0.1))
-ue; rm(ue)
+print.default(ue); rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=function(u){qgamma(u,shape=2)},
              pdist=pgamma, shape=2, udomain=c(0,0.1), plot=TRUE)
-ue; rm(ue)
+print.default(ue); rm(ue)
 
 
 ## xerror -------------------------------------------------------------------
@@ -52,31 +54,35 @@ ue; rm(ue)
 aq <- function(u) { qnorm(u) + u*runif(length(u),max=1.e-10) }
 
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm)
+xe
 rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm)
-xe; rm(xe)
+xe
+print.default(xe); rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm, tails=TRUE)
-xe; rm(xe)
+print.default(xe); rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm, udomain=c(0,0.01))
-xe; rm(xe)
+print.default(xe); rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm, plot=TRUE)
-xe; rm(xe)
+print.default(xe); rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, kind="abs", aqdist=aq, qdist=qnorm, plot=TRUE)
-xe; rm(xe)
+xe
+print.default(xe); rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, kind="rel", aqdist=aq, qdist=qnorm, plot=TRUE)
-xe; rm(xe)
+xe
+print.default(xe); rm(xe)
 
 rm(aq)
 
