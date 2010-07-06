@@ -77,6 +77,8 @@ uerror(n, aqdist, pdist, \dots, udomain=c(0,1),
   \item{med}{an array of median u-errors (of length \code{res}).}
   \item{uqr}{an array of upper quartile of u-errors (of length \code{res}).}
   \item{max}{an array of maximum u-errors (of length \code{res}).}
+  \item{mad}{an array of mean absolute deviations (of length \code{res}).}
+  \item{mse}{an array of mean squared errors (of length \code{res}).}
 }
 
 \note{

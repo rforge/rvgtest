@@ -131,7 +131,9 @@ print.rvgt.ierror <- function (x, ...) {
   cat("   sample size    =",x$n,"\n");
   cat("   u-domain       = (",
       x$udomain[1],", ",x$udomain[2],")\n",sep="")
-  cat("   max error      =",max(x$max),"\n\n")
+  cat("   max error      =",signif(max(x$max),4),"\n")
+  cat("   mean abs error =",signif(sum(x$mad)/x$res,4),"\n")
+  cat("   root of MSE    =",signif(sqrt(sum(x$mse)/x$res),4),"\n\n")
 }
 
 ## --------------------------------------------------------------------------

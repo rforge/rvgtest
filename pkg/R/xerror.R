@@ -77,6 +77,8 @@ xerror <- function (n, aqdist, qdist, ..., udomain=c(0,1),
   xe.med <- numeric(res)
   xe.uqr <- numeric(res)
   xe.max <- numeric(res)
+  xe.mad <- numeric(res)
+  xe.mse <- numeric(res)
 
   ## loop over intervals
   for (i in 1:res) {
@@ -112,7 +114,7 @@ xerror <- function (n, aqdist, qdist, ..., udomain=c(0,1),
       stop ("invalid 'kind'")
     }
     
-    ## compute and store statistics
+    ## quantiles for error
     xdata <- quantile(xerr,c(0,0.25,0.5,0.75,1))
 
     xe.min[i] <- xdata[[1]]
@@ -120,11 +122,16 @@ xerror <- function (n, aqdist, qdist, ..., udomain=c(0,1),
     xe.med[i] <- xdata[[3]]
     xe.uqr[i] <- xdata[[4]]
     xe.max[i] <- xdata[[5]]
+
+    ## MAD and MSE
+    xe.mad[i] <- sum(xerr) / length(xerr)
+    xe.mse[i] <- sum(xerr^2) / length(xerr)
   }
   
   ## return result as object of class "rvgt.ierror"
-  xerror <- list( n=n, res=res, udomain=c(umin,umax), kind=kind.name,
-                  min=xe.min, lqr=xe.lqr, med=xe.med, uqr=xe.uqr, max=xe.max )
+  xerror <- list(n=n, res=res, udomain=c(umin,umax), kind=kind.name,
+                 min=xe.min, lqr=xe.lqr, med=xe.med, uqr=xe.uqr, max=xe.max,
+                 mad=xe.mad, mse=xe.mse)
   class(xerror) <- "rvgt.ierror"
   
   ## plot x-errors

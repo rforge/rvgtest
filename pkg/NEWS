@@ -1,7 +1,10 @@
 
-Version 0.4.0: 2010-07-??
+Version 0.4.0: 2010-07-06
 
 	- added print methods for all S3 classes
+
+	- class 'rvgt.ierror' now also contains arrays 'mad' and 'mse'
+          for the mean absolute deviation and the mean squared error, resp.
 
 	- plot.rvgt.ierror() now accepts NA for argument 'tol'.
           This is equivalent to not providing the argument at all.

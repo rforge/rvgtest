@@ -68,7 +68,9 @@ uerror <- function (n, aqdist, pdist, ..., udomain=c(0,1),
   ue.med <- numeric(res)
   ue.uqr <- numeric(res)
   ue.max <- numeric(res)
-
+  ue.mad <- numeric(res)
+  ue.mse <- numeric(res)
+  
   ## loop over intervals
   for (i in 1:res) {
 
@@ -93,19 +95,24 @@ uerror <- function (n, aqdist, pdist, ..., udomain=c(0,1),
     ## compute u-error
     uerr <- abs(u - pdist(aqdist(u), ...))
 
-    ## compute and store statistics
-    udata <- quantile(uerr,c(0,0.25,0.5,0.75,1))
+    ## quantiles for error
+    udata <- quantile(uerr, c(0,0.25,0.5,0.75,1))
 
     ue.min[i] <- udata[[1]]
     ue.lqr[i] <- udata[[2]]
     ue.med[i] <- udata[[3]]
     ue.uqr[i] <- udata[[4]]
     ue.max[i] <- udata[[5]]
+ 
+    ## MAD and MSE
+    ue.mad[i] <- sum(uerr) / length(uerr)
+    ue.mse[i] <- sum(uerr^2) / length(uerr)
   }
   
   ## return result as object of class "rvgt.ierror"
-  uerror <- list( n=n, res=res, udomain=c(umin,umax), kind="u-error",
-                  min=ue.min, lqr=ue.lqr, med=ue.med, uqr=ue.uqr, max=ue.max )
+  uerror <- list(n=n, res=res, udomain=c(umin,umax), kind="u-error",
+                 min=ue.min, lqr=ue.lqr, med=ue.med, uqr=ue.uqr, max=ue.max,
+                 mad=ue.mad, mse=ue.mse)
   class(uerror) <- "rvgt.ierror"
   
   ## plot u-errors
