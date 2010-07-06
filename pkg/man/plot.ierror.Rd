@@ -9,9 +9,9 @@
 }
 
 \usage{
-\S3method{plot}{rvgt.ierror}(x, maxonly=FALSE, tol, \dots)
+\S3method{plot}{rvgt.ierror}(x, maxonly=FALSE, tol=NA, \dots)
 
-plot.rvgt.ierror(x, maxonly=FALSE, tol, \dots)
+plot.rvgt.ierror(x, maxonly=FALSE, tol=NA, \dots)
 }
 
 \arguments{

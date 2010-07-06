@@ -3,7 +3,7 @@
 ##
 ## --------------------------------------------------------------------------
 
-plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
+plot.rvgt.ierror <- function (x, maxonly=FALSE, tol=NA, ...)
 
   ## ------------------------------------------------------------------------
   ## Function for plotting graph of errors
@@ -18,7 +18,8 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
   if (!is.list(x))
     stop ("Invalid argument 'x'.")
 
-  if (!missing(tol)) {
+  ## is this a number?
+  if (!is.na(tol)) {
     tol <- as.numeric(tol)
     if (tol <= 0 )
       stop ("Invalid argument 'tol'.")
@@ -49,7 +50,7 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
     err.max <- max(err.max, ierr[[i]]$max)
   }
 
-  if (!missing(tol)) {
+  if (!is.na(tol)) {
     err.max <- max(err.max, 1.1*tol)
     err.max <- min(err.max, 10*tol)
   }
@@ -118,7 +119,7 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol, ...)
   }
 
   ## line for given tolerance
-  if (!missing(tol))
+  if (!is.na(tol))
     abline(tol,0,col="darkblue",lwd=2,lty=2)
 }
 

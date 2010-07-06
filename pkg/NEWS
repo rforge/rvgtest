@@ -1,4 +1,12 @@
 
+Version 0.4.0: 2010-07-??
+
+	- added print methods for all S3 classes
+
+	- plot.rvgt.ierror() now accepts NA for argument 'tol'.
+          This is equivalent to not providing the argument at all.
+
+
 Version 0.3.2: 2010-07-01
 
 	- function rvgt.ftable() now also accepts NULL for
