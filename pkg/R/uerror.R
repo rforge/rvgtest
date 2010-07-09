@@ -45,7 +45,7 @@ uerror <- function (n, aqdist, pdist, ..., udomain=c(0,1),
   ## domain
   umin <- max(0,udomain[1])
   umax <- min(1,udomain[2])
-  if( umin>=umax) 
+  if(! isTRUE(umin < umax)) 
     stop ("Invalid argument 'udomain'.")
 
   ## we do not treat tails more accurately
