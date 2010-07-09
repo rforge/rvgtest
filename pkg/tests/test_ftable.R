@@ -100,6 +100,32 @@ plot.rvgt.htest(list(ht1,ht2,ht3))
 rm(ft,ht1,ht2,ht3)
 
 
+## truncated domain ---------------------------------------------------------
+
+rdist <- function(n) {
+  x <- numeric(n)
+  for (i in 1:n) {
+    while(TRUE) { x[i] <- rnorm(1); if (x[i]>0 && x[i]<1) break }
+  }
+  return(x)
+}
+
+ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, qdist=qnorm, plot=FALSE, truncated=c(0,1))
+print.default(ft)
+rvgt.chisq(ft)
+rm(ft)
+
+ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, qdist=qnorm, plot=FALSE, truncated=c(0,1))
+print.default(ft)
+rvgt.chisq(ft)
+rm(ft)
+
+ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, plot=FALSE, truncated=c(0,1))
+print.default(ft)
+rvgt.chisq(ft)
+rm(ft)
+
+
 ## --------------------------------------------------------------------------
 ##
 ## Check invalid arguments

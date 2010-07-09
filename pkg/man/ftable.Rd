@@ -17,7 +17,7 @@
 
 \usage{
 rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
-            breaks = 101, exactu=FALSE, plot=FALSE)
+            breaks = 101, truncated, exactu=FALSE, plot=FALSE)
 }
 
 \arguments{
@@ -39,6 +39,7 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
       and 1, resp. Moreover, they must be different from each other.
     }
   }
+  \item{truncated}{boundaries of truncated domain. (optional)}
   \item{exactu}{logical.
     If \code{TRUE} then the exact locations of the given break points
     are used. Otherwise, these points are slightly shifted in order to
@@ -71,6 +72,10 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
   robust as round-off error in \code{qdist} have much more influence
   than those in \code{pdist}.
 
+  If \code{truncated} is given, then functions \code{qdist} and
+  \code{pdist} are rescaled to this given domain. It is recommended to
+  provide \code{pdist} even when \code{qdist} is given.
+  
   If \code{exactu} is \code{FALSE} \emph{and} the quantile function
   \code{qdist} is missing, then the first sample of size \code{n} is
   used to estimate the quantiles for the given break points using
@@ -150,6 +155,16 @@ plot(ft)
 ## Create a frequency table for the normal distribution with
 ## non-equidistributed break points
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,qdist=qnorm, breaks=1/(1:100))
+plot(ft)
+
+## A (naive) generator for a truncated normal distribution
+rdist <- function(n) {
+  x <- numeric(n)
+  for (i in 1:n){ while(TRUE){ x[i] <- rnorm(1); if (x[i]>1) break} }
+  return(x)
+}
+ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist,
+                  pdist=pnorm, qdist=qnorm, truncated=c(1,Inf))
 plot(ft)
 
 }
