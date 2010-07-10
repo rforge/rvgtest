@@ -17,7 +17,7 @@
 
 \usage{
 rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
-            breaks = 101, truncated, exactu=FALSE, plot=FALSE)
+            breaks = 101, trunc=NULL, exactu=FALSE, plot=FALSE)
 }
 
 \arguments{
@@ -39,7 +39,7 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
       and 1, resp. Moreover, they must be different from each other.
     }
   }
-  \item{truncated}{boundaries of truncated domain. (optional)}
+  \item{trunc}{boundaries of truncated domain. (optional)}
   \item{exactu}{logical.
     If \code{TRUE} then the exact locations of the given break points
     are used. Otherwise, these points are slightly shifted in order to
@@ -72,7 +72,7 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
   robust as round-off error in \code{qdist} have much more influence
   than those in \code{pdist}.
 
-  If \code{truncated} is given, then functions \code{qdist} and
+  If \code{trunc} is given, then functions \code{qdist} and
   \code{pdist} are rescaled to this given domain. It is recommended to
   provide \code{pdist} even when \code{qdist} is given.
   
@@ -164,7 +164,7 @@ rdist <- function(n) {
   return(x)
 }
 ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist,
-                  pdist=pnorm, qdist=qnorm, truncated=c(1,Inf))
+                  pdist=pnorm, qdist=qnorm, trunc=c(1,Inf))
 plot(ft)
 
 }

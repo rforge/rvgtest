@@ -5,7 +5,7 @@
 ## --------------------------------------------------------------------------
 
 rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
-                         breaks=101, truncated, exactu=FALSE, plot=FALSE)
+                         breaks=101, trunc=NULL, exactu=FALSE, plot=FALSE)
 
   ## ------------------------------------------------------------------------
   ## Create RVG frequency table for random variates generator.
@@ -20,7 +20,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## breaks : A single number giving the number of cells of histogram; or
   ##          a vector giving the breakpoints between histogram cells
   ##          (in u-scale)
-  ## truncated : boundaries of truncated domain 
+  ## trunc  : boundaries of truncated domain 
   ## exactu : Whether exact locatoon of break points in u-scale must be used.
   ##          If FALSE, then break points are slightly moved in order of
   ##          faster runtimes (this does not effect correctness of the
@@ -71,24 +71,23 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
 
   ## --- handle truncated domain --------------------------------------------
 
-  if (missing(truncated)) truncated <- NULL
-  if (! is.null(truncated) ) {
-    if (! (length(truncated)==2 && truncated[1]<truncated[2]))
-      stop ("Argument 'truncated' invalid.")
+  if (! is.null(trunc) ) {
+    if (! (length(trunc)==2 && trunc[1]<trunc[2]))
+      stop ("Argument 'trunc' invalid.")
 
     if (! is.null(pdist)) {
-      CDFmin <- pdist(truncated[1],...)
-      CDFmax <- pdist(truncated[2],...)
+      CDFmin <- pdist(trunc[1],...)
+      CDFmax <- pdist(trunc[2],...)
     }
     else {
       CDFmin <- 0
-      if (isTRUE(is.finite(truncated[1]))) {
-        f <- function(x) { qdist(x,...) - truncated[1] } 
+      if (isTRUE(is.finite(trunc[1]))) {
+        f <- function(x) { qdist(x,...) - trunc[1] } 
         CDFmin <- uniroot(f, c(0,1))$root
       }
       CDFmax <- 1
-      if (isTRUE(is.finite(truncated[2]))) {
-        f <- function(x) { qdist(x,...) - truncated[2] } 
+      if (isTRUE(is.finite(trunc[2]))) {
+        f <- function(x) { qdist(x,...) - trunc[2] } 
         CDFmax <- uniroot(f, c(0,1))$root
       }
     }
@@ -160,8 +159,8 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     if (i==1 && !isTRUE(exactu) && all(is.na(xbreaks))) {
       xbreaks <- quantile(x, probs=ubreaks, na.rm=TRUE)
       names(xbreaks) <- NULL
-      xbreaks[1]       <- if (is.null(truncated)) -Inf else truncated[1]
-      xbreaks[nbins+1] <- if (is.null(truncated))  Inf else truncated[2]
+      xbreaks[1]       <- if (is.null(trunc)) -Inf else trunc[1]
+      xbreaks[nbins+1] <- if (is.null(trunc))  Inf else trunc[2]
       ubreaks <- pdist(xbreaks,...)
     }
 

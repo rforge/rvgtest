@@ -3,7 +3,7 @@ Version 0.4.0: 2010-07-09
 
 	- added print methods for all S3 classes.
 
-	- rvgt.ftable() now has new argument 'truncated'.
+	- rvgt.ftable() now has new argument 'trunc'.
 
 	- class 'rvgt.ierror' now also contains arrays 'mad' and 'mse'
           for the mean absolute deviation and the mean squared error, resp.

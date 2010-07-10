@@ -110,17 +110,17 @@ rdist <- function(n) {
   return(x)
 }
 
-ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, qdist=qnorm, plot=FALSE, truncated=c(0,1))
+ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, qdist=qnorm, plot=FALSE, trunc=c(0,1))
 print.default(ft)
 rvgt.chisq(ft)
 rm(ft)
 
-ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, qdist=qnorm, plot=FALSE, truncated=c(0,1))
+ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, qdist=qnorm, plot=FALSE, trunc=c(0,1))
 print.default(ft)
 rvgt.chisq(ft)
 rm(ft)
 
-ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, plot=FALSE, truncated=c(0,1))
+ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, plot=FALSE, trunc=c(0,1))
 print.default(ft)
 rvgt.chisq(ft)
 rm(ft)
