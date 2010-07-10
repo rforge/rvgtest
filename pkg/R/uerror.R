@@ -4,7 +4,7 @@
 ##
 ## --------------------------------------------------------------------------
 
-uerror <- function (n, aqdist, pdist, ..., udomain=c(0,1),
+uerror <- function (n, aqdist, pdist, ..., trunc=NULL, udomain=c(0,1),
                     res=1000, tails=FALSE, plot=FALSE)
 
   ## ------------------------------------------------------------------------
@@ -14,6 +14,7 @@ uerror <- function (n, aqdist, pdist, ..., udomain=c(0,1),
   ## aqdist : Approximate inverse distribution function (quantile function)
   ## pdist  : Cumulative distribution function of distribution
   ## ....   : Parameters of distribution
+  ## trunc  : boundaries of truncated domain of distribution
   ## udomain: domain for u
   ## res    : Resolution of table (number of intervals in [0,1] for which 
   ##          quantiles a sample of u-errors are computed and stored) 
@@ -23,7 +24,7 @@ uerror <- function (n, aqdist, pdist, ..., udomain=c(0,1),
   ## Return:
   ##   list of size 'res' that contains 'n', 'res', domain, kind="u-error" and
   ##   the quantiles of u-errors:
-  ##     min, lqr (lower quartile), med, uqr (upper quartile), max 
+  ##     min, lqr (lower quartile), med, uqr (upper quartile), max, mad, mse
   ## ------------------------------------------------------------------------
 {
   ## sample size
@@ -42,7 +43,17 @@ uerror <- function (n, aqdist, pdist, ..., udomain=c(0,1),
   if( missing(pdist) || !is.function(pdist))
     stop ("Argument 'pdist' missing or invalid.")
 
-  ## domain
+  ## handle truncated domain (for target distribution)
+  if (! is.null(trunc) ) {
+    if (! (length(trunc)==2 && trunc[1]<trunc[2]))
+      stop ("Argument 'trunc' invalid.")
+    CDFmin <- pdist(trunc[1],...)
+    CDFmax <- pdist(trunc[2],...)
+    tmpp <- pdist
+    pdist <- function(x) { (tmpp(x,...) - CDFmin) / (CDFmax - CDFmin) }
+  }
+  
+  ## domain for quantile function
   umin <- max(0,udomain[1])
   umax <- min(1,udomain[2])
   if(! isTRUE(umin < umax)) 

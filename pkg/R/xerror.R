@@ -4,7 +4,7 @@
 ##
 ## --------------------------------------------------------------------------
 
-xerror <- function (n, aqdist, qdist, ..., udomain=c(0,1),
+xerror <- function (n, aqdist, qdist, ..., trunc=NULL, udomain=c(0,1),
                     res=1000, kind=c("abs","rel"), tails=FALSE, plot=FALSE)
 
   ## ------------------------------------------------------------------------
@@ -14,6 +14,7 @@ xerror <- function (n, aqdist, qdist, ..., udomain=c(0,1),
   ## aqdist : Approximate inverse distribution function (quantile function)
   ## qdist  : (Exact) quatile function of distribution
   ## ....   : Parameters of distribution
+  ## trunc  : boundaries of truncated domain of distribution
   ## udomain: domain for u
   ## res    : Resolution of table (number of intervals in [0,1] for which 
   ##          quantiles a sample of x-errors are computed and stored) 
@@ -51,7 +52,27 @@ xerror <- function (n, aqdist, qdist, ..., udomain=c(0,1),
   if( missing(qdist) || !is.function(qdist))
     stop ("Argument 'qdist' missing or invalid.")
 
-  ## domain
+  ## handle truncated domain (for target distribution)
+  if (! is.null(trunc) ) {
+    if (! (length(trunc)==2 && trunc[1]<trunc[2]))
+      stop ("Argument 'trunc' invalid.")
+
+    CDFmin <- 0
+    if (isTRUE(is.finite(trunc[1]))) {
+      f <- function(x) { qdist(x,...) - trunc[1] } 
+      CDFmin <- uniroot(f, c(0,1))$root
+    }
+    CDFmax <- 1
+    if (isTRUE(is.finite(trunc[2]))) {
+      f <- function(x) { qdist(x,...) - trunc[2] } 
+      CDFmax <- uniroot(f, c(0,1))$root
+    }
+
+    tmpq <- qdist
+    qdist <- function(x) { tmpq(x * (CDFmax - CDFmin) + CDFmin, ...) }
+  }
+  
+  ## domain for quantile function
   umin <- max(0,udomain[1])
   umax <- min(1,udomain[2])
   if( umin>=umax) 

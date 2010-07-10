@@ -17,7 +17,7 @@
 }
 
 \usage{
-xerror(n, aqdist, qdist, \dots, udomain=c(0,1),
+xerror(n, aqdist, qdist, \dots, trunc=NULL, udomain=c(0,1),
        res=1000, kind=c("abs","rel"),tails=FALSE, plot=FALSE)
 }
 
@@ -26,8 +26,10 @@ xerror(n, aqdist, qdist, \dots, udomain=c(0,1),
   \item{aqdist}{approximate inverse distribution function (quantile
     function) for a continuous univariate distribution.}
   \item{qdist}{(Exact) quatile function of distribution.}
-  \item{\dots }{parameters to be passed to \code{pdist}.}
-  \item{udomain}{domain for u.}
+  \item{\dots }{parameters to be passed to \code{qdist}.}
+  \item{trunc}{boundaries of truncated domain. (optional)}
+  \item{udomain}{domain of investigation for (approximate) quantile
+    function \code{aqdist}.}
   \item{res}{resolution (number of intervals).}
   \item{kind}{kind of x-error.}
   \item{tails}{logical. If \code{TRUE}, then the tail regions are
@@ -59,8 +61,14 @@ xerror(n, aqdist, qdist, \dots, udomain=c(0,1),
   Thus we save memory and it is much faster to plot and compare x-errors
   for different methods or distributions.
 
+  If \code{trunc} is given, then function \code{qdist} is rescaled to
+  this given domain. Notice, however, that this has some influence on
+  the accuracy of the results of the \dQuote{exact} quantile function
+  \code{qdist}.
+  
   Using argument \code{udomain} it is possible to restrict the domain of
-  \eqn{u}.
+  the given (approximate) quantile function \code{aqdist}, i.e., of its
+  argument \eqn{u}.
   
   When \code{tails=TRUE} we use additional \code{n} points for the first
   and last interval (which correspond to the tail regions of the
@@ -109,6 +117,12 @@ plot(xerr)
 xerr <- xerror(n=1e5, aqdist=aq, qdist=qnorm,
                res=500, kind="rel", plot=TRUE)
 
+
+## An inverse CDF for a truncated normal distribution
+aqtn <- splinefun(x=(pnorm((0:100)*0.015) - pnorm(0))/(pnorm(1.5)-pnorm(0)),
+                  y=(0:100)*0.015, method="monoH.FC")
+xerrtn <- xerror(n=1e5, aqdist=aqtn, qdist=qnorm, trunc=c(0,1.5),
+                 plot=TRUE)
 }
 
 \keyword{distribution}

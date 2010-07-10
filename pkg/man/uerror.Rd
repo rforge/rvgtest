@@ -17,7 +17,7 @@
 }
 
 \usage{
-uerror(n, aqdist, pdist, \dots, udomain=c(0,1),
+uerror(n, aqdist, pdist, \dots, trunc=NULL, udomain=c(0,1),
        res=1000, tails=FALSE, plot=FALSE)
 }
 
@@ -27,7 +27,9 @@ uerror(n, aqdist, pdist, \dots, udomain=c(0,1),
     function) for a continuous univariate distribution.}
   \item{pdist}{cumulative distribution function for distribution.}
   \item{\dots }{parameters to be passed to \code{pdist}.}
-  \item{udomain}{domain for u.}
+  \item{trunc}{boundaries of truncated domain. (optional)}
+  \item{udomain}{domain of investigation for (approximate) quantile
+    function \code{aqdist}.}
   \item{res}{resolution (number of intervals).}
   \item{tails}{logical. If \code{TRUE}, then the tail regions are
   treated more accurately. However, this doubles the given sample size.}
@@ -57,8 +59,13 @@ uerror(n, aqdist, pdist, \dots, udomain=c(0,1),
   Thus we save memory and it is much faster to plot and compare u-errors
   for different methods or distributions.
 
+  If \code{trunc} is given, then function \code{pdist} is rescaled to
+  this given domain. Notice, however, that this has some influence on
+  the accuracy of the results of the distribution function \code{pdist}.
+  
   Using argument \code{udomain} it is possible to restrict the domain of
-  \eqn{u}.
+  the given (approximate) quantile function \code{aqdist}, i.e., of its
+  argument \eqn{u}.
   
   When \code{tails=TRUE} we use additional \code{n} points for the first
   and last interval (which correspond to the tail regions of the
@@ -135,6 +142,11 @@ uerrb <- uerror(n=1e5, aqdist=aqb, pdist=pbeta, shape1=2, shape2=5,
 ## Show all u-errors in one plot
 plot.rvgt.ierror(list(uerrn,uerrg,uerrb))
 
+## An inverse CDF for a truncated normal distribution
+aqtn <- splinefun(x=(pnorm((0:100)*0.015) - pnorm(0))/(pnorm(1.5)-pnorm(0)),
+                  y=(0:100)*0.015, method="monoH.FC")
+uerrtn <- uerror(n=1e5, aqdist=aqtn, pdist=pnorm, trunc=c(0,1.5),
+                 plot=TRUE)
 }
 
 \keyword{distribution}
