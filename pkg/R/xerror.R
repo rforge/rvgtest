@@ -57,16 +57,8 @@ xerror <- function (n, aqdist, qdist, ..., trunc=NULL, udomain=c(0,1),
     if (! (length(trunc)==2 && trunc[1]<trunc[2]))
       stop ("Argument 'trunc' invalid.")
 
-    CDFmin <- 0
-    if (isTRUE(is.finite(trunc[1]))) {
-      f <- function(x) { qdist(x,...) - trunc[1] } 
-      CDFmin <- uniroot(f, c(0,1))$root
-    }
-    CDFmax <- 1
-    if (isTRUE(is.finite(trunc[2]))) {
-      f <- function(x) { qdist(x,...) - trunc[2] } 
-      CDFmax <- uniroot(f, c(0,1))$root
-    }
+    CDFmin <- invqdist(trunc[1], qdist, ...)
+    CDFmax <- invqdist(trunc[2], qdist, ...)
 
     tmpq <- qdist
     qdist <- function(x) { tmpq(x * (CDFmax - CDFmin) + CDFmin, ...) }

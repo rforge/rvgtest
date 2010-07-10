@@ -80,16 +80,8 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
       CDFmax <- pdist(trunc[2],...)
     }
     else {
-      CDFmin <- 0
-      if (isTRUE(is.finite(trunc[1]))) {
-        f <- function(x) { qdist(x,...) - trunc[1] } 
-        CDFmin <- uniroot(f, c(0,1))$root
-      }
-      CDFmax <- 1
-      if (isTRUE(is.finite(trunc[2]))) {
-        f <- function(x) { qdist(x,...) - trunc[2] } 
-        CDFmax <- uniroot(f, c(0,1))$root
-      }
+      CDFmin <- invqdist(trunc[1], qdist, ...)
+      CDFmax <- invqdist(trunc[2], qdist, ...)
     }
 
     if (! is.null(pdist)) {
@@ -193,6 +185,24 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
 
   ## return frequency table
   return(invisible(ftable))
+}
+
+## --------------------------------------------------------------------------
+
+invqdist <- function (x, qdist, ...)
+  ## ------------------------------------------------------------------------
+  ## Compute distribution function by inverting quantile function.
+  ## ------------------------------------------------------------------------
+  ## x      : Point where CDF has to be evaluated
+  ## qdist  : Quantile function of distribution
+  ## ....   : Parameters of distribution
+  ## ------------------------------------------------------------------------
+{
+  if (x ==-Inf) return(0)
+  if (x == Inf) return(1)
+  
+  f <- function(z) { qdist(z,...) - x } 
+  return (uniroot(f, interval=c(0,1), tol=1e-100 * .Machine$double.eps)$root)
 }
 
 ## --------------------------------------------------------------------------
