@@ -23,23 +23,33 @@ iserror <- function (expr) { is(try(expr), "try-error") }
 
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,qdist=qnorm, breaks=51, mean=1,sd=2)
 ft
-print.default(ft); rm(ft)
+print.default(ft)
+if (rvgt.chisq(ft)$pval[5] < 1e-5)  stop ("error in rvgt.ftable()")
+rm(ft)
 
 ## ...........................................................................
 ft <- rvgt.ftable(n=1e5,rep=1, rdist=rnorm,pdist=pnorm, exactu=TRUE)
-print.default(ft); rm(ft)
+print.default(ft)
+if (rvgt.chisq(ft)$pval[1] < 1e-5)  stop ("error in rvgt.ftable()")
+rm(ft)
 
 ## ...........................................................................
 ft <- rvgt.ftable(n=1e5,rep=1, rdist=rnorm,pdist=pnorm, exactu=FALSE)
-print.default(ft); rm(ft)
+print.default(ft)
+if (rvgt.chisq(ft)$pval[1] < 1e-5)  stop ("error in rvgt.ftable()")
+rm(ft)
 
 ## ...........................................................................
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,qdist=qnorm, breaks=1/(1:100))
-print.default(ft); rm(ft)
+print.default(ft)
+if (rvgt.chisq(ft)$pval[5] < 1e-5)  stop ("error in rvgt.ftable()")
+rm(ft)
 
 ## ...........................................................................
 ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,qdist=qnorm, breaks=51, plot=TRUE)
-print.default(ft); rm(ft)
+print.default(ft)
+if (rvgt.chisq(ft)$pval[5] < 1e-5)  stop ("error in rvgt.ftable()")
+rm(ft)
 
 
 ## plot.rvgt.ftable ---------------------------------------------------------
@@ -110,19 +120,19 @@ rdist <- function(n) {
   return(x)
 }
 
-ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, qdist=qnorm, plot=FALSE, trunc=c(0,1))
+ft <- rvgt.ftable(n=1e4,rep=5, rdist=rdist, pdist=pnorm, qdist=qnorm, plot=FALSE, trunc=c(0,1))
 print.default(ft)
-rvgt.chisq(ft)
+if (rvgt.chisq(ft)$pval[5] < 1e-5)  stop ("error in rvgt.ftable()")
 rm(ft)
 
 ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, qdist=qnorm, plot=FALSE, trunc=c(0,1))
 print.default(ft)
-rvgt.chisq(ft)
+if (rvgt.chisq(ft)$pval[5] < 1e-5)  stop ("error in rvgt.ftable()")
 rm(ft)
 
 ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, plot=FALSE, trunc=c(0,1))
 print.default(ft)
-rvgt.chisq(ft)
+if (rvgt.chisq(ft)$pval[5] < 1e-5)  stop ("error in rvgt.ftable()")
 rm(ft)
 
 

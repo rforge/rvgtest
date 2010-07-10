@@ -28,25 +28,35 @@ rm(ue)
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm)
 ue
-print.default(ue); rm(ue)
+print.default(ue)
+if (max(ue$max) > 1e-10)  stop("error in uerror()")
+rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm, tails=TRUE)
-print.default(ue); rm(ue)
+print.default(ue)
+if (max(ue$max) > 1e-10)  stop("error in uerror()")
+rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm, udomain=c(0,0.1))
-print.default(ue); rm(ue)
+print.default(ue)
+if (max(ue$max) > 1e-10)  stop("error in uerror()")
+rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=function(u){qgamma(u,shape=2)},
              pdist=pgamma, shape=2, udomain=c(0,0.1))
-print.default(ue); rm(ue)
+print.default(ue)
+if (max(ue$max) > 1e-10)  stop("error in uerror()")
+rm(ue)
 
 ## ..........................................................................
 ue <- uerror(n=1e3, res=100, aqdist=function(u){qgamma(u,shape=2)},
              pdist=pgamma, shape=2, udomain=c(0,0.1), plot=TRUE)
-print.default(ue); rm(ue)
+print.default(ue)
+if (max(ue$max) > 1e-10)  stop("error in uerror()")
+rm(ue)
 
 
 ## xerror -------------------------------------------------------------------
@@ -60,29 +70,41 @@ rm(xe)
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm)
 xe
-print.default(xe); rm(xe)
+print.default(xe)
+if (max(xe$max) > 1e-10)  stop("error in xerror()")
+rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm, tails=TRUE)
-print.default(xe); rm(xe)
+print.default(xe)
+if (max(xe$max) > 1e-10)  stop("error in xerror()")
+rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm, udomain=c(0,0.01))
-print.default(xe); rm(xe)
+print.default(xe)
+if (max(xe$max) > 1e-10)  stop("error in xerror()")
+rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm, plot=TRUE)
-print.default(xe); rm(xe)
+print.default(xe)
+if (max(xe$max) > 1e-10)  stop("error in xerror()")
+rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, kind="abs", aqdist=aq, qdist=qnorm, plot=TRUE)
 xe
-print.default(xe); rm(xe)
+print.default(xe)
+if (max(xe$max) > 1e-10)  stop("error in xerror()")
+rm(xe)
 
 ## ..........................................................................
 xe <- xerror(n=1e3, res=100, kind="rel", aqdist=aq, qdist=qnorm, plot=TRUE)
 xe
-print.default(xe); rm(xe)
+print.default(xe)
+if (max(xe$max) > 1e-5)  stop("error in xerror()")
+rm(xe)
 
 rm(aq)
 
@@ -130,6 +152,28 @@ rm(xe1,xe2)
 
 rm(aq1,aq2)
 
+
+## truncated domain ---------------------------------------------------------
+
+## An inverse CDF for a truncated normal distribution
+aqtn <- function(x) { qnorm(x * (pnorm(2.5) - pnorm(1.5)) + pnorm(1.5)) }
+
+ue <- uerror(n=1e5, res=100, aqdist=aqtn, pdist=pnorm, trunc=c(1.5,2.5))
+print.default(ue)
+if (max(ue$max) > 1e-10)  stop("error in uerror()")
+rm(ue)
+
+xe <- xerror(n=1e5, res=100, aqdist=aqtn, qdist=qnorm, trunc=c(1.5,2.5), kind="abs")
+print.default(xe)
+if (max(xe$max) > 1e-10)  stop("error in xerror('abs')")
+rm(xe)
+
+xe <- xerror(n=1e5, res=100, aqdist=aqtn, qdist=qnorm, trunc=c(1.5,2.5), kind="rel")
+print.default(xe)
+if (max(xe$max) > 1e-10)  stop("error in xerror('rel')")
+rm(xe)
+
+rm(aqtn)
 
 ## --------------------------------------------------------------------------
 ##
