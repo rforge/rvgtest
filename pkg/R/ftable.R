@@ -118,6 +118,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     nbins <- length(breaks)-1
     ## the break points must be sorted
     ubreaks <- sort(breaks)
+
     ## differences must be strictly positive
     probs = ubreaks[-1] - ubreaks[-length(ubreaks)]
     if (!all(probs>0))
@@ -154,6 +155,8 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
       xbreaks[1]       <- if (is.null(trunc)) -Inf else trunc[1]
       xbreaks[nbins+1] <- if (is.null(trunc))  Inf else trunc[2]
       ubreaks <- pdist(xbreaks,...)
+      ubreaks[ubreaks<0] <- 0
+      ubreaks[ubreaks>1] <- 1
     }
 
     ## get row
@@ -198,11 +201,13 @@ invqdist <- function (x, qdist, ...)
   ## ....   : Parameters of distribution
   ## ------------------------------------------------------------------------
 {
-  if (x ==-Inf) return(0)
-  if (x == Inf) return(1)
-  
+  ql <- qdist(0,...); if (isTRUE(ql>=x)) return(0)
+  qu <- qdist(1,...); if (isTRUE(qu<=x)) return(1)
+
   f <- function(z) { qdist(z,...) - x } 
-  return (uniroot(f, interval=c(0,1), tol=1e-100 * .Machine$double.eps)$root)
+
+  return (uniroot(f, interval=c(0,1), f.lower=(ql-x), f.upper=(qu-x),
+                  tol=1e-100 * .Machine$double.eps)$root)
 }
 
 ## --------------------------------------------------------------------------
