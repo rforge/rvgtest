@@ -1,4 +1,9 @@
 
+Version 0.5.0: 2010-07-12
+
+	- submit to CRAN.
+
+
 Version 0.4.0: 2010-07-09
 
 	- added print methods for all S3 classes.
