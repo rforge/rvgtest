@@ -93,6 +93,10 @@ uerror(n, aqdist, pdist, \dots, trunc=NULL, udomain=c(0,1),
   error of the \emph{composed} function \code{pdist(aqdist(u))}.
   Thus one needs a distribution function \code{pdist} that is
   numerically (much) more accurate than \code{aqdist}.
+
+  The random variate generator \code{rdist} can alternatively be a
+  generator object form the
+  \pkg{\link[Runuran:Runuran-package]{Runuran}} package.
 }
 
 \references{

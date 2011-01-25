@@ -23,7 +23,8 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
 \arguments{
   \item{n}{sample size for one repetition.}
   \item{rep}{number of repetitions.}
-  \item{rdist}{random variate generator for a continuous univariate distribution.}
+  \item{rdist}{random variate generator for a continuous univariate
+    distribution.}
   \item{qdist}{quantile function for the distribution.}
   \item{pdist}{cumulative distribution function for distribution.}
   \item{\dots }{parameters to be passed to \code{rdist}, \code{qdist}
@@ -102,6 +103,10 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
   It is important that all given functions -- \code{rdist},
   \code{qdist}, and \code{pdist} -- accept the same arguments passed to
   \code{rvgt.ftable} via \code{\dots}.
+
+  The random variate generator \code{rdist} can alternatively be a
+  generator object form the
+  \pkg{\link[Runuran:Runuran-package]{Runuran}} package.
 }
 
 \value{
@@ -129,7 +134,7 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
 
 \seealso{
   See \code{\link{plot.rvgt.ftable}} for the syntax of the plotting
-  method.
+  method. 
 }
 
 \examples{

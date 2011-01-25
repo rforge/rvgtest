@@ -11,7 +11,8 @@ xerror <- function (n, aqdist, qdist, ..., trunc=NULL, udomain=c(0,1),
   ## Create table of x-errors for numerical inversion method.
   ## ------------------------------------------------------------------------
   ## n      : Size of random sample 
-  ## aqdist : Approximate inverse distribution function (quantile function)
+  ## aqdist : Approximate inverse distribution function (quantile function):
+  ##             a function or an object of class "unuran"
   ## qdist  : (Exact) quatile function of distribution
   ## ....   : Parameters of distribution
   ## trunc  : boundaries of truncated domain of distribution
@@ -45,9 +46,25 @@ xerror <- function (n, aqdist, qdist, ..., trunc=NULL, udomain=c(0,1),
                       stop ("invalid 'kind'") )
 
   ## approximate inverse distribution function (quantile function)
-  if( missing(aqdist) || !is.function(aqdist))
-    stop ("Argument 'aqdist' missing or invalid.")
+  if( missing(aqdist) )
+    stop ("Argument 'aqdist' missing.")
 
+  if (is.function(aqdist)) {
+    ## R function
+    myaqdist <- aqdist
+  }
+  else if (is(aqdist,"unuran")) {
+    ## "unuran" object
+    ## Remark: We assume that package 'Runuran' is already loaded
+    ##    because it is required to create an object of class "unuran".
+    if (!unuran.is.inversion(aqdist))
+      stop ("Argument 'aqdist' is invalid UNU.RAN object: inversion method required.")
+    myaqdist <- function(u) { uq(unr=aqdist, u) }
+  }
+  else {
+    stop ("Argument 'aqdist' invalid.")
+  }
+  
   ## (exact) quatile function of distribution
   if( missing(qdist) || !is.function(qdist))
     stop ("Argument 'qdist' missing or invalid.")
@@ -117,11 +134,11 @@ xerror <- function (n, aqdist, qdist, ..., trunc=NULL, udomain=c(0,1),
     ## compute x-error
     if (kind == "abs") {
       Fu <- qdist(u,...)
-      xerr <- abs(Fu - aqdist(u))
+      xerr <- abs(Fu - myaqdist(u))
     }
     else if (kind == "rel") {
       Fu <- qdist(u,...)
-      xerr <- abs(Fu - aqdist(u)) / abs(Fu)
+      xerr <- abs(Fu - myaqdist(u)) / abs(Fu)
     }
     else {
       stop ("invalid 'kind'")

@@ -11,7 +11,8 @@ uerror <- function (n, aqdist, pdist, ..., trunc=NULL, udomain=c(0,1),
   ## Create table of u-errors for numerical inversion method.
   ## ------------------------------------------------------------------------
   ## n      : Size of random sample 
-  ## aqdist : Approximate inverse distribution function (quantile function)
+  ## aqdist : Approximate inverse distribution function (quantile function):
+  ##             a function or an object of class "unuran"
   ## pdist  : Cumulative distribution function of distribution
   ## ....   : Parameters of distribution
   ## trunc  : boundaries of truncated domain of distribution
@@ -36,9 +37,25 @@ uerror <- function (n, aqdist, pdist, ..., trunc=NULL, udomain=c(0,1),
     stop ("Invalid argument 'rep'.")
 
   ## approximate inverse distribution function (quantile function)
-  if( missing(aqdist) || !is.function(aqdist))
-    stop ("Argument 'aqdist' missing or invalid.")
+  if( missing(aqdist) )
+    stop ("Argument 'aqdist' missing.")
 
+  if (is.function(aqdist)) {
+    ## R function
+    myaqdist <- aqdist
+  }
+  else if (is(aqdist,"unuran")) {
+    ## "unuran" object
+    ## Remark: We assume that package 'Runuran' is already loaded
+    ##    because it is required to create an object of class "unuran".
+    if (!unuran.is.inversion(aqdist))
+      stop ("Argument 'aqdist' is invalid UNU.RAN object: inversion method required.")
+    myaqdist <- function(u) { uq(unr=aqdist, u) }
+  }
+  else {
+    stop ("Argument 'aqdist' invalid.")
+  }
+  
   ## distribution function
   if( missing(pdist) || !is.function(pdist))
     stop ("Argument 'pdist' missing or invalid.")
@@ -104,7 +121,7 @@ uerror <- function (n, aqdist, pdist, ..., trunc=NULL, udomain=c(0,1),
     }
 
     ## compute u-error
-    uerr <- abs(u - pdist(aqdist(u), ...))
+    uerr <- abs(u - pdist(myaqdist(u), ...))
 
     ## quantiles for error
     udata <- quantile(uerr, c(0,0.25,0.5,0.75,1))

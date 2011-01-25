@@ -13,7 +13,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## ------------------------------------------------------------------------
   ## n      : Size of random sample at each repetition
   ## rep    : Number of repetitions
-  ## rdist  : Random variate generator  
+  ## rdist  : Random variate generator: a function or an object of class "unuran"
   ## qdist  : Quantile function of distribution
   ## pdist  : Cumulative distribution function of distribution
   ## ....   : Parameters of distribution
@@ -35,7 +35,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ##   frequencies of sample of size n
   ## ------------------------------------------------------------------------
 {
-  
+
   ## --- check arguments ----------------------------------------------------
 
   ## sample size
@@ -47,9 +47,23 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     stop ("Invalid argument 'rep'.")
 
   ## random variate generator
-  if (missing(rdist) || !is.function(rdist))
-    stop ("Argument 'rdist' missing or invalid.")
+  if (missing(rdist))
+    stop ("Argument 'rdist' missing.")
 
+  if (is.function(rdist)) {
+    ## R function
+    myrdist <- function(size) { rdist(size,...) }
+  }
+  else if (is(rdist,"unuran")) {
+    ## "unuran" object
+    ## Remark: We assume that package 'Runuran' is already loaded
+    ##    because it is required to create an object of class "unuran".
+    myrdist <- function(size) { ur(unr=rdist, size) }
+  }
+  else {
+    stop ("Argument 'rdist' invalid.")
+  }
+  
   ## quantile and distribution function
   if (missing(qdist)) qdist <- NULL
   if (missing(pdist)) pdist <- NULL
@@ -144,7 +158,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## loop for each row of table
   for (i in 1:rep) {
     ## random sample of size n
-    x <- rdist(n,...)
+    x <- myrdist(n)
 
     ## it is faster to have break points in x-scale.
     ## if allowed we use the empirial quantiles of the first sample
