@@ -64,18 +64,44 @@ test.004.xerror........... <- function () {
 ##
 ## --------------------------------------------------------------------------
 
+## UNU.RAN object must be of class "unuran.cont" ----------------------------
+
+test.011.ftable.invalid... <- function () {
+  ## rvgt.ftable() requires univariate continuous distribution
+  unr <- dgtd.new(udbinom(size=20,prob=0.3))
+  if(VERBOSE) { print(unr) }
+
+  msg <- "\n   rvgt.ftable(): Invalid Runuran object for argument 'rdist' not detected\n"
+  checkException(rvgt.ftable(n=1e4,rep=1, rdist=unr,qdist=qbinom, size=20,prob=0.3), msg)
+}
+
+test.012.uerror.invalid... <- function () {
+  ## uerror() requires univariate continuous distribution
+  unr <- dgtd.new(udbinom(size=20,prob=0.3))
+  if(VERBOSE) { print(unr) }
+  msg <- "\n   uerror(): Invalid Runuran object for argument 'aqdist' not detected\n"
+  checkException(uerror(n=1e3,res=100, aqdist=unr,pdist=pbinom, size=20,prob=0.3), msg)
+}
+
+test.013.xerror.invalid... <- function () {
+  ## xerror() requires univariate continuous distribution
+  unr <- dgtd.new(udbinom(size=20,prob=0.3))
+  if(VERBOSE) { print(unr) }
+  msg <- "\n   xerror(): Invalid Runuran object for argument 'aqdist' not detected\n"
+  checkException(xerror(n=1e3,res=100, aqdist=unr,qdist=qbinom, size=20,prob=0.3), msg)
+}
+
 ## UNU.RAN object with non-inversion method ---------------------------------
 
-test.005.uerror.invalid... <- function () {
+test.021.uerror.invalid... <- function () {
   ## uerror() requires inversion method but TDR is rejection method
   unr <- tdrd.new(udnorm())
   if(VERBOSE) { print(unr) }
   msg <- "\n   uerror(): Invalid Runuran object for argument 'aqdist' not detected\n"
   checkException(uerror(n=1e3, res=100, aqdist=unr, pdist=pnorm), msg)
-
 }
 
-test.006.xerror.invalid... <- function () {
+test.022.xerror.invalid... <- function () {
   ## xerror() requires inversion method but TDR is rejection method
   unr <- tdrd.new(udnorm())
   if(VERBOSE) { print(unr) }

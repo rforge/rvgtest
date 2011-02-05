@@ -58,6 +58,11 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     ## "unuran" object
     ## Remark: We assume that package 'Runuran' is already loaded
     ##    because it is required to create an object of class "unuran".
+    ## However, we need an object that contains a
+    ## univariate continuous distribution.
+    if (unuran.distr.class(rdist) != "cont")
+      stop ("Argument 'rdist' is object of class 'unuran' of invalid distribution type.")
+    
     myrdist <- function(size) { ur(unr=rdist, size) }
   }
   else {

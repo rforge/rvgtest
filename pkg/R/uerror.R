@@ -48,8 +48,14 @@ uerror <- function (n, aqdist, pdist, ..., trunc=NULL, udomain=c(0,1),
     ## "unuran" object
     ## Remark: We assume that package 'Runuran' is already loaded
     ##    because it is required to create an object of class "unuran".
+    ## However, we need an object that contains a
+    ## univariate continuous distribution.
+    if (unuran.distr.class(aqdist) != "cont")
+      stop ("Argument 'aqdist' is object of class 'unuran' of invalid distribution type.")
+    ## Moreover, we need an inversion method
     if (!unuran.is.inversion(aqdist))
       stop ("Argument 'aqdist' is invalid UNU.RAN object: inversion method required.")
+
     myaqdist <- function(u) { uq(unr=aqdist, u) }
   }
   else {

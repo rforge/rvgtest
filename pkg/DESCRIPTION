@@ -5,7 +5,7 @@ Version: 0.5.901
 Date: 2011-02-02
 Author: Josef Leydold and Sougata Chaudhuri <sgtchaudhuri@gmail.com>
 Maintainer: Josef Leydold <josef.leydold@wu.ac.at>
-Suggests: Runuran (>= 0.17), RUnit
+Suggests: Runuran (>= 0.17.900), RUnit
 Description: Test suite for non-uniform pseudo-random number generators.
 License: GPL-2
 URL: http://statmath.wu.ac.at/unuran/
