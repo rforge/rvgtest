@@ -17,9 +17,12 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
   ## ...   : further graphical parameters
   ## ------------------------------------------------------------------------
 {
-  ## check arguments
+  ## --- check arguments ----------------------------------------------------
+
   if (alpha <= 0 || alpha > 0.11)
     stop ("Invalid argument 'alpha'.")
+
+  ## --- read data ----------------------------------------------------------
 
   ## get table
   table <- x$count
@@ -44,22 +47,42 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
   ubreaks <- x$ubreaks
 
   ## expected probabilities
-  p0 <- ubreaks[-1] - ubreaks[-(m+1)]
-  
+  p0 <- diff(ubreaks)
+
   ## get requested frequencies
   if (length(rows)==1) {
-    freq <- table[rows,]
+    count <- table[rows,]
   }
   else {
-    freq <- colSums(table[rows,])
+    count <- colSums(table[rows,])
   }
 
-  ## normalize frequencies
-  freq <- freq / (n * p0)
+  ## --- check probabilities ------------------------------------------------
 
+  ## we have problems to plot the histogram when probabilities are too small.
+  ## thus we collapse the corresponding bins.
+  
+  tol <- 1e-4/n
+  too.small <- which(p0<tol)
+  
+  if (length(too.small)>0) {
+    cumcount <- cumsum(count)[-too.small]
+    cumcount[length(cumcount)] <- n
+    
+    count <- c(cumcount[1],diff(cumcount))
+    p0 <- p0[-too.small]
+    ubreaks <- ubreaks[-too.small]
+  }
+
+  ## --- parameters for plot ------------------------------------------------
+
+  ## normalized frequencies
+  freq <- count / (n * p0)
+  
   ## maximum and minimum frequencies
-  fmax <- max(freq)
-  fmin <- min(freq)
+  ## (we remove NA and NaN to avoid confusing error messages)
+  fmax <- max(freq, na.rm=TRUE)
+  fmin <- min(freq, na.rm=TRUE)
 
   ## standard deviation of bin densities
   s <- sqrt(p0*(1-p0)/n) / p0
@@ -71,7 +94,9 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
   yl <- c(min(fmin, 1.-ci, 1.-2*mean(ci)),
           max(fmax, 1.+ci, 1.+2*mean(ci)))
   xl <- c(0,1)
-  
+
+  ## --- create plot --------------------------------------------------------
+
   ## create plotting aera with labels
   plot(xl,yl,xlim=xl,ylim=yl,type="n",
        xlab="F(x)", ylab="normalized frequencies", ...)
@@ -84,7 +109,6 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
   
   ## add confidence intervals
   ## we treat equidistributed in a special manner
-  p0 <- ubreaks[-1] - ubreaks[-length(ubreaks)]
   if (isTRUE(all.equal(p0, rep(1/length(p0),length(p0))))) {
     ## equidistributed
     abline(1-ci,0,col="red",lwd=2,lty=2)
