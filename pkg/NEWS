@@ -5,6 +5,8 @@ Version 0.6.0: 2011-??-??
 	  generator object from the 'Runuran' package as argument 
 	  'rdist'.
 
+	- rvgt.ftable(): argument 'n' must be >= 100.
+
 
 Version 0.5.0: 2010-07-12
 

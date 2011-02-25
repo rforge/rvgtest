@@ -39,7 +39,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## --- check arguments ----------------------------------------------------
 
   ## sample size
-  if (missing(n) || !is.numeric(n) || n<1 || n!=round(n))
+  if (missing(n) || !is.numeric(n) || n<100 || n!=round(n))
     stop ("Argument 'n' missing or invalid.")
 
   ## number of repetitions
@@ -137,14 +137,13 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     nbins <- length(breaks)-1
     ## the break points must be sorted
     ubreaks <- sort(breaks)
-
-    ## differences must be strictly positive
-    probs = ubreaks[-1] - ubreaks[-length(ubreaks)]
-    if (!all(probs>0))
-      stop ("break points invalid: length of histogram cells must not be 0")
     ## first and last break point must be 0 and 1, resp.
     ubreaks[1] <- 0
     ubreaks[length(ubreaks)] <- 1
+
+    ## differences must be strictly positive
+    if (!all(diff(ubreaks)>0))
+      stop ("break points invalid: length of histogram cells must be greater than 0")
   }
 
   ## --- compute break points in x-scale ------------------------------------

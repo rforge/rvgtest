@@ -21,7 +21,7 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
 }
 
 \arguments{
-  \item{n}{sample size for one repetition.}
+  \item{n}{sample size for one repetition (\eqn{\ge 100}{>=100}).}
   \item{rep}{number of repetitions.}
   \item{rdist}{random variate generator for a continuous univariate
     distribution.}
