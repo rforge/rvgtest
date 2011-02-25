@@ -5,6 +5,7 @@ R=R
 
 help:
 	@echo "test  ... run test suite"
+	@echo "check ... run test suite"
 	@echo "inst  ... install package"
 	@echo "all   ... install package and run test suite"
 	@echo "clean ... clear working space"
@@ -19,10 +20,13 @@ test: # Run unit tests
 	export RCMDCHECK=FALSE; \
 	${R} --vanilla --slave < ${SUITE}
 
+check: # same as 'test'
+	make test
+
 clean:
 	@echo "clear working space ..."
 	@rm -vf Rplots.pdf report.* *~
 
-.PHONY: all clean inst test
+.PHONY: all check clean inst test
 
 
