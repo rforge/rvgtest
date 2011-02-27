@@ -65,7 +65,7 @@
   sample sizes (which are only limited by the available runtimes).
 
   Currently there are two toolsets for testing random variate generators
-  for \emph{continuous univariate distributions}:
+  for \emph{univariate distributions}:
   \enumerate{
     \item Testing based on histograms for all kinds of RVGs.
     \item Estimating errors of RVGs that are based on numerical
@@ -74,7 +74,7 @@
 }
 
 \section{1. Histograms}{
-  A frequently used method for testing continuous univariate
+  A frequently used method for testing univariate
   distributions is based on the following strategy:
   Draw a sample, compute a histogram and run a goodness-of-fit test on
   the resulting frequency table.
