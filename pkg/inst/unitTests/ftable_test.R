@@ -26,7 +26,7 @@ test.001.ftable........... <- function () {
   check.ftable(ft)
 }
 
-test.002.ftable.distparams <- function () {
+test.002.ftable.param..... <- function () {
   ft <- rvgt.ftable(n=1e5, rdist=rnorm,qdist=qnorm, mean=1,sd=2)
   check.ftable(ft)
 }
@@ -55,10 +55,52 @@ test.006.ftable.plot...... <- function () {
   check.ftable(ft, rep=5)
 }
 
+## univariate continuous distribution ---------------------------------------
+
+test.011.ftable.cont.p.... <- function () {
+  ft <- rvgt.ftable(n=1e5, rdist=rnorm,pdist=pnorm)
+  check.ftable(ft)
+}
+
+test.012.ftable.cont.p.exa <- function () {
+  ft <- rvgt.ftable(n=1e5, rdist=rnorm,pdist=pnorm, exactu=TRUE)
+  check.ftable(ft)
+}
+
+test.013.ftable.cont.q.... <- function () {
+  ft <- rvgt.ftable(n=1e5, rdist=rnorm,qdist=qnorm)
+  check.ftable(ft)
+}
+
+test.014.ftable.cont.pq.... <- function () {
+  ft <- rvgt.ftable(n=1e5, rdist=rnorm,qdist=qnorm,pdist=pnorm)
+  check.ftable(ft)
+}
+
+
+## univariate discrete distribution -----------------------------------------
+
+test.021.ftable.discr.p... <- function () {
+  ft <- rvgt.ftable(n=1e5, rdist=rgeom,pdist=pgeom, prob=0.123)
+  check.ftable(ft)
+}
+
+test.022.ftable.discr.p.ex <- function () {
+  ft <- rvgt.ftable(n=1e5, rdist=rgeom,pdist=pgeom,exactu=TRUE, prob=0.123)
+  check.ftable(ft)
+}
+
+test.023.ftable.discr.pq... <- function () {
+  ft <- rvgt.ftable(n=1e5, rdist=rgeom,pdist=pgeom,qdist=qgeom, prob=0.123)
+  check.ftable(ft)
+}
+
+## 'qdist' without 'pdist' does not work, see test.111.ftable.invalid..()
+
 
 ## truncated domain ---------------------------------------------------------
 
-test.011.ftable.trunc..... <- function () {
+test.031.ftable.trunc..... <- function () {
   rdist <- function(n) {
     x <- numeric(n)
     for (i in 1:n) {
@@ -70,7 +112,7 @@ test.011.ftable.trunc..... <- function () {
   check.ftable(ft, rep=5)
 }
 
-test.012.ftable.trunc..... <- function () {
+test.032.ftable.trunc..... <- function () {
   rdist <- function(n) {
     x <- numeric(n)
     for (i in 1:n) {
@@ -82,7 +124,7 @@ test.012.ftable.trunc..... <- function () {
   check.ftable(ft, rep=5)
 }
 
-test.013.ftable.trunc..... <- function () {
+test.033.ftable.trunc..... <- function () {
   rdist <- function(n) {
     x <- numeric(n)
     for (i in 1:n) {
@@ -94,10 +136,11 @@ test.013.ftable.trunc..... <- function () {
   check.ftable(ft, rep=1)
 }
 
+## there currently no tests for truncated discrete distributions
 
 ## plot.rvgt.ftable ---------------------------------------------------------
 
-test.021.plot.ftable...... <- function () {
+test.041.plot.ftable...... <- function () {
   ## we just run the code 
   ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,pdist=pnorm, exactu=TRUE)
   plot(ft)
@@ -110,7 +153,7 @@ test.021.plot.ftable...... <- function () {
 
 ## rvgt.chisq ---------------------------------------------------------------
 
-test.031.chisq............ <- function () {
+test.051.chisq............ <- function () {
   rep <- 5
   ft <- rvgt.ftable(n=1e5,rep=rep, rdist=rnorm,pdist=pnorm)
   ht <- rvgt.chisq(ft)
@@ -123,7 +166,7 @@ test.031.chisq............ <- function () {
 
 ## rvgt.Mtest ---------------------------------------------------------------
 
-test.032.Mtest............ <- function () {
+test.052.Mtest............ <- function () {
   rep <- 5
   ft <- rvgt.ftable(n=1e5,rep=rep, rdist=rnorm,pdist=pnorm)
   ht <- rvgt.Mtest(ft)
@@ -136,7 +179,7 @@ test.032.Mtest............ <- function () {
 
 ## plot.rvgt.htest ----------------------------------------------------------
 
-test.041.plot.htest....... <- function () {
+test.061.plot.htest....... <- function () {
   ## we just run the code 
   ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,pdist=pnorm)
   ht1 <- rvgt.chisq(ft)
@@ -163,7 +206,7 @@ test.041.plot.htest....... <- function () {
 
 ## rvgt.ftable --------------------------------------------------------------
 
-test.051.ftable.invalid.. <- function () {
+test.111.ftable.invalid.. <- function () {
   ## sample size 'n'
   msg <- "\n   rvgt.ftable(): invalid argument 'n' not detected\n"
   checkException(rvgt.ftable(       rdist=rnorm, qdist=qnorm), msg)
@@ -188,6 +231,10 @@ test.051.ftable.invalid.. <- function () {
   checkException(rvgt.ftable(n=100, rdist=rnorm, pdist="pnorm"), msg)
   checkException(rvgt.ftable(n=100, rdist=rnorm, qdist="qnorm"), msg)
 
+  ## quantile and distribution function
+  msg <- "\n   rvgt.ftable(): missing argument 'pdist' for discrete distribution not detected\n"
+  checkException(rvgt.ftable(n=100, rdist=rgeom,qdist=qgeom, prob=0.123), msg)
+
   ## break points
   msg <- "\n   rvgt.ftable(): invalid argument 'breaks' not detected\n"
   checkException(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=c(0,0.1,0.2,"0.3")), msg)
@@ -205,7 +252,7 @@ test.051.ftable.invalid.. <- function () {
 
 ## rvgt.chisq ---------------------------------------------------------------
 
-test.061.chisq.invalid.... <- function () {
+test.121.chisq.invalid.... <- function () {
   msg <- "\n   rvgt.chisq(): invalid argument 'ftable' not detected\n"
   checkException(rvgt.chisq(),          msg)
   checkException(rvgt.chisq("ftable"),  msg)
@@ -214,7 +261,7 @@ test.061.chisq.invalid.... <- function () {
 
 ## rvgt.Mtest ---------------------------------------------------------------
 
-test.062.Mtest.invalid.... <- function () {
+test.122.Mtest.invalid.... <- function () {
   msg <- "\n   rvgt.Mtest(): invalid argument 'ftable' not detected\n"
   checkException(rvgt.Mtest(),          msg)
   checkException(rvgt.Mtest("ftable"),  msg)
@@ -223,7 +270,7 @@ test.062.Mtest.invalid.... <- function () {
 
 ## plot.rvgt.ftable ---------------------------------------------------------
 
-test.071.plot.ftable.inval <- function () {
+test.131.plot.ftable.inval <- function () {
   ft <- rvgt.ftable(n=1e5, rdist=rnorm, qdist=qnorm)
 
   ## number of rows
@@ -241,7 +288,7 @@ test.071.plot.ftable.inval <- function () {
 
 ## plot.rvgt.htest ----------------------------------------------------------
 
-test.072.plot.htest.invali <- function () {
+test.132.plot.htest.invali <- function () {
   ft <- rvgt.ftable(n=1e5, rdist=rnorm, qdist=qnorm)
   ht <- rvgt.chisq(ft)
 

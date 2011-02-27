@@ -129,7 +129,13 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
 ## --------------------------------------------------------------------------
 
 print.rvgt.ftable <- function(x, ...) {
+  type <- switch(x$dtype,
+                 "cont"  = "continuous distribution",
+                 "discr" = "discrete distribution",
+                 stop("internal error"))
+
   cat("\nrvgtest - ftable:\n")
+  cat("   distrib type   =",type,"\n");
   cat("   sample size    =",x$rep,"*",x$n,"=",x$n*x$rep,"\n");
   cat("   # break points =",length(x$ubreaks),"\n\n")
 }

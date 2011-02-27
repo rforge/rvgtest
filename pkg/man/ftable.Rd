@@ -11,8 +11,7 @@
   in an array which can be used to visualize possible defects of the
   pseudo-random variate generator and run goodness-of-fit tests.
 
-  Currently the function only works for generators for continuous
-  univariate distribution.
+  The function only works for generators for univariate distributions.
 }
 
 \usage{
@@ -23,8 +22,7 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
 \arguments{
   \item{n}{sample size for one repetition (\eqn{\ge 100}{>=100}).}
   \item{rep}{number of repetitions.}
-  \item{rdist}{random variate generator for a continuous univariate
-    distribution.}
+  \item{rdist}{random variate generator for a univariate distribution.}
   \item{qdist}{quantile function for the distribution.}
   \item{pdist}{cumulative distribution function for distribution.}
   \item{\dots }{parameters to be passed to \code{rdist}, \code{qdist}
@@ -50,7 +48,7 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
 
 \details{
   \code{rvgt.ftable} returns tables of bin counts similar to the
-  \code{\link{hist}} function. Bins can be either specified my the
+  \code{\link{hist}} function. Bins can be specified either by the
   number of break points between the cells of the histogram, or by a
   list of break points in the \eqn{u}-scale.
   In the former case the break points are constructed such that all bins
@@ -97,6 +95,18 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
     sample sizes, or
     \item allows for a two-level test.
   }
+
+  For \emph{discrete} distributions function \code{pdist} must be given
+  and both arguments \code{qdist} and \code{exactu} are ignored.
+  Moreover, the given break points have to be adjusted according to the
+  probability function of the discrete distribution. In particular this
+  means that bins have to be collapsed when the probability of some
+  number is larger than difference of break points in \eqn{u}-scale.
+  Thus there resulting tables may contain less break points than
+  requested.
+
+  The type of distribution (continuous or discrete) is autodetected by
+  the function.
 }
 
 \note{
@@ -119,6 +129,8 @@ rvgt.ftable(n, rep=1, rdist, qdist, pdist, \dots,
   \item{count}{a matrix of \code{rep} rows and (\code{breaks}\eqn{-1})
     columns that contains the bin counts. The results for each
     repetition are stored row wise.}
+  \item{dtype}{a string that contains the type of the distribution:
+    \code{"cont"} or \code{"discr"}.}
 }
 
 \references{
@@ -170,6 +182,10 @@ rdist <- function(n) {
 }
 ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist,
                   pdist=pnorm, qdist=qnorm, trunc=c(1,Inf))
+plot(ft)
+
+## An example for a discrete distribution
+ft <- rvgt.ftable(n=1e5,rep=1, rdist=rgeom,pdist=pgeom, prob=0.123)
 plot(ft)
 
 }

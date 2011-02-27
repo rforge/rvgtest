@@ -1,8 +1,8 @@
 Package: rvgtest
 Type: Package
 Title: Tools for Analyzing Non-Uniform Pseudo-Random Variate Generators
-Version: 0.5.901
-Date: 2011-02-02
+Version: 0.5.902
+Date: 2011-02-27
 Author: Josef Leydold and Sougata Chaudhuri <sgtchaudhuri@gmail.com>
 Maintainer: Josef Leydold <josef.leydold@wu.ac.at>
 Suggests: Runuran (>= 0.17.900), RUnit

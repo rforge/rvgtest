@@ -25,9 +25,18 @@ test.001.ftable........... <- function () {
   checkTrue(pval > 1e-5, msg)
 }
 
+test.002.ftable........... <- function () {
+  unr <- dgtd.new(udbinom(size=20,prob=0.3))
+  ft <- rvgt.ftable(n=1e5,rep=5, rdist=unr,pdist=pbinom, breaks=51, size=20, prob=0.3)
+  if(VERBOSE) { print(unr); print(ft); print.default(ft) }
+  pval <- rvgt.chisq(ft)$pval[5]
+  msg <- "\n   rvgt.ftable(): Runuran API does not work\n"
+  checkTrue(pval > 1e-5, msg)
+}
+
 ## rvgt.ftable with truncated domain -----------------------------------------
 
-test.002.ftable.trunc..... <- function () {
+test.003.ftable.trunc..... <- function () {
   unr <- new("unuran", "normal();domain=(0,1)")
   ft <- rvgt.ftable(n=1e5,rep=5, rdist=unr,qdist=qnorm, breaks=51, trunc=c(0,1))
   if(VERBOSE) { print(unr); print(ft); print.default(ft) }
@@ -38,7 +47,7 @@ test.002.ftable.trunc..... <- function () {
 
 ## uerror -------------------------------------------------------------------
 
-test.003.uerror........... <- function () {
+test.004.uerror........... <- function () {
   unr <- pinvd.new(udnorm(mean=1, sd=2), uresolution=1.e-12)
   ue <- uerror(n=1e3, res=100, aqdist=unr, pdist=pnorm, mean=1,sd=2)
   if(VERBOSE) { print(unr); print(ue) }
@@ -49,7 +58,7 @@ test.003.uerror........... <- function () {
 
 ## xerror -------------------------------------------------------------------
 
-test.004.xerror........... <- function () {
+test.005.xerror........... <- function () {
   unr <- pinvd.new(udnorm(mean=1,sd=2), uresolution=1.e-12)
   xe <- xerror(n=1e3, res=100, aqdist=unr, qdist=qnorm, mean=1,sd=2)
   if(VERBOSE) { print(unr); print(xe) }
@@ -67,8 +76,8 @@ test.004.xerror........... <- function () {
 ## UNU.RAN object must be of class "unuran.cont" ----------------------------
 
 test.011.ftable.invalid... <- function () {
-  ## rvgt.ftable() requires univariate continuous distribution
-  unr <- dgtd.new(udbinom(size=20,prob=0.3))
+  ## rvgt.ftable() requires univariate distribution
+  unr <- hitro.new(dim=2, pdf=function(x){exp(-sum(x^2))})
   if(VERBOSE) { print(unr) }
 
   msg <- "\n   rvgt.ftable(): Invalid Runuran object for argument 'rdist' not detected\n"

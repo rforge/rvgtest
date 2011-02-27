@@ -39,6 +39,10 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
 
   min.bin.width <- 1e-12   ## minimal width for bins
 
+  ## --- variables ----------------------------------------------------------
+
+  dtype <- NULL
+
   ## --- check arguments ----------------------------------------------------
 
   ## sample size
@@ -63,9 +67,15 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     ##    because it is required to create an object of class "unuran".
     ## However, we need an object that contains a
     ## univariate continuous distribution.
-    if (unuran.distr.class(rdist) != "cont")
+
+    ## store type of distribution
+    dtype <- unuran.distr.class(rdist)
+
+    ## check type of distribution
+    if (! (dtype == "cont" || dtype == "discr"))
       stop ("Argument 'rdist' is object of class 'unuran' of invalid distribution type.")
-    
+
+    ## define sampling routine
     myrdist <- function(size) { ur(unr=rdist, size) }
   }
   else {
@@ -152,6 +162,37 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   if (nbins > 1e9)
     stop ("Argument 'breaks': too many bins (> 1e9).")
 
+  ## --- pre-sample and type of distribution --------------------------------
+
+  ## random sample of size n
+  ## ("pre-sample" required to get some information about the distribution)
+  X <- myrdist(n)
+
+  ## estimate distribution type
+  if (is.null(dtype)) {
+    tmp <- X[1:100]
+    if (isTRUE(all.equal(tmp,round(tmp))) && isTRUE(all(tmp<1e6))) {
+      dtype <- "discr"
+    } else {
+      dtype <- "cont"
+    }
+  }
+
+  ## check given data again
+  if (dtype=="discr") {
+    if(isTRUE(exactu)) {
+      warning("Argument 'exactu' ignored for discrete distributions.")
+      exactu <- FALSE
+    }
+    if (!is.null(qdist)) {
+      warning("Argument 'qdist' ignored for discrete distributions.")
+      qdist <- NULL
+    }
+    if (is.null(pdist)) {
+      stop ("Argument 'pdist' required for discrete distribution.")
+    }
+  }
+  
   ## --- 'qdist' given: compute break points in x-scale ---------------------
 
   if (! is.null(qdist)) {
@@ -160,17 +201,12 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   
   ## --- 'qdist' not given: recompute break points in u- and x-scale --------
   
-  X <- NULL   ## random sample 
-
   if (is.null(qdist)) {
 
     if (! isTRUE(exactu)) {
       ## it is faster to have break points in x-scale.
       ## if allowed we use the empirial quantiles of the first sample
       ## and recompute the break points in u-scale.
-
-      ## random sample of size n
-      X <- myrdist(n)
 
       ## compute empirial quantiles
       xbreaks <- quantile(X, probs=ubreaks, na.rm=TRUE)
@@ -203,7 +239,8 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   
   if (length(too.small)>0) {
     ## collapse bins
-    warning("probability for some bins too small --> collapse bins.")
+    if (dtype != "discr")
+      warning("probability for some bins too small --> collapse bins.")
 
     ubreaks <- ubreaks[-too.small]
     ubreaks[length(ubreaks)] <- 1
@@ -222,9 +259,10 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
      
   ## loop for each row of table
   for (i in 1:rep) {
+
     ## random sample of size n
-    if (i>1 || is.null(X))
-      X <- myrdist(n)
+    ## (for i==0 we reuse the pre-sample)
+    if (i>1) X <- myrdist(n)
 
     ## get row
     if (! is.na(xbreaks[1])) {
@@ -245,7 +283,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## --- prepare result -----------------------------------------------------
 
   ## return result as object of class "rvgt.ftable"
-  ftable <- list(n=n,rep=rep,ubreaks=ubreaks,xbreaks=xbreaks,count=count)
+  ftable <- list(n=n,rep=rep,ubreaks=ubreaks,xbreaks=xbreaks,count=count,dtype=dtype)
   class(ftable) <- "rvgt.ftable"
 
   ## plot histogram
