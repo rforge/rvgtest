@@ -134,7 +134,7 @@ Hence we have implemented routines that can run tests on very large
 sample sizes (which are only limited by the available runtimes).
 
 Currently there are two tool-sets for testing random variate generators
-for \emph{continuous univariate distributions}:
+for \emph{univariate distributions}:
 \begin{itemize}
 \item
   Tests based on histograms for all kinds of RVGs.

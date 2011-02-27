@@ -3,7 +3,7 @@
 \section{Goodness-of-Fit Tests based on Histograms}
 \label{sec:histogram}
 
-A frequently used method for testing continuous univariate
+A frequently used method for testing univariate
 distributions is based on the following strategy:
 Draw a sample, compute a histogram and run a goodness-of-fit test on
 the resulting frequency table. Often the random sample is transformed
