@@ -21,7 +21,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ##          a vector giving the breakpoints between histogram cells
   ##          (in u-scale)
   ## trunc  : boundaries of truncated domain 
-  ## exactu : Whether exact locatoon of break points in u-scale must be used.
+  ## exactu : Whether exact location of break points in u-scale must be used.
   ##          If FALSE, then break points are slightly moved in order of
   ##          faster runtimes (this does not effect correctness of the
   ##          frequency table.)
@@ -121,10 +121,8 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     if (breaks < 3) 
       stop (paste("Number of break points too small (less than 3):",breaks))
 
-    ## number of bins
-    nbins <- breaks-1
     ## equidistributed break points for uniform scale
-    ubreaks <- (0:nbins)/nbins
+    ubreaks <- (0:(breaks-1))/(breaks-1)
   }
 
   ## case: vector of break points (in u-scale)
@@ -133,8 +131,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
       stop (paste("Number of break points too small (less than 3):",length(breaks)))
     if (min(breaks)<0 || max(breaks)>1)
       stop ("break points out of range [0,1]")
-    ## number of bins
-    nbins <- length(breaks)-1
+
     ## the break points must be sorted
     ubreaks <- sort(breaks)
     ## first and last break point must be 0 and 1, resp.
@@ -142,18 +139,50 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     ubreaks[length(ubreaks)] <- 1
 
     ## differences must be strictly positive
-    if (!all(diff(ubreaks)>0))
+    if (! all(diff(ubreaks)>0))
       stop ("break points invalid: length of histogram cells must be greater than 0")
   }
 
-  ## --- compute break points in x-scale ------------------------------------
+  ## number of bins
+  nbins <- length(ubreaks)-1
+  
+  ## --- 'qdist' given: compute break points in x-scale ---------------------
 
-  ## do we have a quantile function?
-  if (!is.null(qdist))
+  if (! is.null(qdist)) {
     xbreaks <- qdist(ubreaks,...)
-  else
-    xbreaks <- rep(NA,nbins+1)
+  }
+  
+  ## --- 'qdist' not given: recompute break points in u- and x-scale --------
+  
+  X <- NULL   ## random sample 
 
+  if (is.null(qdist)) {
+
+    if (! isTRUE(exactu)) {
+      ## it is faster to have break points in x-scale.
+      ## if allowed we use the empirial quantiles of the first sample
+      ## and recompute the break points in u-scale.
+
+      ## random sample of size n
+      X <- myrdist(n)
+
+      ## compute empirial quantiles
+      xbreaks <- quantile(X, probs=ubreaks, na.rm=TRUE)
+      names(xbreaks) <- NULL
+      xbreaks[1]       <- if (is.null(trunc)) -Inf else trunc[1]
+      xbreaks[nbins+1] <- if (is.null(trunc))  Inf else trunc[2]
+
+      ## adjust break points in u-scale
+      ubreaks <- pdist(xbreaks,...)
+      ubreaks[ubreaks<0] <- 0
+      ubreaks[ubreaks>1] <- 1
+      
+    } else {
+      ## break points in x-scale not available
+      xbreaks <- rep(NA,length(ubreaks))
+    }
+  }
+    
   ## --- compute frequency tables -------------------------------------------
 
   ## table for storing frequencies
@@ -162,25 +191,13 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ## loop for each row of table
   for (i in 1:rep) {
     ## random sample of size n
-    x <- myrdist(n)
-
-    ## it is faster to have break points in x-scale.
-    ## if allowed we use the empirial quantiles of the first sample
-    ## and recompute the break points in u-scale.
-    if (i==1 && !isTRUE(exactu) && all(is.na(xbreaks))) {
-      xbreaks <- quantile(x, probs=ubreaks, na.rm=TRUE)
-      names(xbreaks) <- NULL
-      xbreaks[1]       <- if (is.null(trunc)) -Inf else trunc[1]
-      xbreaks[nbins+1] <- if (is.null(trunc))  Inf else trunc[2]
-      ubreaks <- pdist(xbreaks,...)
-      ubreaks[ubreaks<0] <- 0
-      ubreaks[ubreaks>1] <- 1
-    }
+    if (i>1 || is.null(X))
+      X <- myrdist(n)
 
     ## get row
-    if (!all(is.na(xbreaks))) {
+    if (! is.na(xbreaks[1])) {
       ## we can construct the histogram using the x-values
-      count[i,] <- .Call("rvgt_bincount",x,xbreaks,PACKAGE="rvgtest")
+      count[i,] <- .Call("rvgt_bincount",X,xbreaks,PACKAGE="rvgtest")
     }
     else {
       ## otherwise we first have to transform the x-values into
@@ -188,7 +205,7 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
       ## (slower but more robust for densities with poles)
 
       ## get frequency table (using function hist)
-      u <- pdist(x,...)
+      u <- pdist(X,...)
       count[i,] <- .Call("rvgt_bincount",u,ubreaks,PACKAGE="rvgtest")
     }
   }
