@@ -32,7 +32,7 @@ rvgt.chisq <- function (ftable)
 
   ## probabilities under null hypothesis
   ubreaks <- ftable$ubreaks
-  p0 <- ubreaks[-1] - ubreaks[-(nbins+1)]
+  p0 <- diff(ubreaks)
   
   ## Vector to store p-values.
   pval <- numeric(r)
