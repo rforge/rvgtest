@@ -35,6 +35,9 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
   ##   frequencies of sample of size n
   ## ------------------------------------------------------------------------
 {
+  ## --- constants ----------------------------------------------------------
+
+  min.bin.width <- 1e-12   ## minimal width for bins
 
   ## --- check arguments ----------------------------------------------------
 
@@ -145,7 +148,10 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
 
   ## number of bins
   nbins <- length(ubreaks)-1
-  
+
+  if (nbins > 1e9)
+    stop ("Argument 'breaks': too many bins (> 1e9).")
+
   ## --- 'qdist' given: compute break points in x-scale ---------------------
 
   if (! is.null(qdist)) {
@@ -183,6 +189,32 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     }
   }
     
+  ## --- check probabilities ------------------------------------------------
+
+  ## we have problems when expected probabilities are too small.
+  ## however, this may happens for discrete random variates.
+  ## thus we collapse the corresponding bins.
+
+  ## expected probabilities
+  p0 <- diff(ubreaks)
+
+  ## find bins which are "too small"
+  too.small <- which(p0<min.bin.width)
+  
+  if (length(too.small)>0) {
+    ## collapse bins
+    warning("probability for some bins too small --> collapse bins.")
+
+    ubreaks <- ubreaks[-too.small]
+    ubreaks[length(ubreaks)] <- 1
+
+    xbreaks.max <- xbreaks[length(xbreaks)]
+    xbreaks <- xbreaks[-too.small]
+    xbreaks[length(xbreaks)] <- xbreaks.max
+
+    nbins <- length(ubreaks)-1
+  }
+  
   ## --- compute frequency tables -------------------------------------------
 
   ## table for storing frequencies
