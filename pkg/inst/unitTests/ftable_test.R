@@ -110,29 +110,28 @@ test.021.plot.ftable...... <- function () {
 
 ## rvgt.chisq ---------------------------------------------------------------
 
-##test.031.chisq............ <- function () {
-##  ## we just run the code 
-##  ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,pdist=pnorm)
-##  ht <- rvgt.chisq(ft)
-##  print(ht)
-##  print.default(ht)
-##
-##  ft <- rvgt.ftable(n=1e5,rep=1, rdist=rnorm,pdist=pnorm)
-##  ht <- rvgt.chisq(ft)
-##  print(ht)
-##  print.default(ht)
-##}
+test.031.chisq............ <- function () {
+  rep <- 5
+  ft <- rvgt.ftable(n=1e5,rep=rep, rdist=rnorm,pdist=pnorm)
+  ht <- rvgt.chisq(ft)
+  if(VERBOSE) { print(ht); print.default(ht) }
+  msg <- paste("\n   rvgt.chisq(): p-value too small\n", sep="")
+  pval <- ht$pval[rep]
+  checkTrue(pval > 1e-5, msg)
+}
 
 
 ## rvgt.Mtest ---------------------------------------------------------------
 
-##test.032.Mtest............ <- function () {
-##  ## we just run the code 
-##  ft <- rvgt.ftable(n=1e5,rep=5, rdist=rnorm,pdist=pnorm)
-##  ht <- rvgt.Mtest(ft)
-##  print(ht)
-##  print.default(ht)
-##}
+test.032.Mtest............ <- function () {
+  rep <- 5
+  ft <- rvgt.ftable(n=1e5,rep=rep, rdist=rnorm,pdist=pnorm)
+  ht <- rvgt.Mtest(ft)
+  if(VERBOSE) { print(ht); print.default(ht) }
+  msg <- paste("\n   rvgt.Mtest(): p-value too small\n", sep="")
+  pval <- ht$pval[rep]
+  checkTrue(pval > 1e-5, msg)
+}
 
 
 ## plot.rvgt.htest ----------------------------------------------------------
@@ -194,6 +193,7 @@ test.051.ftable.invalid.. <- function () {
   checkException(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=c(0,0.1,0.2,"0.3")), msg)
   checkException(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=numeric()),          msg)
   checkException(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=2),                  msg)
+  checkException(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=2e9),                msg)
   checkException(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=c(0,1)),             msg)
   checkException(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=c(0,-2,1)),          msg)
   checkException(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=c(0,0.5,0.5,1)),     msg)
