@@ -6,7 +6,7 @@ use Getopt::Std;
 
 # --- Constants -------------------------------------------------------------
 
-my $vignette_file = "./inst/doc/src/version.tex";
+my $vignette_file = "./inst/doc/inputs/version.tex";
 my $package_Rd_file = "./man/rvgtest-package.Rd";
 
 # --- Usage -----------------------------------------------------------------
