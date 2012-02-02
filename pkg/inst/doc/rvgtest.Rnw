@@ -161,7 +161,7 @@ set.seed(123456789)
 
 %% --------------------------------------------------------------------------
 
-\SweaveInput{src/title.tex}
+\SweaveInput{inputs/title.tex}
 
 \renewcommand{\contentsname}{Table of Contents}
 \setcounter{tocdepth}{1}
@@ -171,11 +171,11 @@ set.seed(123456789)
 % ---------------------------------------------------------------------------
 
 \clearpage
-\SweaveInput{src/intro.Rnw}
+\SweaveInput{inputs/intro.Rnw}
 \clearpage
-\SweaveInput{src/histogram.Rnw}
+\SweaveInput{inputs/histogram.Rnw}
 \clearpage
-\SweaveInput{src/inversion.Rnw}
+\SweaveInput{inputs/inversion.Rnw}
 
 % ---------------------------------------------------------------------------
 % \appendix
