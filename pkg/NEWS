@@ -1,5 +1,5 @@
 
-Version 0.6.0: 2011-??-??
+Version 0.6.0: 2012-02-02
 
 	- rvgt.ftable(), uerror() and xerror() now accept a
 	  generator object from the 'Runuran' package as argument 
