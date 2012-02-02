@@ -10,8 +10,6 @@
 
 \usage{
 \S3method{plot}{rvgt.ierror}(x, maxonly=FALSE, tol=NA, \dots)
-
-plot.rvgt.ierror(x, maxonly=FALSE, tol=NA, \dots)
 }
 
 \arguments{
@@ -34,13 +32,14 @@ plot.rvgt.ierror(x, maxonly=FALSE, tol=NA, \dots)
   depends on the maximal observed error. If \code{tol} is given, then
   the range is between \code{1.1*tol} and \code{10*tol}.
 
-  The argument \code{x} must be an object of class \code{"rvgt.ierror"}
+  Argument \code{x} must be an object of class \code{"rvgt.ierror"}
   that contains information about u-errors.
   Such an object is created by \code{\link{uerror}} or
   \code{\link{xerror}}.
-  
-  Alternatively, when using the function \code{plot.rvgt.ierror} then
-  argument \code{x} also can be a list of such objects.
+
+  Alternatively, when the method is called by its full name,
+  \code{plot.rvgt.ierror}, then the first argument \code{x} may also
+  be a list of such objects.
   Then maximual errors for multiple experiments will be plotted in the
   same graph with different colors (that is, with \code{maxonly=TRUE}).
   Thus one can compare errors of different inverse distribution functions.

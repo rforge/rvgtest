@@ -11,8 +11,6 @@
 
 \usage{
 \S3method{plot}{rvgt.htest}(x, alpha = 0.001, \dots)
-
-plot.rvgt.htest(x, alpha = 0.001, \dots)
 }
 
 \arguments{
@@ -30,12 +28,13 @@ plot.rvgt.htest(x, alpha = 0.001, \dots)
   red dashed line.
   This allows for visible inspection of test results.
 
-  The argument \code{x} must be an object of class
+  Argument \code{x} must be an object of class
   \code{"rvgt.htest"} that contains information about the test and
   p-values. Such an object is created by \code{\link{rvgt.chisq}} or
   \code{\link{rvgt.Mtest}}.
 
-  Alternatively, when using the function \code{plot.rvgt.htest} may also
+  Alternatively, when the method is called by its full name,
+  \code{plot.rvgt.htest}, then the first argument \code{x} may also
   be a list of such objects.
   Then p-values for multiple experiments will be plotted in the same
   graph with different colors. Thus one can compare the power of
