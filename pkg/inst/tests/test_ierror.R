@@ -230,18 +230,17 @@ test_that("[i11] calling uerror with invalid arguments: n", {
         expect_error(uerror(n=1.2, aqdist=qnorm, pdist=pnorm), msg)
 })
 
-## FIXME
-#test_that("[i12] calling uerror with invalid arguments: res", {
-#        ## resolution 'res'
-#        msg <- "Invalid argument 'res'."
-#        expect_error(uerror(n=1e4, res="a", aqdist=qnorm, pdist=pnorm), msg)
-#        expect_error(uerror(n=1e4, res=0,   aqdist=qnorm, pdist=pnorm), msg)
-#        expect_error(uerror(n=1e4, res=1.2, aqdist=qnorm, pdist=pnorm), msg)
-#
-#        msg <- "Invalid arguments 'n' < 'res'."
-#        expect_error(uerror(n=100, res=201, aqdist=qnorm, pdist=pnorm), msg)
-#
-#})
+test_that("[i12] calling uerror with invalid arguments: res", {
+        ## resolution 'res'
+        msg <- "Invalid argument 'res'."
+        expect_error(uerror(n=1e4, res="a", aqdist=qnorm, pdist=pnorm), msg)
+        expect_error(uerror(n=1e4, res=0,   aqdist=qnorm, pdist=pnorm), msg)
+        expect_error(uerror(n=1e4, res=1.2, aqdist=qnorm, pdist=pnorm), msg)
+
+        msg <- "Invalid arguments 'n' < 'res'."
+        expect_error(uerror(n=100, res=201, aqdist=qnorm, pdist=pnorm), msg)
+
+})
 
 test_that("[i13] calling uerror with invalid arguments: aqdist", {
         ## approximate inverse distribution function (quantile function)
@@ -278,15 +277,15 @@ test_that("[i21] calling xerror with invalid arguments: n", {
         expect_error(xerror(n=1.2, aqdist=qnorm, qdist=qnorm), msg)
 })
 
-## FIXME
-#test_that("[i22] calling xerror with invalid arguments: res", {
-#        ## resolution 'res'
-#        msg <- "Invalid argument 'res'."
-#        expect_error(xerror(n=1e4, res="a", aqdist=qnorm, qdist=qnorm), msg)
-#        expect_error(xerror(n=1e4, res=0,   aqdist=qnorm, qdist=qnorm), msg)
-#        expect_error(xerror(n=1e4, res=1.2, aqdist=qnorm, qdist=qnorm), msg)
-#        expect_error(xerror(n=100, res=201, aqdist=qnorm, qdist=qnorm), msg)
-#})
+test_that("[i22] calling xerror with invalid arguments: res", {
+        ## resolution 'res'
+        msg <- "Invalid argument 'res'."
+        expect_error(xerror(n=1e4, res="a", aqdist=qnorm, qdist=qnorm), msg)
+        expect_error(xerror(n=1e4, res=0,   aqdist=qnorm, qdist=qnorm), msg)
+        expect_error(xerror(n=1e4, res=1.2, aqdist=qnorm, qdist=qnorm), msg)
+        msg <- "Invalid arguments 'n' < 'res'."
+        expect_error(xerror(n=100, res=201, aqdist=qnorm, qdist=qnorm), msg)
+})
 
 test_that("[i23] calling xerror with invalid arguments: aqdist", {
         ## approximate inverse distribution function (quantile function)
@@ -317,7 +316,6 @@ test_that("[i25] calling xerror with invalid arguments: udomain", {
 #        expect_error(xerror(n=1e4, aqdist=qnorm, qdist=qnorm, kind="foo"), msg)
 #        expect_error(xerror(n=1e4, aqdist=qnorm, qdist=qnorm, kind=10000), msg)
 #})
-
 
 ## plot.rvgt.ierror ---------------------------------------------------------
 

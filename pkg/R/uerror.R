@@ -34,7 +34,7 @@ uerror <- function (n, aqdist, pdist, ..., trunc=NULL, udomain=c(0,1),
 
   ## resolution
   if (!is.numeric(res) || res<1 || res!=round(res))
-    stop ("Invalid argument 'rep'.")
+    stop ("Invalid argument 'res'.")
 
   ## approximate inverse distribution function (quantile function)
   if( missing(aqdist) )
@@ -93,7 +93,7 @@ uerror <- function (n, aqdist, pdist, ..., trunc=NULL, udomain=c(0,1),
   
   ## samplesize for each interval
   k <- round(n / res)
-  if( k<1 ) stop ("Invalid arguments 'n' < 'rep'.")
+  if( k<1 ) stop ("Invalid arguments 'n' < 'res'.")
   n <- k * res
 
   ## arrays for storing u-errors
