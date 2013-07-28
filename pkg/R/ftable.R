@@ -184,12 +184,12 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
       warning("Argument 'exactu' ignored for discrete distributions.")
       exactu <- FALSE
     }
+    if (is.null(pdist)) {
+      stop ("Argument 'pdist' required for discrete distribution.")
+    }
     if (!is.null(qdist)) {
       warning("Argument 'qdist' ignored for discrete distributions.")
       qdist <- NULL
-    }
-    if (is.null(pdist)) {
-      stop ("Argument 'pdist' required for discrete distribution.")
     }
   }
   
