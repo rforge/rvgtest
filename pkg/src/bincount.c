@@ -44,19 +44,19 @@ rvgt_bincount (SEXP sexp_x, SEXP sexp_breaks)
 
   /* extract and check sample 'x' */
   if (TYPEOF(sexp_x)!=REALSXP)
-    error("_rvgt_bincount: argment 'x' invalid");
+    error("_rvgt_bincount: argument 'x' invalid");
   x = NUMERIC_POINTER(sexp_x);
   nx = length(sexp_x);
   if (nx<1)
-    error("_rvgt_bincount: argment 'x' invalid");
+    error("_rvgt_bincount: argument 'x' has too few elements");
 
   /* extract and check 'breaks' */
   if (TYPEOF(sexp_breaks)!=REALSXP)
-    error("_rvgt_bincount: argment 'breaks' invalid");
+    error("_rvgt_bincount: argument 'breaks' invalid");
   breaks = NUMERIC_POINTER(sexp_breaks);
   nbreaks = length(sexp_breaks);
   if (nbreaks<3)
-    error("_rvgt_bincount: argment 'breaks' invalid");
+    error("_rvgt_bincount: argument 'breaks' has too few elements (< 3)");
 
   /* number of bins */
   nc = nbreaks - 1;
