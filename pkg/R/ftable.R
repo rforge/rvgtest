@@ -263,6 +263,8 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
     ## random sample of size n
     ## (for i==0 we reuse the pre-sample)
     if (i>1) X <- myrdist(n)
+    ## X must be of class "numeric"
+    if (is.integer(X)) { X <- as.numeric(X) }
 
     ## get row
     if (! is.na(xbreaks[1])) {
