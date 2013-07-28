@@ -19,7 +19,7 @@ context("[htable] RVG frequency tables - GoF tests")
 
 ## rvgt.chisq ---------------------------------------------------------------
 
-test_that("[051] running rvgt.chisq: cont, pdist", {
+test_that("[ht-051] running rvgt.chisq: cont, pdist", {
         rep <- 5
         ft <- rvgt.ftable(n=n,rep=rep, rdist=rnorm,pdist=pnorm)
         ht <- rvgt.chisq(ft)
@@ -29,7 +29,7 @@ test_that("[051] running rvgt.chisq: cont, pdist", {
 
 ## rvgt.Mtest ---------------------------------------------------------------
 
-test_that("[052] running rvgt.Mtest: cont, pdist", {
+test_that("[ht-052] running rvgt.Mtest: cont, pdist", {
         rep <- 5
         ft <- rvgt.ftable(n=n,rep=rep, rdist=rnorm,pdist=pnorm)
         ht <- rvgt.Mtest(ft)
@@ -39,7 +39,7 @@ test_that("[052] running rvgt.Mtest: cont, pdist", {
 
 ## plot.rvgt.htest ----------------------------------------------------------
 
-test_that("[061] plotting rvgt.htest", {
+test_that("[ht-061] plotting rvgt.htest", {
         ## we just run the code 
         ft <- rvgt.ftable(n=n,rep=5, rdist=rnorm,pdist=pnorm)
         ht1 <- rvgt.chisq(ft)
@@ -73,7 +73,7 @@ context("[htable] RVG frequency tables - Invalid arguments for GoF tests")
 
 ## rvgt.chisq ---------------------------------------------------------------
 
-test_that("[i21] calling rvgt.chisq with invalid arguments", {
+test_that("[ht-i21] calling rvgt.chisq with invalid arguments", {
         msg <- "Argument 'ftable' missing or invalid."
         expect_error(rvgt.chisq(),          msg)
         expect_error(rvgt.chisq("ftable"),  msg)
@@ -82,7 +82,7 @@ test_that("[i21] calling rvgt.chisq with invalid arguments", {
 
 ## rvgt.Mtest ---------------------------------------------------------------
 
-test_that("[i22] calling rvgt.Mtest with invalid arguments", {
+test_that("[ht-i22] calling rvgt.Mtest with invalid arguments", {
         msg <- "Argument 'ftable' missing or invalid."
         expect_error(rvgt.Mtest(),          msg)
         expect_error(rvgt.Mtest("ftable"),  msg)
@@ -91,7 +91,7 @@ test_that("[i22] calling rvgt.Mtest with invalid arguments", {
 
 ## plot.rvgt.htest ----------------------------------------------------------
 
-test_that("[i41] calling plot.rvgt.htest with invalid arguments: alpha", {
+test_that("[ht-i41] calling plot.rvgt.htest with invalid arguments: alpha", {
         ## significance level 'alpha'
         ft <- rvgt.ftable(n=n, rdist=rnorm, qdist=qnorm)
         ht <- rvgt.chisq(ft)
@@ -102,7 +102,7 @@ test_that("[i41] calling plot.rvgt.htest with invalid arguments: alpha", {
         expect_error(plot(ht,alpha=1),   msg)
 })
 
-test_that("[i42] calling plot.rvgt.htest with invalid arguments: x", {
+test_that("[ht-i42] calling plot.rvgt.htest with invalid arguments: x", {
         ## htest object
         ft <- rvgt.ftable(n=n, rdist=rnorm, qdist=qnorm)
         ht <- rvgt.chisq(ft)

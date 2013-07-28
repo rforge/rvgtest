@@ -26,75 +26,75 @@ context("[ftable] RVG frequency tables - Create")
 
 ## rvgt.ftable --------------------------------------------------------------
 
-test_that("[001] calling rvgt.ftable: default", {
+test_that("[ft-001] calling rvgt.ftable: default", {
         ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm)
         check.ftable(ft)
 })
 
-test_that("[002] calling rvgt.ftable: dparams", {
+test_that("[ft-002] calling rvgt.ftable: dparams", {
         ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm, mean=1,sd=2)
         check.ftable(ft)
 })
 
-test_that("[003] calling rvgt.ftable: dparams, breaks", {
+test_that("[ft-003] calling rvgt.ftable: dparams, breaks", {
         ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm, breaks=51, mean=1,sd=2)
         check.ftable(ft)
         ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm, breaks=1/(1:100))
         check.ftable(ft)
 })
 
-test_that("[004] calling rvgt.ftable: dparams, breaks, rep", {
+test_that("[ft-004] calling rvgt.ftable: dparams, breaks, rep", {
         ft <- rvgt.ftable(n=n, rep=5, rdist=rnorm,qdist=qnorm, breaks=51, mean=1,sd=2)
         check.ftable(ft, rep=5)
 })
 
-test_that("[005] calling rvgt.ftable: exactu", {
+test_that("[ft-005] calling rvgt.ftable: exactu", {
         ft <- rvgt.ftable(n=n,rep=1, rdist=rnorm,pdist=pnorm, exactu=TRUE)
         check.ftable(ft)
         ft <- rvgt.ftable(n=n,rep=1, rdist=rnorm,pdist=pnorm, exactu=FALSE)
         check.ftable(ft)
 })
 
-test_that("[006] calling rvgt.ftable: plot", {
+test_that("[ft-006] calling rvgt.ftable: plot", {
         ft <- rvgt.ftable(n=n,rep=5, rdist=rnorm,qdist=qnorm, breaks=51, plot=TRUE)
         check.ftable(ft, rep=5)
 })
 
 ## univariate continuous distribution ---------------------------------------
  
-test_that("[011] calling rvgt.ftable: cont, pdist", {
+test_that("[ft-011] calling rvgt.ftable: cont, pdist", {
    ft <- rvgt.ftable(n=n, rdist=rnorm,pdist=pnorm)
    check.ftable(ft)
 })
 
-test_that("[012] calling rvgt.ftable: cont, pdist, exactu", {
+test_that("[ft-012] calling rvgt.ftable: cont, pdist, exactu", {
         ft <- rvgt.ftable(n=n, rdist=rnorm,pdist=pnorm, exactu=TRUE)
         check.ftable(ft)
 })
 
-test_that("[013] calling rvgt.ftable: cont, qdist", {
+test_that("[ft-013] calling rvgt.ftable: cont, qdist", {
         ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm)
         check.ftable(ft)
 })
 
-test_that("[014] calling rvgt.ftable: cont, pdist, qdist", {
+test_that("[ft-014] calling rvgt.ftable: cont, pdist, qdist", {
    ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm,pdist=pnorm)
    check.ftable(ft)
 })
 
 ## univariate discrete distribution -----------------------------------------
 
-test_that("[021] calling rvgt.ftable: discr, pdist, dparams", {
+test_that("[ft-021] calling rvgt.ftable: discr, pdist, dparams", {
         ft <- rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom, prob=0.123)
         check.ftable(ft)
 })
 
-test_that("[022] calling rvgt.ftable: discr, pdist, exactu, dparams", {
+test_that("[ft-022] calling rvgt.ftable: discr, pdist, exactu, dparams", {
         ft <- rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom,exactu=TRUE, prob=0.123)
         check.ftable(ft)
 })
 
-test_that("[021] calling rvgt.ftable: discr, pdist, qdist, dparams", {
+test_that("[ft-021] calling rvgt.ftable: discr, pdist, qdist, dparams", {
         ft <- rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom,qdist=qgeom, prob=0.123)
         check.ftable(ft)
 })
@@ -103,7 +103,7 @@ test_that("[021] calling rvgt.ftable: discr, pdist, qdist, dparams", {
 
 ## truncated domain ---------------------------------------------------------
 
-test_that("[031] calling rvgt.ftable: cont, trunc, pdist, qdist", {
+test_that("[ft-031] calling rvgt.ftable: cont, trunc, pdist, qdist", {
         rdist <- function(n) {
                 x <- numeric(n)
                 for (i in 1:n) {
@@ -115,7 +115,7 @@ test_that("[031] calling rvgt.ftable: cont, trunc, pdist, qdist", {
         check.ftable(ft, rep=5)
 })
 
-test_that("[032] calling rvgt.ftable: cont, trunc, qdist", {
+test_that("[ft-032] calling rvgt.ftable: cont, trunc, qdist", {
         rdist <- function(n) {
                 x <- numeric(n)
                 for (i in 1:n) {
@@ -127,7 +127,7 @@ test_that("[032] calling rvgt.ftable: cont, trunc, qdist", {
         check.ftable(ft, rep=5)
 })
 
-test_that("[033] calling rvgt.ftable: cont, trunc, pdist", {
+test_that("[ft-033] calling rvgt.ftable: cont, trunc, pdist", {
         rdist <- function(n) {
                 x <- numeric(n)
                 for (i in 1:n) {
@@ -143,7 +143,7 @@ test_that("[033] calling rvgt.ftable: cont, trunc, pdist", {
 
 ## plot.rvgt.ftable ---------------------------------------------------------
 
-test_that("[041] plotting rvgt.ftable", {
+test_that("[ft-041] plotting rvgt.ftable", {
         ## we just run the code 
         ft <- rvgt.ftable(n=n,rep=5, rdist=rnorm,pdist=pnorm, exactu=TRUE)
         retval <- plot(ft)
@@ -168,7 +168,7 @@ context("[ftable] RVG frequency tables - Invalid arguments")
 
 ## rvgt.ftable --------------------------------------------------------------
  
-test_that("[i11] calling rvgt.ftable with invalid arguments: n", {
+test_that("[ft-i11] calling rvgt.ftable with invalid arguments: n", {
         ## sample size 'n'
         msg <- "Argument 'n' missing or invalid."
         expect_error(rvgt.ftable(       rdist=rnorm, qdist=qnorm), msg)
@@ -177,7 +177,7 @@ test_that("[i11] calling rvgt.ftable with invalid arguments: n", {
         expect_error(rvgt.ftable(n=1.2, rdist=rnorm, qdist=qnorm), msg)
 })
 
-test_that("[i12] calling rvgt.ftable with invalid arguments: res", {
+test_that("[ft-i12] calling rvgt.ftable with invalid arguments: res", {
         ## resolution 'res'
         msg <- "Invalid argument 'rep'."
         expect_error(rvgt.ftable(n=100, rep="a", rdist=rnorm, qdist=qnorm), msg)
@@ -185,7 +185,7 @@ test_that("[i12] calling rvgt.ftable with invalid arguments: res", {
         expect_error(rvgt.ftable(n=100, rep=1.2, rdist=rnorm, qdist=qnorm), msg)
 })
 
-test_that("[i13] calling rvgt.ftable with invalid arguments: rdist", {
+test_that("[ft-i13] calling rvgt.ftable with invalid arguments: rdist", {
         ## random variate generator
         msg <- "Argument 'rdist' missing."
         expect_error(rvgt.ftable(n=100, qdist=rnorm               ), msg)
@@ -194,7 +194,7 @@ test_that("[i13] calling rvgt.ftable with invalid arguments: rdist", {
         expect_error(rvgt.ftable(n=100, rdist="rnorm", qdist=qnorm), msg)
 })
 
-test_that("[i14] calling rvgt.ftable with invalid arguments: pdist, qdist", {
+test_that("[ft-i14] calling rvgt.ftable with invalid arguments: pdist, qdist", {
         ## quantile and distribution function: continuous
         msg <- "Argument 'qdist' or 'pdist' required."
         expect_error(rvgt.ftable(n=100, rdist=rnorm               ), msg)
@@ -210,7 +210,7 @@ test_that("[i14] calling rvgt.ftable with invalid arguments: pdist, qdist", {
         expect_error(rvgt.ftable(n=100, rdist=rgeom,qdist=qgeom, prob=0.123), msg)
 })
 
-test_that("[i15] calling rvgt.ftable with invalid arguments: breaks", {
+test_that("[ft-i15] calling rvgt.ftable with invalid arguments: breaks", {
         ## break points
         msg <- "Invalid argument 'breaks'."
         expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=c(0,0.1,0.2,"0.3")), msg)
@@ -238,7 +238,7 @@ test_that("[i15] calling rvgt.ftable with invalid arguments: breaks", {
 
 ## plot.rvgt.ftable ---------------------------------------------------------
 
-test_that("[i31] calling plot.rvgt.ftable with invalid arguments: rows", {
+test_that("[ft-i31] calling plot.rvgt.ftable with invalid arguments: rows", {
         ## number of rows
         ft <- rvgt.ftable(n=n, rdist=rnorm, qdist=qnorm)
         
@@ -248,7 +248,7 @@ test_that("[i31] calling plot.rvgt.ftable with invalid arguments: rows", {
         expect_error(plot(ft,rows=2),   msg)
 })
 
-test_that("[i32] calling plot.rvgt.ftable with invalid arguments: alpha", {
+test_that("[ft-i32] calling plot.rvgt.ftable with invalid arguments: alpha", {
         ## significance level 'alpha'
         ft <- rvgt.ftable(n=n, rdist=rnorm, qdist=qnorm)
 

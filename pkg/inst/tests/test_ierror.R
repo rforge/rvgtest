@@ -29,39 +29,39 @@ context("[ierror] Approximation error - uerror")
 
 ## uerror -------------------------------------------------------------------
 
-test_that("[001] calling uerror: default", {
+test_that("[ie-001] calling uerror: default", {
         ue <- uerror(n=1e4, aqdist=qnorm, pdist=pnorm)
         check.uerror(ue)
 })
 
-test_that("[002] calling uerror: res", {
+test_that("[ie-002] calling uerror: res", {
         ue <- uerror(n=1e4, res=100, aqdist=qnorm, pdist=pnorm)
         check.uerror(ue)
 })
 
-test_that("[003] calling uerror: tails", {
+test_that("[ie-003] calling uerror: tails", {
         ue <- uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm, tails=TRUE)
         check.uerror(ue)
 })
 
-test_that("[004] calling uerror: udomain", {
+test_that("[ie-004] calling uerror: udomain", {
         ue <- uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm, udomain=c(0,0.1))
         check.uerror(ue)
 })
 
-test_that("[005] calling uerror: dparams", {
+test_that("[ie-005] calling uerror: dparams", {
         ue <- uerror(n=1e3, res=100, aqdist=function(u){qgamma(u,shape=2)},
                      pdist=pgamma, shape=2, udomain=c(0,0.1))
         check.uerror(ue)
 })
 
-test_that("[006] calling uerror: dparams, plot", {
+test_that("[ie-006] calling uerror: dparams, plot", {
         ue <- uerror(n=1e3, res=100, aqdist=function(u){qgamma(u,shape=2)},
                      pdist=pgamma, shape=2, udomain=c(0,0.1), plot=TRUE)
         check.uerror(ue)
 })
 
-test_that("[007] calling uerror: trunc", {
+test_that("[ie-007] calling uerror: trunc", {
         ## An inverse CDF for a truncated normal distribution
         aqtn <- function(x) { qnorm(x * (pnorm(2.5) - pnorm(1.5)) + pnorm(1.5)) }
 
@@ -79,55 +79,55 @@ context("[ierror] Approximation error - xerror")
 
 ## xerror -------------------------------------------------------------------
 
-test_that("[011] calling xerror: default", {
+test_that("[ie-011] calling xerror: default", {
         aq <- function(u) { qnorm(u) + u*runif(length(u),max=9.e-11) }
         xe <- xerror(n=1e5, aqdist=aq, qdist=qnorm)
         check.xerror(xe)
 })
 
-test_that("[012] calling xerror: res", {
+test_that("[ie-012] calling xerror: res", {
         aq <- function(u) { qnorm(u) + u*runif(length(u),max=9.e-11) }
         xe <- xerror(n=1e4, res=100, aqdist=aq, qdist=qnorm)
         check.xerror(xe)
 })
 
-test_that("[013] calling xerror: tails", {
+test_that("[ie-013] calling xerror: tails", {
         aq <- function(u) { qnorm(u) + u*runif(length(u),max=9.e-11) }
         xe <- xerror(n=1e3, res=100, aqdist=aq, qdist=qnorm, tails=TRUE)
         check.xerror(xe)
 })
 
-test_that("[014] calling xerror: udomain", {
+test_that("[ie-014] calling xerror: udomain", {
         aq <- function(u) { qnorm(u) + u*runif(length(u),max=9.e-11) }
         xe <- xerror(n=1e4, res=100, aqdist=aq, qdist=qnorm, udomain=c(0,0.01))
         check.xerror(xe)
 })
 
-test_that("[015] calling xerror: plot", {
+test_that("[ie-015] calling xerror: plot", {
         aq <- function(u) { qnorm(u) + u*runif(length(u),max=9.e-11) }
         xe <- xerror(n=1e4, res=100, aqdist=aq, qdist=qnorm, plot=TRUE)
         check.xerror(xe)
 })
 
-test_that("[016] calling xerror: abs", {
+test_that("[ie-016] calling xerror: abs", {
         aq <- function(u) { qnorm(u) + u*runif(length(u),max=9.e-11) }
         xe <- xerror(n=1e4, res=100, kind="abs", aqdist=aq, qdist=qnorm, plot=TRUE)
         check.xerror(xe)
 })
 
-test_that("[017] calling xerror: rel", {
+test_that("[ie-017] calling xerror: rel", {
         aq <- function(u) { qnorm(u) + u*runif(length(u),max=9.e-11) }
         xe <- xerror(n=1e4, res=100, kind="rel", aqdist=aq, qdist=qnorm, plot=TRUE)
         check.xerror(xe, limit=1e-5)
 })
 
-test_that("[018] calling xerror: abs, trunc", {
+test_that("[ie-018] calling xerror: abs, trunc", {
         aqtn <- function(x) { qnorm(x * (pnorm(2.5) - pnorm(1.5)) + pnorm(1.5)) }
         xe <- xerror(n=1e5, res=100, aqdist=aqtn, qdist=qnorm, trunc=c(1.5,2.5), kind="abs")
         check.xerror(xe)
 })
 
-test_that("[019] calling xerror: rel, trunc", {
+test_that("[ie-019] calling xerror: rel, trunc", {
   aqtn <- function(x) { qnorm(x * (pnorm(2.5) - pnorm(1.5)) + pnorm(1.5)) }
   xe <- xerror(n=1e5, res=100, aqdist=aqtn, qdist=qnorm, trunc=c(1.5,2.5), kind="rel")
   check.xerror(xe)
@@ -144,7 +144,7 @@ context("[ierror] Approximation error - plot")
 
 ## plot.rvgt.ierror ---------------------------------------------------------
 
-test_that("[021] calling plot.rvgt.ierror: uerror", {
+test_that("[ie-021] calling plot.rvgt.ierror: uerror", {
         ## we just run the code 
         ue1 <- uerror(n=1e3, res=100, aqdist=function(u){qgamma(u,shape=2)},
                       pdist=pgamma, shape=2)
@@ -173,7 +173,7 @@ test_that("[021] calling plot.rvgt.ierror: uerror", {
         expect_identical(retval,NULL)
 })
 
-test_that("[022] calling plot.rvgt.ierror: xerror, abs", {
+test_that("[ie-022] calling plot.rvgt.ierror: xerror, abs", {
         ## we just run the code 
         aq1 <- function(u) { qnorm(u) + u*runif(length(u),max=1.e-10) }
         xe1 <- xerror(n=1e3, res=100, aqdist=aq1, qdist=qnorm)
@@ -194,7 +194,7 @@ test_that("[022] calling plot.rvgt.ierror: xerror, abs", {
         expect_identical(retval,NULL)
 })
 
-test_that("[023] calling plot.rvgt.ierror: xerror, rel", {
+test_that("[ie-023] calling plot.rvgt.ierror: xerror, rel", {
         ## we just run the code 
         aq1 <- function(u) { qnorm(u) + u*runif(length(u),max=1.e-10) }
         xe1 <- xerror(n=1e3, res=100, aqdist=aq1, qdist=qnorm, kind="rel")
@@ -221,7 +221,7 @@ context("[ierror] Approximation error - Invalid arguments")
 
 ## uerror -------------------------------------------------------------------
 
-test_that("[i11] calling uerror with invalid arguments: n", {
+test_that("[ie-i11] calling uerror with invalid arguments: n", {
         ## sample size 'n'
         msg <- "Argument 'n' missing or invalid."
         expect_error(uerror(       aqdist=qnorm, pdist=pnorm), msg)
@@ -230,7 +230,7 @@ test_that("[i11] calling uerror with invalid arguments: n", {
         expect_error(uerror(n=1.2, aqdist=qnorm, pdist=pnorm), msg)
 })
 
-test_that("[i12] calling uerror with invalid arguments: res", {
+test_that("[ie-i12] calling uerror with invalid arguments: res", {
         ## resolution 'res'
         msg <- "Invalid argument 'res'."
         expect_error(uerror(n=1e4, res="a", aqdist=qnorm, pdist=pnorm), msg)
@@ -242,7 +242,7 @@ test_that("[i12] calling uerror with invalid arguments: res", {
 
 })
 
-test_that("[i13] calling uerror with invalid arguments: aqdist", {
+test_that("[ie-i13] calling uerror with invalid arguments: aqdist", {
         ## approximate inverse distribution function (quantile function)
         msg <- "Argument 'aqdist' missing."
         expect_error(uerror(n=1e3, res=100                 ), msg)
@@ -251,14 +251,14 @@ test_that("[i13] calling uerror with invalid arguments: aqdist", {
         expect_error(uerror(n=1e3, res=100, aqdist="aqdist"), msg)
 })
 
-test_that("[i14] calling uerror with invalid arguments: pdist", {
+test_that("[ie-i14] calling uerror with invalid arguments: pdist", {
         ## distribution function
         msg <- "Argument 'pdist' missing or invalid."
         expect_error(uerror(n=1e3, res=100, aqdist=qnorm               ), msg)
         expect_error(uerror(n=1e3, res=100, aqdist=qnorm, pdist="pnorm"), msg)
 })
 
-test_that("[i15] calling uerror with invalid arguments: udomain", {
+test_that("[ie-i15] calling uerror with invalid arguments: udomain", {
         ## domain
         msg <- "Invalid argument 'udomain'."
         expect_error(uerror(n=1e3, res=100, aqdist=qnorm, pdist=pnorm, udomain=c(0.5,0.5)), msg)
@@ -268,7 +268,7 @@ test_that("[i15] calling uerror with invalid arguments: udomain", {
 
 ## xerror -------------------------------------------------------------------
 
-test_that("[i21] calling xerror with invalid arguments: n", {
+test_that("[ie-i21] calling xerror with invalid arguments: n", {
         ## sample size 'n'
         msg <- "Invalid argument 'n'."
         expect_error(xerror(       aqdist=qnorm, qdist=qnorm), msg)
@@ -277,7 +277,7 @@ test_that("[i21] calling xerror with invalid arguments: n", {
         expect_error(xerror(n=1.2, aqdist=qnorm, qdist=qnorm), msg)
 })
 
-test_that("[i22] calling xerror with invalid arguments: res", {
+test_that("[ie-i22] calling xerror with invalid arguments: res", {
         ## resolution 'res'
         msg <- "Invalid argument 'res'."
         expect_error(xerror(n=1e4, res="a", aqdist=qnorm, qdist=qnorm), msg)
@@ -287,7 +287,7 @@ test_that("[i22] calling xerror with invalid arguments: res", {
         expect_error(xerror(n=100, res=201, aqdist=qnorm, qdist=qnorm), msg)
 })
 
-test_that("[i23] calling xerror with invalid arguments: aqdist", {
+test_that("[ie-i23] calling xerror with invalid arguments: aqdist", {
         ## approximate inverse distribution function (quantile function)
         msg <- "Argument 'aqdist' missing."
         expect_error(xerror(n=1e3, res=100                 ), msg)
@@ -295,34 +295,32 @@ test_that("[i23] calling xerror with invalid arguments: aqdist", {
         expect_error(xerror(n=1e3, res=100, aqdist="aqdist"), msg)
 })
 
-test_that("[i24] calling xerror with invalid arguments: qdist", {
+test_that("[ie-i24] calling xerror with invalid arguments: qdist", {
         ## (exact) quatile function of distribution
         msg <- "Argument 'qdist' missing or invalid."
         expect_error(xerror(n=1e3, res=100, aqdist=qnorm               ), msg)
         expect_error(xerror(n=1e3, res=100, aqdist=qnorm, qdist="qnorm"), msg)
 })
 
-test_that("[i25] calling xerror with invalid arguments: udomain", {
+test_that("[ie-i25] calling xerror with invalid arguments: udomain", {
         ## domain
         msg <- "Invalid argument 'udomain'."
         expect_error(xerror(n=1e3, res=100, aqdist=qnorm, qdist=qnorm, udomain=c(0.5,0.5)), msg)
         expect_error(xerror(n=1e3, res=100, aqdist=qnorm, qdist=qnorm, udomain=c(-0.5,0.)), msg)
 })
 
-## FIXME
-#test_that("[i26] calling xerror with invalid arguments: kind", {
-#        ## kind
-#        msg <- " 'arg' must be NULL or a character vector"
-#        expect_error(xerror(n=1e4, aqdist=qnorm, qdist=qnorm, kind="foo"), msg)
-#        expect_error(xerror(n=1e4, aqdist=qnorm, qdist=qnorm, kind=10000), msg)
-#})
+test_that("[ie-i26] calling xerror with invalid arguments: kind", {
+        ## kind
+        msg <- "'arg' should be one of \"abs\", \"rel\""
+        expect_error(xerror(n=1e4, aqdist=qnorm, qdist=qnorm, kind="foo"), msg)
+        msg <- "'arg' must be NULL or a character vector"
+        expect_error(xerror(n=1e4, aqdist=qnorm, qdist=qnorm, kind=10000), msg)
+})
 
 ## plot.rvgt.ierror ---------------------------------------------------------
 
-test_that("[i31] calling plot.rvgt.ierror: x", {
-        ##        msg <- "'x' is missing."
-        ## FIXME
-        msg <- "'x' is missing"
+test_that("[ie-i31] calling plot.rvgt.ierror: x", {
+        msg <- "'x' is missing."
         expect_error(plot.rvgt.ierror(              ), msg)
 
         msg <- "Invalid argument 'x'."
@@ -330,7 +328,7 @@ test_that("[i31] calling plot.rvgt.ierror: x", {
         expect_error(plot.rvgt.ierror(x=list(a=1:10)), msg)
 })
 
-test_that("[i32] calling plot.rvgt.ierror: tol", {
+test_that("[ie-i32] calling plot.rvgt.ierror: tol", {
         msg <- "Invalid argument 'tol'."
         ue <- uerror(n=1e4, res=10, aqdist=qnorm, pdist=pnorm)
         expect_error(plot.rvgt.ierror(ue, tol=0   ), msg)
