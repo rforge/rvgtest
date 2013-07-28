@@ -39,7 +39,7 @@ test_that("[ft-002] calling rvgt.ftable: dparams", {
 test_that("[ft-003] calling rvgt.ftable: dparams, breaks", {
         ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm, breaks=51, mean=1,sd=2)
         check.ftable(ft)
-        ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm, breaks=1/(1:100))
+        ft <- rvgt.ftable(n=n, rdist=rnorm,qdist=qnorm, breaks=(0:100)/100)
         check.ftable(ft)
 })
 
@@ -63,8 +63,8 @@ test_that("[ft-006] calling rvgt.ftable: plot", {
 ## univariate continuous distribution ---------------------------------------
  
 test_that("[ft-011] calling rvgt.ftable: cont, pdist", {
-   ft <- rvgt.ftable(n=n, rdist=rnorm,pdist=pnorm)
-   check.ftable(ft)
+        ft <- rvgt.ftable(n=n, rdist=rnorm,pdist=pnorm)
+        check.ftable(ft)
 })
 
 test_that("[ft-012] calling rvgt.ftable: cont, pdist, exactu", {
@@ -89,17 +89,7 @@ test_that("[ft-021] calling rvgt.ftable: discr, pdist, dparams", {
         check.ftable(ft)
 })
 
-test_that("[ft-022] calling rvgt.ftable: discr, pdist, exactu, dparams", {
-        ft <- rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom,exactu=TRUE, prob=0.123)
-        check.ftable(ft)
-})
-
-test_that("[ft-021] calling rvgt.ftable: discr, pdist, qdist, dparams", {
-        ft <- rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom,qdist=qgeom, prob=0.123)
-        check.ftable(ft)
-})
-
-## 'qdist' without 'pdist' does not work, see Test [111].
+## 'qdist' without 'pdist' does not work for discrete distributions.
 
 ## truncated domain ---------------------------------------------------------
 
@@ -135,7 +125,7 @@ test_that("[ft-033] calling rvgt.ftable: cont, trunc, pdist", {
                 return(x)
         }
  
-        ft <- rvgt.ftable(n=1e3,rep=5, rdist=rdist, pdist=pnorm, trunc=c(0,1))
+        ft <- rvgt.ftable(n=2e3,rep=5, rdist=rdist, pdist=pnorm, trunc=c(0,1))
         check.ftable(ft, rep=5)
 })
 
@@ -156,7 +146,7 @@ test_that("[ft-041] plotting rvgt.ftable", {
         retval <- plot(ft)
         expect_identical(retval,NULL)
 })
-                                        # 
+
 
 ## --------------------------------------------------------------------------
 ##
@@ -208,6 +198,10 @@ test_that("[ft-i14] calling rvgt.ftable with invalid arguments: pdist, qdist", {
         ## quantile and distribution function: discrete
         msg <- "Argument 'pdist' required for discrete distribution."
         expect_error(rvgt.ftable(n=100, rdist=rgeom,qdist=qgeom, prob=0.123), msg)
+
+        msg <- "Argument 'qdist' ignored for discrete distributions."
+        expect_warning_suppress(
+          rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom,qdist=qgeom, prob=0.123), msg)
 })
 
 test_that("[ft-i15] calling rvgt.ftable with invalid arguments: breaks", {
@@ -234,6 +228,16 @@ test_that("[ft-i15] calling rvgt.ftable with invalid arguments: breaks", {
         ## use exact location of break points
         msg <- "Argument 'exactu' must be boolean."
         expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, exactu=0), msg)
+})
+
+test_that("[ft-i16] calling rvgt.ftable with invalid arguments: exactu", {
+        ## exactu
+        msg <- "Argument 'exactu' must be boolean."
+        expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, exactu="on"), msg)
+
+        msg <- "Argument 'exactu' ignored for discrete distributions."
+        expect_warning_suppress(
+          rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom,exactu=TRUE, prob=0.123), msg)
 })
 
 ## plot.rvgt.ftable ---------------------------------------------------------
