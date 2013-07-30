@@ -1,6 +1,6 @@
 TOP=../..                       ## top directory of package
 PKG=${shell cd ${TOP};pwd}      ## name of top directory
-SUITE=runtests.R
+SUITE=runalltests.R
 R=R
 
 help:
