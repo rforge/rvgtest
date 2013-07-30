@@ -1,10 +1,22 @@
-require("testthat")
-require("rvgtest")
 
-## store R options
+## --- Setup ----------------------------------------------------------------
+
+## Load package 'testthat' 
+if(! require("testthat", quietly=TRUE)) {
+  message("\ncannot run unit tests -- package 'testthat' is not available\n")
+  quit(save="no",runLast=FALSE)
+}
+
+## Load package 'rvgtest' 
+library("rvgtest")
+
+## Store R options
 opt.save <- options()
 
-## auxiliary routines -------------------------------------------------------
+## Print warnings immediately
+## options(warn=1)
+
+## --- Auxiliary routines ---------------------------------------------------
 
 ## check for warning but suppress warning message
 expect_warning_suppress <- function (x, y) {
@@ -14,12 +26,29 @@ expect_warning_suppress <- function (x, y) {
         options(opt.store)
 }
 
+## --- Run tests ------------------------------------------------------------
 
-## Print warnings immediately
-options(warn=1)
+## Path to unit test files
+if(Sys.getenv("RCMDCHECK") == "FALSE") {
+        ## Path to unit tests for standalone running under Makefile (not R CMD check)
+        ## PKG/inst/tests
+        unittest.dir <- file.path(getwd())
+} else {
+        ## Path to unit tests for R CMD check
+        ## PKG.Rcheck/tests/../PKG/unitTests
+        unittest.dir <- system.file(package="rvgtest", "tests")
+}
 
-test_dir(".",reporter = "summary")
-##test_dir(".",reporter = "tap")
+## Use summary reporter
+test_dir(unittest.dir,reporter = "summary")
 
-## restore R options
+## A possible alternative is the TAP reporter that uses
+## the Test Anything Protocol (TAP) for the output result.
+## test_dir(".",reporter = "tap")
+
+## --- End ------------------------------------------------------------------
+
+## Restore R options
 options(opt.save)
+
+## --------------------------------------------------------------------------
