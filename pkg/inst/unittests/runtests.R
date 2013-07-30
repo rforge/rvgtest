@@ -22,7 +22,7 @@ if (exists(".rvgt.RCMDCHECK") && isTRUE(.rvgt.RCMDCHECK)) {
         ## PKG.Rcheck/tests/../PKG/unitTests
         ## Remark: variable '.rvgt.RCMDCHECK' has to be defined in
         ##         the master test file for R CMD check
-        unittest.dir <- system.file(package="rvgtest", "tests")
+        unittest.dir <- system.file(package="rvgtest", "unittests")
 } else {
         ## Path to unit tests for standalone running under Makefile (not R CMD check)
         ## PKG/inst/tests
