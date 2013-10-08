@@ -59,11 +59,11 @@
 ## the beta distribution
 aqn <- splinefun(x=pnorm((-100:100)*0.05), y=(-100:100)*0.05,
                  method="monoH.FC")
-uerrn <- uerror(n=1e5, aqdist=aqn, pdist=pnorm)
+uerrn <- uerror(n=1e4, aqdist=aqn, pdist=pnorm, res=200)
 
 aqb <- splinefun(x=pbeta((0:100)*0.01,shape1=2,shape2=5),
                  y=(0:100)*0.01, method="monoH.FC")
-uerrb <- uerror(n=1e5, aqdist=aqb, pdist=pbeta, shape1=2, shape2=5)
+uerrb <- uerror(n=1e4, aqdist=aqb, pdist=pbeta, shape1=2, shape2=5, res=200)
 
 ## Plot u-errors of the normal distribution
 plot(uerrn)
