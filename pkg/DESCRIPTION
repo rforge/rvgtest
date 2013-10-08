@@ -3,8 +3,10 @@ Type: Package
 Title: Tools for Analyzing Non-Uniform Pseudo-Random Variate Generators
 Version: 0.7.1
 Date: 2013-10-08
-Author: Josef Leydold and Sougata Chaudhuri <sgtchaudhuri@gmail.com>
-Maintainer: Josef Leydold <josef.leydold@wu.ac.at>
+Authors@R: c(person("Josef", "Leydold", role = c("aut", "cre"),
+                    email = "josef.leydold@wu.ac.at"),
+             person("Sougata", "Chaudhuri", role = "ctb",
+                    email = "sgtchaudhuri@gmail.com"))
 Suggests: Runuran (>= 0.18), testthat
 Description: Test suite for non-uniform pseudo-random number generators.
 License: GPL-2
