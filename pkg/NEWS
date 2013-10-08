@@ -1,4 +1,9 @@
-Version 0.7.0: 2013-??-??
+Version 0.7.1: 2013-10-08
+
+	- moved inst/doc/ into vignettes/
+
+
+Version 0.7.0: 2013-07-30
 
 	- rvgt.ftable(): fixed handling of discrete random number 
           generators (like rgeom()) that return numbers of class 

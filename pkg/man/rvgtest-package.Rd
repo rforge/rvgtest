@@ -16,7 +16,7 @@
     Package: \tab rvgtest\cr
     Type:    \tab Package\cr
     Version: \tab 0.7.1         \cr
-    Date:    \tab 2013-07-30    \cr
+    Date:    \tab 2013-10-08    \cr
     License: \tab GPL 2 or later\cr
     LazyLoad:\tab yes\cr
   }
