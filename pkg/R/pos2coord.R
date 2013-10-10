@@ -114,7 +114,7 @@ coord2pos <- function (coord, dims) {
 ##' 
 ##' Function \code{pos2coord} returns the indices of the element in
 ##' the corresponding array
-##' (an integer vector of the same length as \var{dims}).
+##' (an integer vector of the same length as \code{dims}).
 ##' 
 ## --------------------------------------------------------------------------
 
