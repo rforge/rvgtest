@@ -38,15 +38,23 @@ cat(rep("=",45),"\n",
     rep("=",45),"\n", sep="")
 
 ## Use summary reporter
-test_dir(unittest.dir, reporter="summary")
+reporter <- SummaryReporter$new()
 
 ## A possible alternative is the TAP reporter that uses
 ## the Test Anything Protocol (TAP) for the output result.
-## test_dir(unittest.dir, reporter="tap")
+### reporter <- TapReporter$new()
+
+## Run tests 
+test_dir(unittest.dir, reporter=reporter)
 
 ## --- End ------------------------------------------------------------------
 
 ## Restore R options
 options(opt.save)
+
+## check for failed tests
+if (reporter$failed) {
+        stop("Test failures", call. = FALSE)
+}
 
 ## --------------------------------------------------------------------------
