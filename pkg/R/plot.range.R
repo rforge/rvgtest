@@ -104,8 +104,8 @@
 ## --------------------------------------------------------------------------
 ##'
 ##  Arguments:
-##' @param obj
-##'        object of class \code{"rvgt.range"}.
+##' @param x
+##'        object of class \code{"rvgt.range"} to be plotted.
 ##' 
 ##' @param sub.params
 ##'        subset of parameters for restricting plotting region (list).
@@ -123,7 +123,7 @@
 ##' 
 ## --------------------------------------------------------------------------
 
-plot.rvgt.range <- function (obj, sub.params=list(),
+plot.rvgt.range <- function (x, sub.params=list(),
                              xscale=c("linear","logarithmic"),
                              yscale=c("linear","logarithmic"),
                              zscale=c("linear","logarithmic"),
@@ -131,7 +131,7 @@ plot.rvgt.range <- function (obj, sub.params=list(),
         ## ..................................................................
         
         ## --- maybe we only want to have a subset of parameter values 
-        obj <- get.subrange(obj, sub.params, drop=TRUE)
+        obj <- get.subrange(x, sub.params, drop=TRUE)
 
         ## --- get number of dimensions
         dims <- length(dim(obj$data))
