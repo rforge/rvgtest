@@ -17,6 +17,7 @@ S3method(plot, rvgt.ierror)
 S3method(print, rvgt.ierror)
 
 export(rvgt.range.engine)
+S3method(print, rvgt.range)
 
 export(pertadd, pertsub)
 
