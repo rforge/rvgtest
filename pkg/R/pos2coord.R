@@ -1,6 +1,7 @@
 ## --------------------------------------------------------------------------
 ##'
-##' Convert array indices into position in underlying vector and vice versa.
+##' Convert array indices into position in underlying vector and vice versa
+##' (internal function)
 ##' 
 ## --------------------------------------------------------------------------
 ##
@@ -10,7 +11,7 @@
 ##' \code{"dim"} attribute into the position in the underlying vector
 ##' or, vice versa, convert position of an element in vector into the
 ##' indices of a derived array with a given \code{"dim"} attribute.
-##' -- (internal functions)
+##' -- (internal function)
 ##'
 ## --------------------------------------------------------------------------
 ##
