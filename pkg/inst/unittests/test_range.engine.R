@@ -28,7 +28,7 @@ test_that("[pre-001] list entries returned by rvgt.range.engine: length(dist.par
         expect_is(res, "rvgt.range.unittest")
         expect_is(res, "rvgt.range")
 
-        expect_output(summary(res),
+        expect_output(print(res),
                       paste("^ \\* Test ranges of parameters - Summary:\\s+",
                             "Test:\\s+unittest\\s+",
                             "run unit test\\s+",
@@ -182,7 +182,7 @@ test_that("[pre-002] list entries returned by rvgt.range.engine: length(dist.par
         expect_is(res, "rvgt.range.unit")
         expect_is(res, "rvgt.range")
 
-        expect_output(summary(res),
+        expect_output(print(res),
                       paste("^ \\* Test ranges of parameters - Summary:\\s+",
                             "Test:\\s+unit\\.test\\s+",
                             "RVG:\\s+rnorm\\s+",
@@ -255,7 +255,7 @@ test_that("[pre-003] list entries returned by rvgt.range.engine: length(dist.par
         expect_is(res, "rvgt.range.unit")
         expect_is(res, "rvgt.range")
 
-        expect_output(summary(res),
+        expect_output(print(res),
                       paste("^ \\* Test ranges of parameters - Summary:\\s+",
                             "Test:\\s+unit\\.test\\.a\\s+",
                             "RVG:\\s+rnorm\\s+",
