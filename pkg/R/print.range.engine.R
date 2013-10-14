@@ -27,28 +27,35 @@
 ##'
 ## --------------------------------------------------------------------------
 ##'
+##' @method print rvgt.range
+##' 
+## --------------------------------------------------------------------------
+##'
 ##  Arguments:
-##' @param obj
-##'        object of class \code{"rvgt.range"}.
+##' @param x
+##'        object of class \code{"rvgt.range"} to be printed.
+##' @param ...
+##'        further arguments to be passed to print method
+##'        (ignored in this function).
 ##'
 ## --------------------------------------------------------------------------
 
-print.rvgt.range <- function(obj,...) {
+print.rvgt.range <- function(x,...) {
         cat("\n * Test ranges of parameters - Summary:\n")
-        cat("\n Test:\n  ", obj$test.class, "\n")
-        if (! is.null(obj$test.name))
-                cat("\n  ", obj$test.name, "\n")
-        cat("\n RVG:\n  ", obj$rdist.name, "\n")
+        cat("\n Test:\n  ", x$test.class, "\n")
+        if (! is.null(x$test.name))
+                cat("\n  ", x$test.name, "\n")
+        cat("\n RVG:\n  ", x$rdist.name, "\n")
         cat("\n Parameters:\n")
-        for (i in 1:length(obj$dist.params)) {
-                cat("  ",names(obj$dist.params)[i],
-                    "(", length(obj$dist.params[[i]]), ")\n")
-                print(obj$dist.param[[i]])
+        for (i in 1:length(x$dist.params)) {
+                cat("  ",names(x$dist.params)[i],
+                    "(", length(x$dist.params[[i]]), ")\n")
+                print(x$dist.param[[i]])
         }
         cat("\n Results:\n")
-        print(summary.default(obj$data[is.finite(obj$data)]))
-        cat("\n Tests started at", format(obj$started),"\n")
-        cat("\n Total runtime:",format(obj$runtime),"\n")
+        print(summary.default(x$data[is.finite(x$data)]))
+        cat("\n Tests started at", format(x$started),"\n")
+        cat("\n Total runtime:",format(x$runtime),"\n")
         cat("\n")
 }
 
