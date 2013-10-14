@@ -63,39 +63,39 @@
 ##'
 ##' @examples
 ##' ## Simple "test" that just samples one random number
-##' #create.sample <- function (rdist, dist.params, r.params, test.params, verbose) {
-##' #   cl <- as.call(c(list(name=rdist,n=1),dist.params))
-##' #   eval(cl)
-##' #}
-##' #samp <- rvgt.range.engine(rdist=rnorm,
-##' #                          dist.params=list(mean=0:10, sd=1:10),
-##' #                          test.routine=create.sample,
-##' #                          test.class="sample")
+##' create.sample <- function (rdist, dist.params, ...) {
+##'    cl <- as.call(c(list(name=rdist,n=1),dist.params))
+##'    eval(cl)
+##' }
+##' samp <- rvgt.range.engine(rdist=rnorm,
+##'                           dist.params=list(mean=0:10, sd=1:10),
+##'                           test.routine=create.sample,
+##'                           test.class="sample")
 ##'
 ##' ## Plot all samples
-##' #plot(samp)
+##' plot(samp)
 ##'
 ##' ## Plot only samples where 'sd' is the 5th entry (of 1:10).
 ##' ## It is important that index 5 is given as integer 5L. 
-##' #plot(samp, sub.params=list(sd=5L))
+##' plot(samp, sub.params=list(sd=5L))
 ##' 
 ##' ## Plot only samples where 'sd' restricted to the 5th, 6th and 7th entry.
 ##' ## Notice that 5:7 creates a vector of integers.
-##' #plot(samp, sub.params=list(sd=5:7))
+##' plot(samp, sub.params=list(sd=5:7))
 ##' 
 ##' ## Plot only samples where 'mean' is between 7 and 9.
 ##' ## This time we have to give a pair of numeric values which represent
 ##' ## the lower and upper bound, resp.
 ##' ## Notice that exact comparisons of floating point numbers can sometimes
 ##' ## have surprising results. So it is recommended to add some tolerance.
-##' #plot(samp, sub.params=list(mean=c(6.99,9.01)))
+##' plot(samp, sub.params=list(mean=c(6.99,9.01)))
 ##'
 ##' ## Plot only samples where 'mean' equals 7
 ##' ## (again we have to use a pair of numeric values)
-##' #plot(samp, sub.params=list(mean=c(6.99,7.01)))
+##' plot(samp, sub.params=list(mean=c(6.99,7.01)))
 ##'
 ##' ## Zoom into the region with smalls values for 'mean' and 'sd'.
-##' #plot(samp, sub.params=list(mean=c(0,5.01), sd=c(0,5.01)))
+##' plot(samp, sub.params=list(mean=c(0,5.01), sd=c(0,5.01)))
 ##' 
 ## --------------------------------------------------------------------------
 ##'
