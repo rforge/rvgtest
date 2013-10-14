@@ -1,3 +1,7 @@
+
+importFrom(parallel, mcparallel)
+importFrom(stringr, str_split)
+
 export(rvgt.ftable)
 S3method(plot, rvgt.ftable)
 S3method(print, rvgt.ftable)
@@ -11,6 +15,8 @@ export(uerror, xerror)
 export(plot.rvgt.ierror)
 S3method(plot, rvgt.ierror)
 S3method(print, rvgt.ierror)
+
+export(rvgt.range.engine)
 
 export(pertadd, pertsub)
 
