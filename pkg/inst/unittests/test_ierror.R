@@ -320,16 +320,15 @@ test_that("[ie-i26] calling xerror with invalid arguments: kind", {
 ## plot.rvgt.ierror ---------------------------------------------------------
 
 test_that("[ie-i31] calling plot.rvgt.ierror: x", {
-        msg <- "'x' is missing."
+        msg <- "Argument 'x' missing or invalid."
         expect_error(plot.rvgt.ierror(              ), msg)
-
-        msg <- "Invalid argument 'x'."
         expect_error(plot.rvgt.ierror(x=1:10        ), msg)
+        msg <- "Argument 'x' invalid."
         expect_error(plot.rvgt.ierror(x=list(a=1:10)), msg)
 })
 
 test_that("[ie-i32] calling plot.rvgt.ierror: tol", {
-        msg <- "Invalid argument 'tol'."
+        msg <- "Argument 'tol' invalid."
         ue <- uerror(n=1e4, res=10, aqdist=qnorm, pdist=pnorm)
         expect_error(plot.rvgt.ierror(ue, tol=0   ), msg)
         expect_error(plot.rvgt.ierror(ue, tol=-0.1), msg)

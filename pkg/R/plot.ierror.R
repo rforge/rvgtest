@@ -15,14 +15,14 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol=NA, ...)
   ## ------------------------------------------------------------------------
 {
   ## check arguments
-  if (!is.list(x))
-    stop ("Invalid argument 'x'.")
+  if (missing(x) || !is.list(x))
+    stop ("Argument 'x' missing or invalid.")
 
   ## is this a number?
   if (!is.na(tol)) {
     tol <- as.numeric(tol)
     if (tol <= 0 )
-      stop ("Invalid argument 'tol'.")
+      stop ("Argument 'tol' invalid.")
   }
   
   ## we have two cases:
@@ -35,7 +35,7 @@ plot.rvgt.ierror <- function (x, maxonly=FALSE, tol=NA, ...)
   else {
     ## here we should check the class of the list members
     if (class(x[[1]]) != "rvgt.ierror")
-      stop ("Invalid argument 'x'.")
+      stop ("Argument 'x' invalid.")
     ierr <- x
   }
   
