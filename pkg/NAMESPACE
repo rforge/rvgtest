@@ -1,5 +1,5 @@
 
-importFrom(parallel, mcparallel)
+## importFrom(parallel, mcparallel)
 importFrom(stringr, str_split)
 
 export(rvgt.ftable)

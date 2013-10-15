@@ -499,10 +499,11 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                         }
                         
                         ## start thread that performs a single test
-                        mcparallel(test.routine(rdist=rdist, dist.params=dp, r.params=r.params,
-                                                emgt=emgt[pos],
-                                                test.params=test.params, duration=duration,
-                                                verbose=verbose))
+                        parallel::mcparallel(
+                          test.routine(rdist=rdist, dist.params=dp, r.params=r.params,
+                                       emgt=emgt[pos],
+                                       test.params=test.params, duration=duration,
+                                       verbose=verbose))
                 }
 
                 ## start all parallel threads
