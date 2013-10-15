@@ -200,7 +200,7 @@ test_that("[ft-i14] calling rvgt.ftable with invalid arguments: pdist, qdist", {
         expect_error(rvgt.ftable(n=100, rdist=rgeom,qdist=qgeom, prob=0.123), msg)
 
         msg <- "Argument 'qdist' ignored for discrete distributions."
-        expect_warning_suppress(
+        expect_warning(
           rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom,qdist=qgeom, prob=0.123), msg)
 })
 
@@ -236,7 +236,7 @@ test_that("[ft-i16] calling rvgt.ftable with invalid arguments: exactu", {
         expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, exactu="on"), msg)
 
         msg <- "Argument 'exactu' ignored for discrete distributions."
-        expect_warning_suppress(
+        expect_warning(
           rvgt.ftable(n=n, rdist=rgeom,pdist=pgeom,exactu=TRUE, prob=0.123), msg)
 })
 
