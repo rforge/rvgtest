@@ -510,6 +510,7 @@ test_that("[pre-i08] calling rvgt.range.engine with invalid arguments: duration"
           test.routine=trunit, test.class="a", duration=-1),  msg)
 })
 
+if (.Platform$OS.type == "unix") {
 test_that("[pre-i10] calling rvgt.range.engine with invalid arguments: ncores", {
         ## ncores
         msg <- "Argument 'ncores' must be non-negative."
@@ -517,6 +518,7 @@ test_that("[pre-i10] calling rvgt.range.engine with invalid arguments: ncores", 
           rdist=rnorm, dist.params=list(a=1:2,b=3:4),
           test.routine=trunit, test.class="a", ncores=-1L),  msg)
 })
+}
 
 if (.Platform$OS.type != "unix") {
 test_that("[pre-i11] calling rvgt.range.engine with invalid arguments: ncores", {
@@ -555,12 +557,17 @@ test_that("[pre-i14] calling rvgt.range.engine with invalid arguments: verbose",
         expect_error(rvgt.range.engine(
           rdist=rnorm, dist.params=list(a=1:2,b=3:4),
           test.routine=trunit, test.class="a", verbose=1),  msg)
+})
 
+if (.Platform$OS.type == "unix") {
+test_that("[pre-i15] calling rvgt.range.engine with invalid arguments: verbose", {
+        ## verbose
         msg <- "Argument 'verbose' ignored when 'ncore' > 1"
         expect_message(rvgt.range.engine(
           rdist=rnorm, dist.params=list(a=1:2,b=3:4),
           test.routine=trunit, test.class="a", ncores=2L, verbose=TRUE),  msg)
 })
+}
 
 ## --------------------------------------------------------------------------
 
