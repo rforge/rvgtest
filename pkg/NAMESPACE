@@ -21,6 +21,7 @@ S3method(plot, rvgt.range)
 S3method(print, rvgt.range)
 
 export(rvgt.range.marginal)
+export(rvgt.range.setup)
 
 export(pertadd, pertsub)
 
