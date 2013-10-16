@@ -19,7 +19,7 @@
 ##' using the elapsed running time that is returned by
 ##' \code{\link{system.time}}.
 ##'
-##' The scheduled sampling for a particular combination of parameters
+##' The scheduled sampling time for a particular combination of parameters
 ##' is given by parameter \code{duration}. Notice that it must not be too
 ##' small compared to the resolution of the system clock.
 ##'
@@ -58,10 +58,16 @@
 ##' if it given. 
 ##'
 ##' Timings can vary considerably. In order to get a more robust estimate
-##' one can repeat this test several times an use the median of all timings.
+##' one can repeat this test several times and use the median of all timings.
 ##' This can be achieved by means of argument \code{repetitions}.
 ##' Notice, that this of course increases the total running time.
 ##' This has to be taken into account if a timeout is set.
+##'
+##' A big issue of tests on a large range of parameter settings is that the
+##' running times may be very large for some tests. In order to avoid such
+##' problems the running times for each test can be limited using argument
+##' \code{timeout} which required to enable multicore support using
+##' \code{ncores}.
 ##'
 ## --------------------------------------------------------------------------
 ##'
@@ -74,7 +80,7 @@
 ##' @seealso
 ##' \code{\link{rvgt.range.engine}} for a description of objects of class
 ##' \code{"rvgt.range"}.
-##' \code{\link{print.rvgt.range}} for a summary of test result,
+##' \code{\link{print.rvgt.range}} for printing a summary of test results,
 ##' \code{\link{plot.rvgt.range}} for plotting the test results.
 ##' 
 ## --------------------------------------------------------------------------
@@ -87,8 +93,8 @@
 ##' ## Estimate marginal generation time for beta distribution
 ##' mgt <- rvgt.range.marginal(rdist = rbeta,
 ##'                            dist.params = list(
-##'                              shape1=c(0.01,0.1,1,10),
-##'                              shape2=c(0.01,0.1,1,10)),
+##'                              shape1=c(0.1,1,10),
+##'                              shape2=c(0.1,1,10)),
 ##'                            duration = 0.01, gen.time = 1e-5)
 ##'
 ##' ## print summary of generation times
@@ -100,6 +106,8 @@
 ## --------------------------------------------------------------------------
 ##'
 ##  Arguments:
+##' @inheritParams rvgt.range.engine
+##' 
 ##' @param el.time
 ##'        running time for an accept-reject loop of a generator based on
 ##'        the rejection method.
@@ -108,8 +116,6 @@
 ##'        The marginal generation time is estimated by the median of
 ##'        all test results.
 ##'
-##' @inheritParams rvgt.range.engine
-##' 
 ## --------------------------------------------------------------------------
 ##'
 ##' @return
