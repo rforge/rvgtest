@@ -23,6 +23,7 @@ S3method(print, rvgt.range)
 export(rvgt.range.marginal)
 export(rvgt.range.setup)
 export(rvgt.range.trc)
+export(rvgt.range.erc)
 
 export(pertadd, pertsub)
 
