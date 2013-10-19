@@ -479,9 +479,7 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                 
                 ## list of parallel jobs
                 ## the next 'ncores' jobs
-                run.idx <- which(!finished)[1:ncores]
-                ## remove out of list entries
-                run.idx <- run.idx[!is.na(run.idx)]
+                run.idx <- head(which(!finished), n=ncores)
 
                 ## routine for starting thread
                 test.routine.mc <- function (pos) {
@@ -529,6 +527,8 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                                         i <- run.idx[(which(jobIDs==ch)[1])]
                                         result[i] <- timeout.val
                                         finished[i] <- TRUE
+                                        ## close pipe to (terminated) child process 
+                                        parallel:::readChild(ch)
                                 }
                                 if (verbose) cat("\t---> timeout!\n")
                                 break
