@@ -1,3 +1,24 @@
+Version 0.8.0: 2013-??-??
+
+	- added functions for testing random variate generators
+	  for a set of parameter values:
+
+	  rvgt.range.erc.R(): 
+	     test observed rejection constants 
+	  rvgt.range.marginal(): 
+	     estimate marginal generation times
+	  rvgt.range.setup(): 
+	     estimate setup times
+	  rvgt.range.trc(): 
+	     compute (theoretical) rejection constants
+
+          rvgt.range.engineR():
+             Engine for performing tests for a set of parameters
+
+          pos2coord(), get.subrange():
+	     internal functions
+
+
 Version 0.7.1: 2013-10-08
 
 	- moved inst/doc/ into vignettes/
