@@ -1,7 +1,3 @@
-## --- Empirical rejection constant ----------------------------------------
-##
-## Test hypothesis: empirical rejection constant = theoretical rejection constant
-
 ## --------------------------------------------------------------------------
 ##'
 ##' Test rejection constants for random variate generator
