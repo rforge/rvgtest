@@ -92,7 +92,9 @@
 ##' The function returns an object of class \code{"rvgt.range.gof.erc"}
 ##' where the p-values are stored in field \code{$data},
 ##' see \code{\link{rvgt.range.engine}} for a description of such objects.
-##' The routine returns \code{NA} in all cases where the setup fails, and
+##' The routine returns \code{NA} in all cases where the setup fails,
+##' \code{NaN} when theoretical rejection constant is less than 1
+##' (i.e., obviously invalid), and
 ##' \code{Inf} when the marginal generation time is too slow or when
 ##' a timeout has been reached.
 ##' 
@@ -170,7 +172,7 @@ rvgt.range.erc <- function (rdist, dist.params, r.params=list(),
         if (isTRUE(trc < 0.9999)) {
                 warning("ERROR: rejection constant too small!!!!\n")
                 if (verbose) cat("\tERROR: rejection constant too small!!!!\n")
-                return (NA)
+                return (NaN)
         }
         if (isTRUE(trc < 1)) { trc <- 1 }  ## catch round-off error
 
@@ -233,17 +235,3 @@ erc.pvalue <- function (erc,trc,success) {
 }
 
 ## --- End ------------------------------------------------------------------
-
-
-
-## --- Empirical rejection constant ----------------------------------------
-##
-## Test hypothesis: empirical rejection constant = theoretical rejection constant
-##
-## Values:
-##   NA   ... if setup failed
-##   pval ... if theoretical rejection constant is sufficiently small
-##   NaN  ... if theoretical rejection constant is too large
-##
-## FIXME
-
