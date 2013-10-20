@@ -7,8 +7,8 @@ Authors@R: c(person("Josef", "Leydold", role = c("aut", "cre"),
                     email = "josef.leydold@wu.ac.at"),
              person("Sougata", "Chaudhuri", role = "ctb",
                     email = "sgtchaudhuri@gmail.com"))
-Imports: parallel, stringr
-Suggests: Runuran (>= 0.18), testthat
+Imports: Runuran (>= 0.18), parallel, stringr
+Suggests: testthat
 Description: Test suite for non-uniform pseudo-random number generators.
 License: GPL-2
 URL: http://statmath.wu.ac.at/unuran/

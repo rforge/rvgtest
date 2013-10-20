@@ -1,6 +1,7 @@
 
 ## importFrom(parallel, mcparallel)
 importFrom(stringr, str_split)
+importFrom(Runuran, uq, ur, unuran.is.inversion, unuran.details)
 
 export(rvgt.ftable)
 S3method(plot, rvgt.ftable)
