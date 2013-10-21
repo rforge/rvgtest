@@ -22,9 +22,9 @@
 ##' At least this test allows to detect implementation or coding errors or
 ##' severe numerical problems.
 ##'
-##' Both the theoretical rejection constant as well as the empirical rejection
+##' Both the theoretical rejection constant and the observed rejection
 ##' constant must be provided by random variate generator \code{rdist}
-##' as respective attributes \code{"trc"} and \code{"erc"}, respectively,
+##' as respective attributes \code{"trc"} and \code{"orc"}, respectively,
 ##' when \code{rdist} is called with argument \code{show.properties=TRUE}.
 ##'
 ##' Of course this test is only sensible if \code{rdist} is based on the 
@@ -66,7 +66,7 @@
 ##'    if (isTRUE(show.properties)) {
 ##'       trc <- fmode
 ##'       attr(res,"trc") <- trc
-##'       attr(res,"erc") <- trials / n
+##'       attr(res,"orc") <- trials / n
 ##'    }
 ##'    res
 ##' }
@@ -76,10 +76,10 @@
 ##'                            dist.params = list(shape1=c(2,3), shape2=2),
 ##'                            duration = 0.01)
 ##' ## test rejection constants
-##' erc <- rvgt.range.erc(rdist = myrbeta,
+##' orc <- rvgt.range.orc(rdist = myrbeta,
 ##'                       dist.params = list(shape1=c(2,3), shape2=2),
 ##'                       duration = 0.01, gen.time = mgt)
-##' print(erc)
+##' print(orc)
 ##' 
 ## --------------------------------------------------------------------------
 ##'
@@ -89,7 +89,7 @@
 ## --------------------------------------------------------------------------
 ##'
 ##' @return
-##' The function returns an object of class \code{"rvgt.range.gof.erc"}
+##' The function returns an object of class \code{"rvgt.range.gof.orc"}
 ##' where the p-values are stored in field \code{$data},
 ##' see \code{\link{rvgt.range.engine}} for a description of such objects.
 ##' The routine returns \code{NA} in all cases where the setup fails,
@@ -100,7 +100,7 @@
 ##' 
 ## --------------------------------------------------------------------------
 
-rvgt.range.erc <- function (rdist, dist.params, r.params=list(), 
+rvgt.range.orc <- function (rdist, dist.params, r.params=list(), 
                             duration=0.1, gen.time,
                             ncores=NULL, timeout=Inf, verbose=FALSE) {
         ## ..................................................................
@@ -119,8 +119,8 @@ rvgt.range.erc <- function (rdist, dist.params, r.params=list(),
         rvgt.range.engine(rdist = rdist,
                           dist.params = dist.params,
                           r.params = r.params,
-                          test.routine = .run.erc,
-                          test.class = "gof.erc",
+                          test.routine = .run.orc,
+                          test.class = "gof.orc",
                           duration = duration,
                           gen.time = gen.time,
                           ncores = ncores,
@@ -132,7 +132,7 @@ rvgt.range.erc <- function (rdist, dist.params, r.params=list(),
                             
 ## --- Perform test on enpirical rejection constant -------------------------
 
-.run.erc <- function (rdist, dist.params, r.params, emgt,
+.run.orc <- function (rdist, dist.params, r.params, emgt,
                       test.params, duration, verbose) {
 
         ## --- we use approximate marginal generation times
@@ -196,14 +196,14 @@ rvgt.range.erc <- function (rdist, dist.params, r.params=list(),
         X <- eval(cl)
 
         ## read empirical rejection constant
-        erc <- attr(X,"erc")
-        if (is.null(erc)) {
-                ## attribute 'erc' not available
-                stop("returned value of 'rdist' must have attribute 'erc'.")
+        orc <- attr(X,"orc")
+        if (is.null(orc)) {
+                ## attribute 'orc' not available
+                stop("returned value of 'rdist' must have attribute 'orc'.")
         }        
         
         ## compute p-value
-        pval <- erc.pvalue(erc,trc,n)
+        pval <- orc.pvalue(orc,trc,n)
 
         if (verbose) cat("\t... pval =",pval,"\n")
 
@@ -211,15 +211,15 @@ rvgt.range.erc <- function (rdist, dist.params, r.params=list(),
         pval
 }
 
-## --- compute p-value for erc test
+## --- compute p-value for orc test
 
-erc.pvalue <- function (erc,trc,success) {
+orc.pvalue <- function (orc,trc,success) {
 
         ## H0
         p0 <- 1/trc
 
         ## number of trials = number of rejection loops
-        trials <- round(erc*success)
+        trials <- round(orc*success)
 
         ## run test
         ## approximate test
