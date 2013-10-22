@@ -1,7 +1,6 @@
 \name{uerror}
 \Rdversion{1.1}
 \alias{uerror}
-\alias{uerror.default}
 
 \title{Create Table of U-Errors for Numerical Inversion Method}
 

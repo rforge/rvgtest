@@ -1,7 +1,6 @@
 \name{xerror}
 \Rdversion{1.1}
 \alias{xerror}
-\alias{xerror.default}
 
 \title{Create Table of X-Errors for Numerical Inversion Method}
 
