@@ -276,6 +276,11 @@ rvgt.ftable <- function (n, rep=1, rdist, qdist, pdist, ...,
       ## uniformly distributed u-values
       ## (slower but more robust for densities with poles)
 
+      ## we need 'pdist'. is it available?
+      if (is.null(pdist)) {
+              stop("'qdist' seems to be broken and 'pdist' is missing." )
+      }
+            
       ## get frequency table (using function hist)
       u <- pdist(X,...)
       count[i,] <- .Call("rvgt_bincount",u,ubreaks,PACKAGE="rvgtest")
