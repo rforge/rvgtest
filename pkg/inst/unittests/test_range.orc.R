@@ -8,26 +8,58 @@ context("[rvgt.range.orc] - test rejection constant")
 
 ## --------------------------------------------------------------------------
 
-#test_that("[orc-001] calling rvgt.range.orc", {
-#        rtest <- function(n,a,b,show.properties) {
-#                if (isTRUE(all.equal(c(a,b),c(1,2)))) stop()
-#                X <- 1
-#                attr(X,"orc") <- a+b
-#                X
-#        }
+test_that("[orc-001] calling rvgt.range.orc", {
 
-#        orc <- rvgt.range.orc(rdist = rtest,
-#                              dist.params = list(a=1:2,b=1:2),
-#                              verbose = FALSE)
+        dp <- list(shape1=2:7, shape2=2)
+        
+        ## a simple generator for the beta distribution 
+        myrbeta <- function(n, shape1, shape2, show.properties=FALSE) {
+                if (shape1 <= 1 || shape2 <= 1 || n < 0) stop("arguments invalid")
+                mode <- (shape1 - 1) / (shape1 + shape2 - 2)
+                fmode <- dbeta(mode,shape1,shape2)
+                trials <- 0
+                res <- numeric(n) 
+                for (i in 1:n) {
+                        while(n>0) {
+                                trials <- trials + 1
+                                X <- runif(1)
+                                Y <- fmode * runif(1)
+                                if (Y <= dbeta(X,shape1,shape2)) {
+                                        res[n] <- X
+                                        break
+                                }
+                        }
+                }
+                if (isTRUE(show.properties)) {
+                        trc <- fmode
+                        if (isTRUE(all.equal(shape1,5))) trc <- 0.1
+                        attr(res,"trc") <- trc
+                        attr(res,"orc") <- trials / n
+                }
+                res
+        }
 
-        ## plot(mgt, xscale="lin", yscale="lin", main="[orc-001]")
+        ## first we need the marginal generation times
+        mgt <- rvgt.range.marginal(rdist = myrbeta, dist.params=dp,
+                                   duration = 0.01)
 
-#        expect_equal(orc$data[1,1], 2)
-#        expect_identical(orc$data[1,2], NA_real_)
-#        expect_equal(orc$data[2,1], 3)
-#        expect_equal(orc$data[2,2], 4)
-#})
+        mgt$data[1] <- NA
+        mgt$data[2] <- Inf
+        mgt$data[3] <- 1e10
 
+
+        ## test rejection constants
+        msg <- "ERROR: rejection constant too small!!!!"
+        expect_warning(orc <- rvgt.range.orc(rdist=myrbeta, dist.params=dp,
+                              duration=0.01, gen.time=mgt, verbose=FALSE),  msg)
+
+        expect_true(is.na(orc$data[1]))
+        expect_true(is.infinite(orc$data[2]) && orc$data[2] > 0)
+        expect_true(is.infinite(orc$data[3]) && orc$data[3] > 0)
+        expect_true(is.nan(orc$data[4]))
+        expect_true(all(orc$data[5:6] > 1e-5) && all(orc$data[5:6] < 0.99999)) 
+
+})
 
 ## --------------------------------------------------------------------------
 
