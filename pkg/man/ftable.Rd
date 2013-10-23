@@ -1,7 +1,6 @@
 \name{rvgt.ftable}
 \Rdversion{1.1}
 \alias{rvgt.ftable}
-\alias{rvgt.ftable.default}
 
 \title{Create RVG Frequency Table for Random Variate Generator}
 
