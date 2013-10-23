@@ -25,6 +25,7 @@ export(rvgt.range.marginal)
 export(rvgt.range.setup)
 export(rvgt.range.trc)
 export(rvgt.range.orc)
+export(rvgt.range.chisq)
 
 export(pertadd, pertsub)
 
