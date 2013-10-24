@@ -22,7 +22,7 @@
 ##' @seealso
 ##' \code{\link{rvgt.range.engine}} for a description of objects of class
 ##' \code{"rvgt.range"}.
-##' \code{\link{rvgt.ftable}} and \code{\link{rvgt.chisq} for the routines
+##' \code{\link{rvgt.ftable}} and \code{\link{rvgt.chisq}} for the routines
 ##' that performs the test for a particular combinations of parameters.
 ##' \code{\link{print.rvgt.range}} for printing a summary of test results,
 ##' \code{\link{plot.rvgt.range}} for plotting the test results.
