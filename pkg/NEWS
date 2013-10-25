@@ -9,10 +9,12 @@ Version 0.8.0: 2013-??-??
 	     estimate setup times
 	  rvgt.range.trc(): 
 	     compute (theoretical) rejection constants
-	  rvgt.range.orc.R(): 
+	  rvgt.range.orc(): 
 	     test observed rejection constants 
+	  rvgt.range.chisq(): 
+	     perform chisquare goodness-of-fit tests
 
-          rvgt.range.engineR():
+          rvgt.range.engine():
              Engine for performing tests for a set of parameters
 
           pos2coord(), get.subrange():
