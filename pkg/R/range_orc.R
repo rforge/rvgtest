@@ -7,7 +7,7 @@
 ##  @description
 ##'
 ##' Simple goodness-of-fit test for a generation algorithm that is based on
-##' the acceptence-rejection method:
+##' the acceptance-rejection method:
 ##' Test hypothesis that observed rejection constant coincides with the 
 ##' theoretical rejection constant.
 ##' 
@@ -19,12 +19,12 @@
 ##' for the given random variate generator for each combinations of parameter
 ##' values. It is a very simple but also fast test that compares the
 ##' (theoretical) rejection constant with the observed one.
-##' At least this test allows to detect implementation or coding errors or
-##' severe numerical problems.
+##' It can be used as a first test as it allows to detect coding errors or
+##' severe numerical problems (or a design error of the algorithm).
 ##'
 ##' Both the theoretical rejection constant and the observed rejection
 ##' constant must be provided by random variate generator \code{rdist}
-##' as respective attributes \code{"trc"} and \code{"orc"}, respectively,
+##' as respective attributes \code{"trc"} and \code{"orc"}
 ##' when \code{rdist} is called with argument \code{show.properties=TRUE}.
 ##'
 ##' Of course this test is only sensible if \code{rdist} is based on the 
@@ -75,10 +75,12 @@
 ##' mgt <- rvgt.range.marginal(rdist = myrbeta,
 ##'                            dist.params = list(shape1=c(2,3), shape2=2),
 ##'                            duration = 0.01)
+##'
 ##' ## test rejection constants
 ##' orc <- rvgt.range.orc(rdist = myrbeta,
 ##'                       dist.params = list(shape1=c(2,3), shape2=2),
 ##'                       duration = 0.01, gen.time = mgt)
+##'
 ##' print(orc)
 ##' 
 ## --------------------------------------------------------------------------
