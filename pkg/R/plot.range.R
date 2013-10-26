@@ -44,10 +44,9 @@
 ##' 
 ##' Arguments \code{xscale}, \code{yscale}, and \code{zscale} allow to select
 ##' a particular scaling (\code{"linear"} or \code{"logarithmic"}) for the
-##' given data. Notice, that for 1-dimensional plots the results are shown on
-##' the y-axis and thus \code{yscale} has to be used if the data should be
-##' presented in a logarithmic scale. For 2-dimensional plots the results
-##' correspond to the z-axis. 
+##' given data. Notice, the z-axis always corresponds to the data.
+##' So for an 1-dimensional plot we only have an x-axis and an z-axis and
+##' the value of \code{yscale} is ignored. 
 ##' 
 ## --------------------------------------------------------------------------
 ##'
@@ -74,6 +73,9 @@
 ##'
 ##' ## Plot all samples
 ##' plot(samp)
+##'
+##' ## Plot all samples, use logarithmic scale for parameter 'sd'
+##' plot(samp, yscale="logarithmic")
 ##'
 ##' ## Plot samples where 'sd' is the 5th entry (of 1:10).
 ##' ## It is important that index 5 is given as integer 5L. 
@@ -156,18 +158,18 @@ plot.rvgt.range <- function (x, sub.params=list(),
                         stop("unknown xscale")
                 }
                 
-                if (yscale=="linear") {
-                        ylabel <- obj$test.class ## FIXME
-                        y <- obj$data
-                } else if (yscale=="logarithmic") {
-                        ylabel <- paste("log(",obj$test.class,")",sep="") ## FIXME
-                        y <- log10(obj$data)
+                if (zscale=="linear") {
+                        zlabel <- obj$test.class ## FIXME
+                        z <- obj$data
+                } else if (zscale=="logarithmic") {
+                        zlabel <- paste("log(",obj$test.class,")",sep="") ## FIXME
+                        z <- log10(obj$data)
                 } else {
-                        stop("unknown yscale")
+                        stop("unknown zscale")
                 }
                 
-                plot(x=x, y=y,
-                     xlab=xlabel, ylab=ylabel,
+                plot(x=x, y=z,
+                     xlab=xlabel, ylab=zlabel,
                      type="l", ...)
 
         } else if (identical(dims, 2L)) {

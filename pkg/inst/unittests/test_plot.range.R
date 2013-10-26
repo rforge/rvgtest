@@ -24,8 +24,8 @@ test_that("[prr-101] calling plot.rvgt.range (dim=1)", {
         plot(res, sub.params=list(alpha=c(40,70)), main="[prr-101] C")
 
         plot(res, xscale="log", main="[prr-101] D")
-        plot(res, yscale="log", main="[prr-101] E")
-        plot(res, xscale="log", yscale="log", main="[prr-101] F")
+        plot(res, zscale="log", main="[prr-101] E")
+        plot(res, xscale="log", zscale="log", main="[prr-101] F")
 })
         
 test_that("[prr-102] calling plot.rvgt.range (dim=2)", {

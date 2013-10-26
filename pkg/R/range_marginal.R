@@ -100,7 +100,7 @@
 ##' ## print summary of generation times
 ##' print(mgt)
 ##'
-##' ## plot generation times (using logarithmic scales)
+##' ## plot generation times (using logarithmic scales for parameters)
 ##' plot(mgt, xscale="log", yscale="log", main="rbeta")
 ##' 
 ## --------------------------------------------------------------------------
