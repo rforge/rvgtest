@@ -16,7 +16,7 @@
 ##' Routine \code{rvgt.range.marginal} estimates marginal generation times of
 ##' random variate generator \code{rdist} for a range of parameters.
 ##' For this purpose the total generation time of a larger sample is estimated
-##' using the elapsed running time that is returned by
+##' using the running time that is returned by
 ##' \code{\link{system.time}}.
 ##'
 ##' The scheduled sampling time for a particular combination of parameters
@@ -29,30 +29,31 @@
 ##' chicken-and-egg situation. Thus one has to provide an (at least rough)
 ##' estimate for the marginal generation time via argument \code{gen.time}.
 ##' This is either a single numeric value or the result of a pilot run of
-##' routine \code{rvgt.range.marginal}. If no such value is given then a sample
-##' of size 1 is used as a first guess.
+##' routine \code{rvgt.range.marginal}. If no such value is given then
+##' the \code{duration} (which results in a sample of size 1)
+##' is used as a first guess.
 ##' This information is then used to estimate the marginal running time in
-##' a sequence of tries where the sample size is \emph{increasing} after each run.
+##' a sequence of tries where the sample size is \emph{increasing} after
+##' each run when the total running time for the sample is too small.
 ##' (So the first guess of the marginal generation time should be rather too
 ##' large than too small.)
 ##' This iterative process is stopped if the total running time is close to
-##' \code{duration}. (An immediate consequence of this procedure is th
+##' \code{duration}.
 ##'
 ##' \emph{Notice:}
 ##' if \code{gen.time} contains the result of a pilot run, then tests
 ##' for parameter values where the result was \code{NA} (i.e., the setup failed)
-##' or \code{Inf} (timeout was reached) are not performed and the old results
-##' are just copied.
+##' or \code{Inf} (timeout was reached) are not performed any more and
+##' the old results are just copied.
 ##' 
 ##' An alternative approach works for random number generators that are based
 ##' on the rejection method. Then it is assumed that the running time for a
 ##' single acceptance-rejection loop does not depend on the parameters of the
-##' distribution but the rejection constant varies.
-##' This approach is used when the time for one acceptance-rejection loop
-##' is provided by argument \code{el.time}.
+##' distribution and is provide by argument \code{el.time}.
 ##' Moreover, random variate generator \code{rdist} has to return a sample
 ##' with attribute \code{"trc"} (theoretical rejection constant) when
-##' argument \code{show.properties=TRUE}.
+##' argument \code{show.properties=TRUE}. Then the expected running time
+##' is approximated by the product of these two values.
 ##'
 ##' Notice that \code{el.time} is always used (instead of \code{gen.time})
 ##' if it given. 
@@ -60,19 +61,17 @@
 ##' Timings can vary considerably. In order to get a more robust estimate
 ##' one can repeat this test several times and use the median of all timings.
 ##' This can be achieved by means of argument \code{repetitions}.
-##' Notice, that this of course increases the total running time.
-##' This has to be taken into account if a timeout is set.
 ##'
 ##' A big issue of tests on a large range of parameter settings is that the
-##' running times may be very large for some tests. In order to avoid such
-##' problems the running times for each test can be limited using argument
-##' \code{timeout} which required to enable multicore support using
-##' \code{ncores}.
+##' running times may not be known in advance. So the total running time of
+##' the test suite may explode due to some unexpected long runs for some tests.
+##' In order to avoid such problems the running times for each test can be
+##' limited by means of argument \code{timeout}.
 ##'
 ## --------------------------------------------------------------------------
 ##'
 ##' @note
-##' It is assumed that the setup time is neglectible compared the total
+##' It is assumed that the setup time is negligible compared the total
 ##' sampling time.
 ##' 
 ## --------------------------------------------------------------------------
