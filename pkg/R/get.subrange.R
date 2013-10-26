@@ -16,14 +16,14 @@
 ##  @details
 ## 
 ##' An object of class \code{"rvgt.range"} contains the results of some test
-##' that has been performed on a set of parameters. Function \code{get.subrange}
-##' extracts a subset of these parameters. This can be useful if one wants
-##' to \dQuote{zoom} into a region of interest, or if the number of dimensions
-##' have to be reduces (using \code{drop=TRUE}) in order to visualize the
-##' results be means of plots.
+##' that has been performed on a set of parameter values.
+##' Function \code{get.subrange} extracts a subset of these parameter values.
+##' This can be useful if one wants to \dQuote{zoom} into a region of interest,
+##' or if the number of dimensions have to be reduces (using \code{drop=TRUE})
+##' in order to visualize the results by means of plots.
 ##' 
-##' Each list entry in \code{sub.params} must correspond to a name in list
-##' \code{obj$dist.params}.
+##' Each list entry in argument \code{sub.params} must correspond to a name
+##' in list \code{obj$dist.params}.
 ##' Each member of this list entry is either
 ##' \itemize{
 ##'   \item a (non-empty) vector of integers, or
@@ -31,7 +31,7 @@
 ##' }
 ##' Integer vectors give the indices of the elements in the vector of values
 ##' of the corresponding parameter as listed in \code{obj$dist.params}.
-##' These are included in the subset.
+##' These are then included in the subset.
 ##'
 ##' Pairs of numeric values are interpreted as lower and upper bound, resp.,
 ##' for the values to be included in the object with subsets.
@@ -48,7 +48,7 @@
 ## --------------------------------------------------------------------------
 ##'
 ##' @seealso
-##' \code{\link{rvgt.range.engine}} a description of class
+##' \code{\link{rvgt.range.engine}} for a description of class
 ##' \code{"rvgt.range"}.
 ##' 
 ## --------------------------------------------------------------------------
@@ -61,7 +61,7 @@
 ##' @param obj
 ##'        object of class \code{"rvgt.range"}.
 ##' @param sub.params
-##'        subset of parameters for distribution (list).
+##'        subset of parameter values (list).
 ##' @param drop
 ##'        if TRUE then dimensions with 1 entry are removed (boolean).
 ##'
@@ -69,7 +69,7 @@
 ##'
 ##' @return
 ##'        An object of class \code{"rvgt.range"} that contains the subset
-##'        of parameters.
+##'        of parameter values.
 ##' 
 ## --------------------------------------------------------------------------
 
