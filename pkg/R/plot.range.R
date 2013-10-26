@@ -12,32 +12,32 @@
 ## 
 ##  @details
 ## 
-##' Method \code{plot.rvgt.range} allows to visualize the results of running
-##' \code{rvgt.range.engine}. The output depends on the number of parameters
+##' Method \code{plot.rvgt.range} allows to visualize the output of routine
+##' \code{rvgt.range.engine}. The plot depends on the number of parameters
 ##' where a range of values if given.
-##' If there is one such parameter then the results of the test routine are
+##' If there is one such parameter then the output of the test routine are
 ##' plotted against this single parameter. If two such parameters with ranges
-##' of values are given then the results are presented by means of an image plot.
-##' There are three or more such parameters are not supported.
+##' of values are given then the output is presented by means of an image plot.
+##' Three or more such parameters are not supported.
 ##'
-##' However, argument \code{sub.params} allows to restrict the given parameter
+##' Argument \code{sub.params} allows to restrict the given parameter
 ##' values before plotting. This allows to \dQuote{zoom} into a region of
 ##' interest. It also allows to restrict a vector of parameter values to one
 ##' of its entries. Thus one can reduce the number of dimensions for the plot.
 ##'
 ##' The entries of \code{sub.params} correspond to the parameters of the
-##' distribution as given in object \code{obj}.
-##' Each member of this list entry is either
+##' distribution as given in argument \code{x}.
+##' Each member of this list is either
 ##' \itemize{
 ##'   \item a (non-empty) vector of integers, or
 ##'   \item a pair of numeric values.
 ##' }
 ##' Integer vectors give the indices of the elements in the vector of values
-##' of the corresponding parameter as listed in \code{obj$dist.params}.
-##' These are included in the subset.
+##' of the corresponding parameter as listed in \code{x$dist.params}.
+##' These are then included in the subset.
 ##' Pairs of numeric values are interpreted as lower and upper bound, resp.,
 ##' for the values to be included in the object with subsets.
-##' If a parameter from \code{obj$dist.params} is omitted in \code{sub.params},
+##' If a parameter from \code{x$dist.params} is omitted in \code{sub.params},
 ##' then all its values are included in the new object.
 ##' (The subset of parameters is actually created by means of function
 ##' \code{\link{get.subrange}}.)
@@ -53,7 +53,7 @@
 ##'
 ##' @seealso
 ##' \code{\link{rvgt.range.engine}} for a description of objects of class
-##' ' \code{"rvgt.range"}.
+##' \code{"rvgt.range"}.
 ##' 
 ## --------------------------------------------------------------------------
 ##'
@@ -75,23 +75,23 @@
 ##' ## Plot all samples
 ##' plot(samp)
 ##'
-##' ## Plot only samples where 'sd' is the 5th entry (of 1:10).
+##' ## Plot samples where 'sd' is the 5th entry (of 1:10).
 ##' ## It is important that index 5 is given as integer 5L. 
 ##' plot(samp, sub.params=list(sd=5L))
 ##' 
-##' ## Plot only samples where 'sd' restricted to the 5th, 6th and 7th entry.
+##' ## Plot samples where 'sd' is restricted to the 5th, 6th and 7th entry.
 ##' ## Notice that 5:7 creates a vector of integers.
 ##' plot(samp, sub.params=list(sd=5:7))
 ##' 
-##' ## Plot only samples where 'mean' is between 7 and 9.
+##' ## Plot samples where 'mean' is between 7 and 9.
 ##' ## This time we have to give a pair of numeric values which represent
 ##' ## the lower and upper bound, resp.
 ##' ## Notice that exact comparisons of floating point numbers can sometimes
 ##' ## have surprising results. So it is recommended to add some tolerance.
 ##' plot(samp, sub.params=list(mean=c(6.99,9.01)))
 ##'
-##' ## Plot only samples where 'mean' equals 7
-##' ## (again we have to use a pair of numeric values)
+##' ## Plot samples where 'mean' equals 7
+##' ## (again we have to use a pair of numeric values).
 ##' plot(samp, sub.params=list(mean=c(6.99,7.01)))
 ##'
 ##' ## Zoom into the region with smalls values for 'mean' and 'sd'.
@@ -108,7 +108,8 @@
 ##'        object of class \code{"rvgt.range"} to be plotted.
 ##' 
 ##' @param sub.params
-##'        subset of parameters for restricting plotting region (list).
+##'        subset of parameter values which should be printed (list).
+##'        This allows to restrict the plotting region.
 ##' 
 ##' @param xscale
 ##'        type of scale used for first coordinate.
