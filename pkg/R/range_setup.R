@@ -34,8 +34,8 @@
 ##' \code{for} loop. However, this also includes the overhead for calling an
 ##' \R function. For experimental generators that are implemented at C level
 ##' there is a workaround: if generator \code{rdist} accepts argument \code{rep}
-##' it is assumed that this for loop is implemented at C level, too, where
-##' \code{rep} is the number of repetitions. 
+##' it is assumed that this \code{for} loop is implemented at C level, too,
+##' where \code{rep} is the number of repetitions. 
 ##'
 ##' Timings can vary considerably. In order to get a more robust estimate
 ##' one can repeat this test several times and use the median of all timings.
@@ -44,10 +44,12 @@
 ##' This has to be taken into account if a timeout is set.
 ##' 
 ##' A big issue of tests on a large range of parameter settings is that the
-##' running times may be very large for some tests. In order to avoid such
-##' problems the running times for each test can be limited using argument
-##' \code{timeout} which required to enable multicore support using
-##' \code{ncores}.
+##' running times may not be known in advance. Thus the total running time of
+##' the test suite may be extremely long due to some unexpected long runs
+##' for some tests. 
+##' In order to avoid such problems the running times for each test can be
+##' limited by means of argument \code{timeout} which required to enable
+##' multicore support using \code{ncores}.
 ##'
 ## --------------------------------------------------------------------------
 ##'

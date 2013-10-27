@@ -63,10 +63,12 @@
 ##' This can be achieved by means of argument \code{repetitions}.
 ##'
 ##' A big issue of tests on a large range of parameter settings is that the
-##' running times may not be known in advance. So the total running time of
-##' the test suite may explode due to some unexpected long runs for some tests.
+##' running times may not be known in advance. Thus the total running time of
+##' the test suite may be extremely long due to some unexpected long runs
+##' for some tests. 
 ##' In order to avoid such problems the running times for each test can be
-##' limited by means of argument \code{timeout}.
+##' limited by means of argument \code{timeout} which required to enable
+##' multicore support using \code{ncores}.
 ##'
 ## --------------------------------------------------------------------------
 ##'

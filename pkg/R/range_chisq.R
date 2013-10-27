@@ -34,7 +34,7 @@
 ## --------------------------------------------------------------------------
 ##
 ##' @examples
-##' ## Run chisquare gog test on the output of rbeta()
+##' ## Run chisquare gof test on the output of rbeta()
 ##' ## on the following set of parameters:
 ##' dp <- list(shape1=1:3, shape2=2)
 ##'
@@ -56,7 +56,7 @@
 ##' @inheritParams rvgt.range.engine
 ##'
 ##' @param duration
-##'        maximal runtime for drawing random sample.
+##'        maximal running time for drawing random sample.
 ##'        A test is not performed if sample size \code{n} times
 ##'        marginal generation time (given by argument \code{gen.time})
 ##'        exceeds this value (numeric).

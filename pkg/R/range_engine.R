@@ -7,7 +7,7 @@
 ##  @description
 ##' 
 ##' Perform tests on the output of a random variate generator for all
-##' combinations of the given parameters for the distribution.
+##' combinations of the given parameter values for the distribution.
 ##' 
 ## --------------------------------------------------------------------------
 ## 
@@ -15,11 +15,13 @@
 ## 
 ##' Routine \code{rvgt.range.engine} is the workhorse for performing tests
 ##' encoded in function \code{test.routine} on the output of random variate
-##' generator \code{rdist} for a given set of parameters.
+##' generator \code{rdist} for a given set of parameter values.
 ##' This set is provided by argument \code{dist.params} where each entry
-##' corresponds to a parameter and holds the vector of possible values.
+##' of this list corresponds to a parameter and holds the vector of possible
+##' values.
 ##'
-##' Detailed description of the arguments are given in the sections below.
+##' Detailed description of the arguments of this functions are given in the
+##' sections below.
 ##'
 ## ..........................................................................
 ##'
@@ -38,8 +40,8 @@
 ##' the value for that parameter is kept fixed or a vector of numbers.
 ##' In the latter case \code{rvgt.range.engine} runs through all possible
 ##' combinations of parameter values.
-##' (Parameters of the distribution that have defaults need not be listed in
-##' argument \code{dist.params}.)
+##' (Parameters of the distribution that have defaults in \code{rdist}
+##' need not be listed in argument \code{dist.params}.)
 ##'
 ##' Function \code{rdist} may also have some additional arguments,
 ##' e.g., debugging flags. This can be useful for testing experimental
@@ -49,7 +51,8 @@
 ##'
 ##' Some tests require propoerties of the random variate generator that
 ##' can only be collected during setup (like the rejection constant)
-##' or running random variate generator \code{rdist} (like rejection rate).
+##' or running the random variate generator \code{rdist}
+##' (like the rejection rate).
 ##' These properties must be stored in the returned sample
 ##' as attributes. 
 ##' In order to run these tests function \code{rdist}
@@ -58,6 +61,7 @@
 ##' \item must return its properties (like the rejection constant)
 ##'       as attributes when \code{show.properties=TRUE}.
 ##' }
+##' See function \code{rvgt.range.trc} or \code{rvgt.range.orc} for examples. 
 ##' 
 ## ..........................................................................
 ##'
@@ -82,7 +86,7 @@
 ##'   \item{\code{verbose}}{%
 ##'         if TRUE show progress (logical).}
 ##' }
-##' The function prototype reads
+##' Thus the function prototype reads
 ##' \code{test.routine(rdist, dist.params, r.params, emgt, test.params, duration, verbose)}.
 ##' 
 ##' When \code{test.routine} is called then the corresponding arguments
@@ -190,7 +194,7 @@
 ##'        \item \code{NULL}:
 ##'              the tests run sequentially on a single core.
 ##'        \item A positive integer:
-##'              the tests run on \code{ncores} in parallel.
+##'              the tests run on \code{ncores} cores in parallel.
 ##'              Notice that \code{ncores=1L} is possible.
 ##'              Although then only one core is used the behavior
 ##'              is different from \code{ncores=NULL}.
@@ -210,7 +214,7 @@
 ##'        (When a timeout is set then \code{ncores} is automatically
 ##'        set to \code{1L} if it is not already set by the user.) 
 ##' @param timeout.val
-##'        value returned if a timeout is reached (numeric, including Inf).
+##'        value returned if a timeout is reached (numeric or Inf).
 ##'
 ##' @param verbose
 ##'        if TRUE show progress.
@@ -222,7 +226,7 @@
 ##' The function returns an object (list) with class attributes
 ##' \code{c("rvgt.range.testclass","rvgt.range"} if \emph{testclass} is the string
 ##' given by argument \code{test.class}). If string \emph{testclass} contains one
-##' or more periods \code{'.'}, then a cascade of class names is created.
+##' or more periods \code{.}, then a cascade of class names is created.
 ##' E.g., if \code{test.class="test.foo.bar"} then the class attributes is set to
 ##' \code{c("rvgt.range.test.foo.bar", "rvgt.range.test.foo", "rvgt.range.test", "rvgt.range")}.
 ##' 
