@@ -7,7 +7,7 @@
 ##  @description
 ##'
 ##' Perform a chisquare goodness-of-fit test on the given random variate
-##' generator for a range of parameters.
+##' generator for a range of parameter values.
 ##' 
 ## --------------------------------------------------------------------------
 ## 
@@ -74,7 +74,7 @@
 ## --------------------------------------------------------------------------
 ##'
 ##' @return
-##' The function returns an object of class \code{"rvgt.range.gof.erc"}
+##' The function returns an object of class \code{"rvgt.range.gof.chisq"}
 ##' where the p-values are stored in field \code{$data},
 ##' see \code{\link{rvgt.range.engine}} for a description of such objects.
 ##' The routine returns \code{NA} in all cases where the setup fails, and
