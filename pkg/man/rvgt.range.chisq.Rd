@@ -1,0 +1,118 @@
+\name{rvgt.range.chisq}
+\alias{rvgt.range.chisq}
+\title{Chisquare goodness-of-fit test for random variate generator}
+\usage{
+  rvgt.range.chisq(rdist, dist.params, r.params = list(),
+    n, breaks, qdist, pdist, duration = 0.1, gen.time,
+    ncores = NULL, timeout = Inf, verbose = FALSE)
+}
+\arguments{
+  \item{duration}{maximal running time for drawing random
+  sample.  A test is not performed if sample size \code{n}
+  times marginal generation time (given by argument
+  \code{gen.time}) exceeds this value (numeric).}
+
+  \item{n}{sample size for test (integer).}
+
+  \item{breaks}{number of bins in histogram, i.e,
+  equidistributed break points for uniform scale
+  (integer).}
+
+  \item{qdist}{quantile function for distribution
+  (function).}
+
+  \item{pdist}{cumulative distribution function for
+  distribution (function).}
+
+  \item{rdist}{random number generator for distribution
+  (function).}
+
+  \item{dist.params}{parameters for distribution (non-empty
+  list).}
+
+  \item{r.params}{additional arguments for \code{rdist}
+  (list).}
+
+  \item{gen.time}{(approximate) marginal generation time
+  for \code{rdist}.  It must be either a single positive
+  number (numeric) or an object of class
+  \code{"rvgt.range.time"} that holds the result of a
+  previous call to routine
+  \code{\link{rvgt.range.marginal}}.}
+
+  \item{ncores}{enable multicore support for performing
+  tests in parallel and for setting timeout.  The following
+  values are possible: \itemize{ \item \code{NULL}: the
+  tests run sequentially on a single core.  \item A
+  positive integer: the tests run on \code{ncores} cores in
+  parallel.  Notice that \code{ncores=1L} is possible.
+  Although then only one core is used the behavior is
+  different from \code{ncores=NULL}.  \item \code{0L}: the
+  number of available cores is autodetected by means of
+  \code{\link[parallel]{detectCores}}.  } Multicore support
+  is only available on POSIX-compliant OSes (basically
+  every but Windows OSes).}
+
+  \item{timeout}{set a timeout in seconds for each test
+  (numeric).  This allows to protect against unexpected
+  long running times or infinite loops.  It requires
+  multicore support which is enabled by setting argument
+  \code{ncores}.  (When a timeout is set then \code{ncores}
+  is automatically set to \code{1L} if it is not already
+  set by the user.)}
+
+  \item{verbose}{if TRUE show progress.  Ignored when
+  multicore support is enabled and 'ncores' > 1 (logical).}
+}
+\value{
+  The function returns an object of class
+  \code{"rvgt.range.gof.chisq"} where the p-values are
+  stored in field \code{$data}, see
+  \code{\link{rvgt.range.engine}} for a description of such
+  objects. The routine returns \code{NA} in all cases where
+  the setup fails, and \code{Inf} when the marginal
+  generation time is too slow or when a timeout has been
+  reached. When the chisquare goodness-of-fit tests aborts
+  for other reasons then \code{NaN} is returned.
+}
+\description{
+  Perform a chisquare goodness-of-fit test on the given
+  random variate generator for a range of parameter values.
+}
+\details{
+  Routine \code{rvgt.range.chisq} performs a chisquare
+  goodness-of-fit test on the given random variate
+  \code{rdist} for a range of parameters, see
+  \code{\link{rvgt.chisq}} for details.
+}
+\examples{
+## Run chisquare gof test on the output of rbeta()
+## on the following set of parameters:
+dp <- list(shape1=1:3, shape2=2)
+
+## first we need the running times for the generator
+mgt <- rvgt.range.marginal(rdist = rbeta, dist.params = dp,
+                           duration = 0.01, gen.time = 1e-5)
+
+## now run the test
+chisq <- rvgt.range.chisq(rdist = rbeta, dist.params = dp,
+                          n = 1e4, breaks = 100, qdist=qbeta,
+                          duration = 1, gen.time = mgt)
+
+## print summary
+chisq
+}
+\author{
+  Josef Leydold \email{josef.leydold@wu.ac.at}
+}
+\seealso{
+  \code{\link{rvgt.range.engine}} for a description of
+  objects of class \code{"rvgt.range"}.
+  \code{\link{rvgt.ftable}} and \code{\link{rvgt.chisq}}
+  for the routines that performs the test for a particular
+  combinations of parameters.
+  \code{\link{print.rvgt.range}} for printing a summary of
+  test results, \code{\link{plot.rvgt.range}} for plotting
+  the test results.
+}
+

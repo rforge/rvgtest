@@ -1,0 +1,103 @@
+\name{rvgt.range.trc}
+\alias{rvgt.range.trc}
+\title{Collect theoretical rejection constants for random variate generator}
+\usage{
+  rvgt.range.trc(rdist, dist.params, r.params = list(),
+    ncores = NULL, timeout = Inf, verbose = FALSE)
+}
+\arguments{
+  \item{rdist}{random number generator for distribution
+  (function).}
+
+  \item{dist.params}{parameters for distribution (non-empty
+  list).}
+
+  \item{r.params}{additional arguments for \code{rdist}
+  (list).}
+
+  \item{ncores}{enable multicore support for performing
+  tests in parallel and for setting timeout.  The following
+  values are possible: \itemize{ \item \code{NULL}: the
+  tests run sequentially on a single core.  \item A
+  positive integer: the tests run on \code{ncores} cores in
+  parallel.  Notice that \code{ncores=1L} is possible.
+  Although then only one core is used the behavior is
+  different from \code{ncores=NULL}.  \item \code{0L}: the
+  number of available cores is autodetected by means of
+  \code{\link[parallel]{detectCores}}.  } Multicore support
+  is only available on POSIX-compliant OSes (basically
+  every but Windows OSes).}
+
+  \item{timeout}{set a timeout in seconds for each test
+  (numeric).  This allows to protect against unexpected
+  long running times or infinite loops.  It requires
+  multicore support which is enabled by setting argument
+  \code{ncores}.  (When a timeout is set then \code{ncores}
+  is automatically set to \code{1L} if it is not already
+  set by the user.)}
+
+  \item{verbose}{if TRUE show progress.  Ignored when
+  multicore support is enabled and 'ncores' > 1 (logical).}
+}
+\value{
+  The function returns an object of class
+  \code{"rvgt.range.prop.trc"} where the rejection
+  constants are stored in field \code{$data}, see
+  \code{\link{rvgt.range.engine}} for a description of such
+  objects. The routine returns \code{NA} in all cases where
+  the setup failed or when a timeout has been reached.
+}
+\description{
+  Collect (theoretical) rejection constants from the given
+  random variate generator for a range of parameters.
+}
+\details{
+  Routine \code{rvgt.range.trc} collects the (theoretical)
+  rejection constant from generator \code{rdist} for a
+  range of parameters. The rejection constant must be
+  provide as attribute \code{"trc"} (theoretical rejection
+  constant) in the returned sample when \code{rdist} is
+  called with argument \code{show.properties=TRUE}. Of
+  course this property is only sensible if \code{rdist} is
+  based on the acceptance-rejection method.
+}
+\examples{
+## a simple generator for the beta distribution
+myrbeta <- function(n, shape1, shape2, show.properties=FALSE) {
+   if (shape1 <= 1 || shape2 <= 1 || n < 0) stop("arguments invalid")
+   mode <- (shape1 - 1) / (shape1 + shape2 - 2)
+   fmode <- dbeta(mode,shape1,shape2)
+   res <- numeric(n)
+   for (i in 1:n) {
+      while(n>0) {
+         X <- runif(1)
+         Y <- fmode * runif(1)
+         if (Y <= dbeta(X,shape1,shape2)) {
+            res[n] <- X
+            break
+         }
+      }
+   }
+   if (isTRUE(show.properties)) {
+      trc <- fmode
+      attr(res,"trc") <- trc
+   }
+   res
+}
+
+## Collect rejection constants for a range of parameter values.
+trc <- rvgt.range.trc(rdist = myrbeta,
+                      dist.params = list(shape1=2:10,shape2=5))
+print(trc)
+}
+\author{
+  Josef Leydold \email{josef.leydold@wu.ac.at}
+}
+\seealso{
+  \code{\link{rvgt.range.engine}} for a description of
+  objects of class \code{"rvgt.range"}.
+  \code{\link{print.rvgt.range}} for printing a summary of
+  test results, \code{\link{plot.rvgt.range}} for plotting
+  the test results.
+}
+

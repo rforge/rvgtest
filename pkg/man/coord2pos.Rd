@@ -1,0 +1,56 @@
+\name{coord2pos}
+\alias{coord2pos}
+\alias{pos2coord}
+\title{Convert array indices into position in underlying vector and vice versa
+(internal function)}
+\usage{
+  coord2pos(coord, dims)
+
+  pos2coord(pos, dims)
+}
+\arguments{
+  \item{coord}{vector of coordinates (vector of integers)}
+
+  \item{dims}{dimensions of the array (vector of
+  integers).}
+
+  \item{pos}{position in underlying vector (integer).}
+}
+\value{
+  Function \code{coord2pos} returns the position of the
+  element in the underlying vector (integer).
+
+  Function \code{pos2coord} returns the indices of the
+  element in the corresponding array (an integer vector of
+  the same length as \code{dims}).
+}
+\description{
+  Convert the indices of an element in an array with a
+  given \code{"dim"} attribute into the position in the
+  underlying vector or, vice versa, convert position of an
+  element in vector into the indices of a derived array
+  with a given \code{"dim"} attribute. -- (internal
+  function)
+}
+\details{
+  Recall that an array (and in particular a matrix) is a
+  vector with a \code{"\link{dim}"} attribute. For a given
+  array (with given \code{"dim"} attribute) function
+  \code{coord2pos} converts the indices of an element in an
+  array into the position in the underlying vector.
+
+  Vice versa, function \code{pos2coord} converts the
+  position of an element in a vector into the corresponding
+  indices of an array with given attribute \code{"dim"}.
+}
+\examples{
+## get indices of forth entry in a 2x3 matrix
+rvgtest:::pos2coord(pos=4L, dims=c(2L,3L))
+
+## get position of element with indices c(2,3) in a 4x6 matrix
+rvgtest:::coord2pos(coord=c(2L,3L), dims=c(4L,6L))
+}
+\author{
+  Josef Leydold \email{josef.leydold@wu.ac.at}
+}
+
