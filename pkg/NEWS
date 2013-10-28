@@ -1,4 +1,4 @@
-Version 0.8.0: 2013-??-??
+Version 0.8.0: 2013-10-28
 
 	- added functions for testing random variate generators
 	  for a set of parameter values:
