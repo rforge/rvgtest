@@ -562,7 +562,7 @@ test_that("[pre-i14] calling rvgt.range.engine with invalid arguments: verbose",
 if (.Platform$OS.type == "unix") {
 test_that("[pre-i15] calling rvgt.range.engine with invalid arguments: verbose", {
         ## verbose
-        msg <- "Argument 'verbose' ignored when 'ncore' > 1"
+        msg <- "Argument 'verbose' ignored when 'ncores' > 1"
         expect_message(rvgt.range.engine(
           rdist=rnorm, dist.params=list(a=1:2,b=3:4),
           test.routine=trunit, test.class="a", ncores=2L, verbose=TRUE),  msg)
