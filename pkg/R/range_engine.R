@@ -137,8 +137,11 @@
 ##' 
 ## --------------------------------------------------------------------------
 ##'
-##' @author Josef Leydold \email{josef.leydold@@wu.ac.at}
+##' @author Josef Leydold \email{josef.leydold@@wu.ac.at}.
 ##'
+##' Thanks to Simon Urbanek for helpful explanations of the low level functions of
+##' the \pkg{parallel}/\pkg{multicore} package.
+##' 
 ## --------------------------------------------------------------------------
 ##'
 ##' @examples
@@ -464,6 +467,10 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
 }
 
 ## --- Multicore ------------------------------------------------------------
+
+## Remark:
+## The author of this code gratefully thanks Simon Urbanek for helpful
+## explanations of the low level functions of the parallel/multicore package.
 
 .run.engine.mc <- function (rdist, dist.params, r.params, emgt,
                             test.routine, test.params, duration,
