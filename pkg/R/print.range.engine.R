@@ -42,18 +42,31 @@
 
 print.rvgt.range <- function(x,...) {
         cat("\n * Test ranges of parameters - Summary:\n")
+
         cat("\n Test:\n  ", x$test.class, "\n")
         if (! is.null(x$test.name))
                 cat("\n  ", x$test.name, "\n")
+
         cat("\n RVG:\n  ", x$rdist.name, "\n")
+
         cat("\n Parameters:\n")
         for (i in 1:length(x$dist.params)) {
                 cat("  ",names(x$dist.params)[i],
                     "(", length(x$dist.params[[i]]), ")\n")
                 print(x$dist.param[[i]])
         }
+
+        if (length(x$r.params)>0) {
+                cat("\n Additional Parameters:\n")
+                for (i in 1:length(x$r.params)) {
+                        cat("  ",names(x$r.params)[i],"\n")
+                        print(x$r.param[[i]])
+                }
+        }
+
         cat("\n Results:\n")
         print(summary.default(x$data[is.finite(x$data)]))
+
         cat("\n Tests started at", format(x$started),"\n")
         cat("\n Total runtime:",format(x$runtime),"\n")
         cat("\n")

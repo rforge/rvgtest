@@ -175,8 +175,10 @@ test_that("[pre-002] list entries returned by rvgt.range.engine: length(dist.par
         dp <- list(alpha=c(2,3),beta=c(5,7,11))
         res <- rvgt.range.engine(rdist=rnorm,
                                  dist.params=dp,
+                                 r.params=list(gamma=99),
                                  test.routine=trunit,
-                                 test.class="unit.test"
+                                 test.class="unit.test",
+                                 test.name="Unit Test"
                                  )
         expect_is(res, "rvgt.range.unit.test")
         expect_is(res, "rvgt.range.unit")
@@ -184,10 +186,11 @@ test_that("[pre-002] list entries returned by rvgt.range.engine: length(dist.par
 
         expect_output(print(res),
                       paste("^ \\* Test ranges of parameters - Summary:\\s+",
-                            "Test:\\s+unit\\.test\\s+",
+                            "Test:\\s+unit\\.test\\s+Unit Test\\s+",
                             "RVG:\\s+rnorm\\s+",
                             "Parameters:\\s+alpha \\( 2 \\)\\[1\\] 2 3\\s+",
                             "beta \\( 3 \\)\\[1\\]\\s+5\\s+7\\s+11\\s+",
+                            "Additional Parameters:\\s+gamma\\s+\\[1\\]\\s+99\\s+",
                             "Results:\\s+",
                             "Min. 1st Qu.  Median    Mean 3rd Qu.    Max.\\s+",
                             "10\\.00\\s+14\\.25\\s+18\\.00\\s+19\\.17\\s+21\\.75\\s+33.00\\s*",
