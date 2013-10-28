@@ -353,7 +353,7 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                 stop("Argument 'verbose' invalid")
 
         if (verbose && isTRUE(ncores>1L)) {
-                message("Argument 'verbose' ignored when 'ncore' > 1")
+                message("Argument 'verbose' ignored when 'ncores' > 1")
                 verbose <- FALSE
         }        
 
