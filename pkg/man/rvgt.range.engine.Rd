@@ -234,7 +234,11 @@ print(samp)
 plot(samp)
 }
 \author{
-  Josef Leydold \email{josef.leydold@wu.ac.at}
+  Josef Leydold \email{josef.leydold@wu.ac.at}.
+
+  Thanks to Simon Urbanek for helpful explanations of the
+  low level functions of the \pkg{parallel}/\pkg{multicore}
+  package.
 }
 \seealso{
   \code{\link{print.rvgt.range}} for printing a summary of
