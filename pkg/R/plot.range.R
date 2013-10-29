@@ -46,7 +46,7 @@
 ##' a particular scaling (\code{"linear"} or \code{"logarithmic"}) for the
 ##' given data. Notice, the z-axis always corresponds to the data.
 ##' So for an 1-dimensional plot we only have an x-axis and an z-axis and
-##' the value of \code{yscale} is ignored. 
+##' the value of \code{yscale} is ignored.
 ##' 
 ## --------------------------------------------------------------------------
 ##'
@@ -129,7 +129,7 @@
 plot.rvgt.range <- function (x, sub.params=list(),
                              xscale=c("linear","logarithmic"),
                              yscale=c("linear","logarithmic"),
-                             zscale=c("linear","logarithmic"),
+                             zscale=c("auto","linear","logarithmic"),
                              ...) {
         ## ..................................................................
         
@@ -143,7 +143,15 @@ plot.rvgt.range <- function (x, sub.params=list(),
         xscale <- match.arg(xscale)
         yscale <- match.arg(yscale)
         zscale <- match.arg(zscale)
-        
+
+        ## --- choose scale type automatically
+        if (zscale=="auto") {
+                zdata <- obj$data[is.finite(obj$data)]
+                zmin <- min(zdata)
+                zmax <- max(zdata)
+                zscale <- ifelse(isTRUE(zmax/zmin > 100), "logarithmic", "linear")
+        }
+
         ## --- plot
         if (identical(dims, 1L)) {
 
@@ -202,9 +210,9 @@ plot.rvgt.range <- function (x, sub.params=list(),
                 } else if (zscale=="logarithmic") {
                         z <- log10(obj$data)
                 } else {
-                        stop("unknown yscale")
+                        stop("unknown zscale")
                 }
-                
+
                 filled.contour(x=x, y=y, z=z,
                                xlab=xlabel, ylab=ylabel,
                                color.palette=topo.colors,

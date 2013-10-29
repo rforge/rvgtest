@@ -5,7 +5,7 @@
   \method{plot}{rvgt.range} (x, sub.params = list(),
     xscale = c("linear", "logarithmic"),
     yscale = c("linear", "logarithmic"),
-    zscale = c("linear", "logarithmic"), ...)
+    zscale = c("auto", "linear", "logarithmic"), ...)
 }
 \arguments{
   \item{x}{object of class \code{"rvgt.range"} to be

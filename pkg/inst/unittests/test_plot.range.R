@@ -92,6 +92,8 @@ test_that("[prr-i01] calling plot.rvgt.range with invalid arguments", {
         msg <- "'arg' should be one of \"linear\", \"logarithmic\""
         expect_error(plot(res, sub.params=list(alpha=1L), xscale="nix"),  msg)
         expect_error(plot(res, sub.params=list(alpha=1L), yscale="nix"),  msg)
+
+        msg <- "'arg' should be one of \"auto\", \"linear\", \"logarithmic\""
         expect_error(plot(res, sub.params=list(alpha=1L), zscale="nix"),  msg)
 })
 
