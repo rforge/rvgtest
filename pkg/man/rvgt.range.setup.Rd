@@ -3,8 +3,8 @@
 \title{Estimate setup time of random variate generator}
 \usage{
   rvgt.range.setup(rdist, dist.params, r.params = list(),
-    duration = 0.1, repetitions = 1L, ncores = NULL,
-    timeout = Inf, verbose = FALSE)
+    duration = 0.1, gen.time = duration, repetitions = 1L,
+    ncores = NULL, timeout = Inf, verbose = FALSE)
 }
 \arguments{
   \item{repetitions}{number of repetitions of the test.
@@ -22,6 +22,13 @@
 
   \item{duration}{scheduled duration for a single test in
   seconds (numeric).}
+
+  \item{gen.time}{(approximate) marginal generation time
+  for \code{rdist}.  It must be either a single positive
+  number (numeric) or an object of class
+  \code{"rvgt.range.time"} that holds the result of a
+  previous call to routine
+  \code{\link{rvgt.range.marginal}}.}
 
   \item{ncores}{enable multicore support for performing
   tests in parallel and for setting timeout.  The following

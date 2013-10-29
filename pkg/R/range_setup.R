@@ -98,7 +98,7 @@
 ## --------------------------------------------------------------------------
 
 rvgt.range.setup <- function (rdist, dist.params, r.params=list(), 
-                              duration=0.1, repetitions=1L,
+                              duration=0.1, gen.time=duration, repetitions=1L,
                               ncores=NULL, timeout=Inf, verbose=FALSE) {
         ## ..................................................................
 
@@ -121,6 +121,7 @@ rvgt.range.setup <- function (rdist, dist.params, r.params=list(),
                                   repetitions=repetitions,  ## number of repetitions
                                   esut=duration),           ## expected setup time
                           duration = duration,
+                          gen.time = gen.time,
                           ncores = ncores,
                           timeout = timeout,
                           timeout.val = Inf,
@@ -154,6 +155,26 @@ rvgt.range.setup <- function (rdist, dist.params, r.params=list(),
 .run.setup.single <- function (rdist, dist.params, r.params, emgt,
                                test.params, duration, verbose) {
 
+
+        ## --- approximate marginal generation times
+
+        ## We have to draw 1 random variate.
+        ## So we can use 'emgt' to get a lower bound for the
+        ## setup time.
+        
+        ## Check whether we can expect that the setup of rdist() works at all.
+        ## Case 'NA':  setup failed in a previous run
+        if (is.na(emgt)) {
+                if (verbose) cat("\t---> setup failed!")
+                return (NA)
+        }
+        ## Case 'Inf' or 'emgt' > 'duration':
+        ##    The marginal generation time was too slow
+        if (! (is.finite(emgt) && emgt < 1.1*duration)) { 
+                if (verbose) cat("\t---> too slow!")
+                return (Inf)
+        }
+        
         ## --- estimate required sample size
 
         esut <- test.params$esut                 ## expected setup time
