@@ -56,7 +56,7 @@
 ##' @seealso
 ##' \code{\link{rvgt.range.engine}} for a description of objects of class
 ##' \code{"rvgt.range"}.
-##' \code{\link{print.rvgt.range}} for printing a summary of test results,
+##' \code{\link{summary.rvgt.range}} for a summary of test results,
 ##' \code{\link{plot.rvgt.range}} for plotting the test results.
 ##' 
 ## --------------------------------------------------------------------------
@@ -73,7 +73,7 @@
 ##'                            shape2=c(0.1,1,10)),
 ##'                         duration = 0.01, verbose=FALSE)
 ##'
-##' ## show summary of generation times
+##' ## show summary of setup times
 ##' summary(sut)
 ##'
 ## --------------------------------------------------------------------------

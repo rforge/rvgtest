@@ -100,7 +100,7 @@ chisq <- rvgt.range.chisq(rdist = rbeta, dist.params = dp,
                           duration = 1, gen.time = mgt)
 
 ## print summary
-chisq
+summary(chisq)
 }
 \author{
   Josef Leydold \email{josef.leydold@wu.ac.at}
@@ -111,8 +111,8 @@ chisq
   \code{\link{rvgt.ftable}} and \code{\link{rvgt.chisq}}
   for the routines that performs the test for a particular
   combinations of parameters.
-  \code{\link{print.rvgt.range}} for printing a summary of
-  test results, \code{\link{plot.rvgt.range}} for plotting
-  the test results.
+  \code{\link{summary.rvgt.range}} for a summary of test
+  results, \code{\link{plot.rvgt.range}} for plotting the
+  test results.
 }
 

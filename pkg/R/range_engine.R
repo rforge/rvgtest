@@ -132,7 +132,7 @@
 ## --------------------------------------------------------------------------
 ##'
 ##' @seealso
-##' \code{\link{print.rvgt.range}} for printing a summary of test results,
+##' \code{\link{summary.rvgt.range}} for a summary of test results,
 ##' \code{\link{plot.rvgt.range}} for plotting the test results.
 ##' 
 ## --------------------------------------------------------------------------
@@ -158,7 +158,7 @@
 ##'                           test.class="sample")
 ##'
 ##' ## print summary
-##' print(samp)
+##' summary(samp)
 ##'
 ##' ## Plot sample
 ##' plot(samp)

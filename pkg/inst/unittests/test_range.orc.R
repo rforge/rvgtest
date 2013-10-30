@@ -57,7 +57,7 @@ test_that("[orc-001] calling rvgt.range.orc", {
         expect_true(is.infinite(orc$data[2]) && orc$data[2] > 0)
         expect_true(is.infinite(orc$data[3]) && orc$data[3] > 0)
         expect_true(is.nan(orc$data[4]))
-        expect_true(all(orc$data[5:6] > 1e-5) && all(orc$data[5:6] < 0.99999)) 
+        expect_true(all(orc$data[5:6] > 1e-5) && all(orc$data[5:6] <= 1)) 
 
 })
 

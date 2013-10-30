@@ -35,7 +35,7 @@
 ##' @seealso
 ##' \code{\link{rvgt.range.engine}} for a description of objects of class
 ##' \code{"rvgt.range"}.
-##' \code{\link{print.rvgt.range}} for printing a summary of test results,
+##' \code{\link{summary.rvgt.range}} for a summary of test results,
 ##' \code{\link{plot.rvgt.range}} for plotting the test results.
 ##' 
 ## --------------------------------------------------------------------------
@@ -81,7 +81,8 @@
 ##'                       dist.params = list(shape1=c(2,3), shape2=2),
 ##'                       duration = 0.01, gen.time = mgt)
 ##'
-##' print(orc)
+##' ## print summary
+##' summary(orc)
 ##' 
 ## --------------------------------------------------------------------------
 ##'

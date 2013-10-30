@@ -1,18 +1,18 @@
 ## --------------------------------------------------------------------------
 ##'
-##' Print result of range tests
+##' Summarizing result of range tests
 ##
 ## --------------------------------------------------------------------------
 ##
 ##  @description
 ##'
-##' \code{print} method for class \code{"rvgt.range"}.
+##' \code{summary} method for class \code{"rvgt.range"}.
 ##' 
 ## --------------------------------------------------------------------------
 ## 
 ##  @details
 ## 
-##' Method \code{print.range.engige} tries to give a comprehensive overview
+##' \code{summary.range.engige} tries to give a comprehensive overview
 ##' of the test results.
 ##' 
 ## --------------------------------------------------------------------------
@@ -27,48 +27,48 @@
 ##'
 ## --------------------------------------------------------------------------
 ##'
-##' @method print rvgt.range
+##' @method summary rvgt.range
 ##' 
 ## --------------------------------------------------------------------------
 ##'
 ##  Arguments:
-##' @param x
-##'        object of class \code{"rvgt.range"} to be printed.
+##' @param object
+##'        object of class \code{"rvgt.range"} to be summarized.
 ##' @param ...
-##'        further arguments to be passed to print method
+##'        further arguments to be passed to summary method
 ##'        (ignored in this function).
 ##'
 ## --------------------------------------------------------------------------
 
-print.rvgt.range <- function(x,...) {
+summary.rvgt.range <- function(object,...) {
         cat("\n * Test ranges of parameters - Summary:\n")
 
-        cat("\n Test:\n  ", x$test.class, "\n")
-        if (! is.null(x$test.name))
-                cat("\n  ", x$test.name, "\n")
+        cat("\n Test:\n  ", object$test.class, "\n")
+        if (! is.null(object$test.name))
+                cat("\n  ", object$test.name, "\n")
 
-        cat("\n RVG:\n  ", x$rdist.name, "\n")
+        cat("\n RVG:\n  ", object$rdist.name, "\n")
 
         cat("\n Parameters:\n")
-        for (i in 1:length(x$dist.params)) {
-                cat("  ",names(x$dist.params)[i],
-                    "(", length(x$dist.params[[i]]), ")\n")
-                print(x$dist.param[[i]])
+        for (i in 1:length(object$dist.params)) {
+                cat("  ",names(object$dist.params)[i],
+                    "(", length(object$dist.params[[i]]), ")\n")
+                print(object$dist.param[[i]])
         }
 
-        if (length(x$r.params)>0) {
+        if (length(object$r.params)>0) {
                 cat("\n Additional Parameters:\n")
-                for (i in 1:length(x$r.params)) {
-                        cat("  ",names(x$r.params)[i],"\n")
-                        print(x$r.param[[i]])
+                for (i in 1:length(object$r.params)) {
+                        cat("  ",names(object$r.params)[i],"\n")
+                        print(object$r.param[[i]])
                 }
         }
 
         cat("\n Results:\n")
-        print(summary.default(x$data[is.finite(x$data)]))
+        print(summary.default(object$data[is.finite(object$data)]))
 
-        cat("\n Tests started at", format(x$started),"\n")
-        cat("\n Total runtime:",format(x$runtime),"\n")
+        cat("\n Tests started at", format(object$started),"\n")
+        cat("\n Total runtime:",format(object$runtime),"\n")
         cat("\n")
 }
 

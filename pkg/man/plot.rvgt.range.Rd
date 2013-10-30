@@ -12,7 +12,7 @@
   plotted.}
 
   \item{sub.params}{subset of parameter values which should
-  be printed (list).  This allows to restrict the plotting
+  be plotted (list).  This allows to restrict the plotting
   region.}
 
   \item{xscale}{type of scale used for first coordinate.}

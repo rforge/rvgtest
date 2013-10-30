@@ -151,7 +151,7 @@ mgt <- rvgt.range.marginal(rdist = rbeta,
                            duration = 0.01, gen.time = 1e-5)
 
 ## print summary of generation times
-print(mgt)
+summary(mgt)
 
 ## plot generation times (using logarithmic scales for parameters)
 plot(mgt, xscale="log", yscale="log", main="rbeta")
@@ -162,8 +162,8 @@ plot(mgt, xscale="log", yscale="log", main="rbeta")
 \seealso{
   \code{\link{rvgt.range.engine}} for a description of
   objects of class \code{"rvgt.range"}.
-  \code{\link{print.rvgt.range}} for printing a summary of
-  test results, \code{\link{plot.rvgt.range}} for plotting
-  the test results.
+  \code{\link{summary.rvgt.range}} for a summary of test
+  results, \code{\link{plot.rvgt.range}} for plotting the
+  test results.
 }
 

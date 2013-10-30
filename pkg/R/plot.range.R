@@ -110,7 +110,7 @@
 ##'        object of class \code{"rvgt.range"} to be plotted.
 ##' 
 ##' @param sub.params
-##'        subset of parameter values which should be printed (list).
+##'        subset of parameter values which should be plotted (list).
 ##'        This allows to restrict the plotting region.
 ##' 
 ##' @param xscale

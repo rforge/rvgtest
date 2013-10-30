@@ -26,7 +26,7 @@
 ##' @seealso
 ##' \code{\link{rvgt.range.engine}} for a description of objects of class
 ##' \code{"rvgt.range"}.
-##' \code{\link{print.rvgt.range}} for printing a summary of test results,
+##' \code{\link{summary.rvgt.range}} for a summary of test results,
 ##' \code{\link{plot.rvgt.range}} for plotting the test results.
 ##' 
 ## --------------------------------------------------------------------------
@@ -62,7 +62,9 @@
 ##' ## Collect rejection constants for a range of parameter values.
 ##' trc <- rvgt.range.trc(rdist = myrbeta,
 ##'                       dist.params = list(shape1=2:10,shape2=5))
-##' print(trc)
+##'
+##' ## print summary
+##' summary(trc)
 ##' 
 ## --------------------------------------------------------------------------
 ##'

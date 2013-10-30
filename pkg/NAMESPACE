@@ -19,7 +19,7 @@ S3method(print, rvgt.ierror)
 
 export(rvgt.range.engine)
 S3method(plot, rvgt.range)
-S3method(print, rvgt.range)
+S3method(summary, rvgt.range)
 
 export(rvgt.range.marginal)
 export(rvgt.range.setup)
