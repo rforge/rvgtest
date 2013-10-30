@@ -74,7 +74,7 @@
   of the generatur) with the given random variate generator
   for a range of parameters. (This corresponds to the
   \dQuote{varying parameter case} in applications). For
-  this purpose the elapsed running time returned by
+  this purpose the running time returned by
   \code{\link{system.time}} is used.
 
   The scheduled sampling time for a particular combination
