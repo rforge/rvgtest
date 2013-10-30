@@ -1,0 +1,28 @@
+\name{summary.rvgt.range}
+\alias{summary.rvgt.range}
+\title{Summarizing result of range tests}
+\usage{
+  \method{summary}{rvgt.range} (object, ...)
+}
+\arguments{
+  \item{object}{object of class \code{"rvgt.range"} to be
+  summarized.}
+
+  \item{...}{further arguments to be passed to summary
+  method (ignored in this function).}
+}
+\description{
+  \code{summary} method for class \code{"rvgt.range"}.
+}
+\details{
+  \code{summary.range.engige} tries to give a comprehensive
+  overview of the test results.
+}
+\author{
+  Josef Leydold \email{josef.leydold@wu.ac.at}
+}
+\seealso{
+  \code{\link{rvgt.range.engine}} a description of class
+  \code{"rvgt.range"}.
+}
+
