@@ -38,7 +38,11 @@ get.runtime <- function(time)
         if (!is.na(time[5L])) 
                 time[2L] <- time[2L] + time[5L]
 
-        time[3L]
+        ## elapsed time
+        ## time[3L]
+
+        ## user + system time
+        time[1L] + time[2L]
 }
 
 ## --- End ------------------------------------------------------------------

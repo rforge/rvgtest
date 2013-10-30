@@ -11,7 +11,7 @@ context("[rvgt.range.setup] - setup time")
 test_that("[sut-101] calling rvgt.range.setup: argument 'rep'", {
         rtest <- function(n,a,b,rep) {
                 if (isTRUE(all.equal(c(a,b),c(1,2)))) stop()
-                Sys.sleep(0.01)
+                wait.while.process(0.01)
         }
 
         sut <- rvgt.range.setup(rdist = rtest,
@@ -29,7 +29,7 @@ test_that("[sut-101] calling rvgt.range.setup: argument 'rep'", {
 test_that("[sut-102] calling rvgt.range.setup: no argument 'rep'", {
         rtest <- function(n,a,b) {
                 if (isTRUE(all.equal(c(a,b),c(1,2)))) stop()
-                Sys.sleep(0.01)
+                wait.while.process(0.01)
         }
 
         sut <- rvgt.range.setup(rdist = rtest,

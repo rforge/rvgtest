@@ -23,7 +23,7 @@ context("[rvgt.range.marginal] - marginal generation times")
 test_that("[mgt-102] calling rvgt.range.marginal", {
         rtest <- function(n,a,b,show.properties) {
                 if (isTRUE(all.equal(c(a,b),c(1,2)))) stop()
-                Sys.sleep(0.01)
+                wait.while.process(0.01)
         }
 
         mgt <- rvgt.range.marginal(rdist = rtest,

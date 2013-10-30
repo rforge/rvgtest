@@ -5,11 +5,13 @@
 ## --------------------------------------------------------------------------
 
 trunit <- function(rdist,dist.params,...) { prod(as.numeric(dist.params)) }
-trsleep <- function(rdist,dist.params,...) {
-        if (dist.params[[1]] > 9 && dist.params[[1]] < 100) { Sys.sleep(dist.params[[1]])};
+tremgt <- function(emgt,...) { emgt }
+
+trwait <- function(rdist,dist.params,...) {
+        if (dist.params[[1]] > 9 && dist.params[[1]] < 100) {
+                wait.while.process(dist.params[[1]]) }
         return (dist.params[[1]]^2)
 }
-tremgt <- function(emgt,...) { emgt }
 
 ## --------------------------------------------------------------------------
 
@@ -96,7 +98,7 @@ test_that("[pre-001mc1to] list entries returned by rvgt.range.engine: timeout", 
 
         expect_that(res1 <- rvgt.range.engine(rdist=rnorm,
                                               dist.params=dp,
-                                              test.routine=trsleep,
+                                              test.routine=trwait,
                                               test.class="unittest",
                                               ncores=1L, timeout=0.02, timeout.val=timeout.val
                                               ),
@@ -110,7 +112,7 @@ test_that("[pre-001mc1to] list entries returned by rvgt.range.engine: timeout", 
 
         expect_that(res2 <- rvgt.range.engine(rdist=rnorm,
                                               dist.params=dp,
-                                              test.routine=trsleep,
+                                              test.routine=trwait,
                                               test.class="unittest",
                                               ncores=2L, timeout=0.02, timeout.val=timeout.val
                                               ),
@@ -134,14 +136,14 @@ test_that("[pre-001mc1tonocores] list entries returned by rvgt.range.engine: tim
         msg <- "Timeout requires multicore support. Argument 'ncores' set to 1L."
         expect_message(rvgt.range.engine(rdist=rnorm,
                                          dist.params=dp,
-                                         test.routine=trsleep,
+                                         test.routine=trwait,
                                          test.class="unittest",
                                          timeout=0.02, timeout.val=timeout.val
                                          ),  msg)
 
         expect_that(res1 <- rvgt.range.engine(rdist=rnorm,
                                               dist.params=dp,
-                                              test.routine=trsleep,
+                                              test.routine=trwait,
                                               test.class="unittest",
                                               timeout=0.02, timeout.val=timeout.val
                                               ),
@@ -155,7 +157,7 @@ test_that("[pre-001mc1tonocores] list entries returned by rvgt.range.engine: tim
 
         expect_that(res2 <- rvgt.range.engine(rdist=rnorm,
                                               dist.params=dp,
-                                              test.routine=trsleep,
+                                              test.routine=trwait,
                                               test.class="unittest",
                                               ncores=2L, timeout=0.02, timeout.val=timeout.val
                                               ),
