@@ -15,8 +15,8 @@
   \tabular{ll}{
     Package: \tab rvgtest\cr
     Type:    \tab Package\cr
-    Version: \tab 0.8.0         \cr
-    Date:    \tab 2013-10-28    \cr
+    Version: \tab 0.8.1         \cr
+    Date:    \tab 2013-10-30    \cr
     License: \tab GPL 2 or later\cr
     LazyLoad:\tab yes\cr
   }
