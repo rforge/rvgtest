@@ -95,6 +95,11 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
           max(fmax, 1.+ci, 1.+2*mean(ci)))
   xl <- c(0,1)
 
+  ## line width for histogram lines and confidence boundaries
+  lwdhist <- round(20 / sqrt(length(ubreaks)))
+  lwdhist <- min(2, lwdhist)
+  lwdhist <- max(0.5, lwdhist)
+
   ## --- create plot --------------------------------------------------------
 
   ## create plotting aera with labels
@@ -118,12 +123,12 @@ plot.rvgt.ftable <- function(x, rows, alpha=0.01, ...)
     ## not equidistributed
     ub <- rep(ubreaks,each=2)
     ub <- ub[-1]; ub <- ub[-length(ub)]
-    lines(ub, rep(1-ci,each=2), col="red",lwd=2,lty=1)
-    lines(ub, rep(1+ci,each=2), col="red",lwd=2,lty=1)
+    lines(ub, rep(1-ci,each=2), col="red",lwd=lwdhist,lty=1)
+    lines(ub, rep(1+ci,each=2), col="red",lwd=lwdhist,lty=1)
   }
 
-  ## draw histogram lines
-  lines(rep(ubreaks,each=2), c(yl[1],rep(freq,each=2),yl[1]), col="dark blue", lwd=2 )
+  ## draw additional histogram lines
+  lines(rep(ubreaks,each=2), c(yl[1],rep(freq,each=2),yl[1]), col="dark blue", lwd=lwdhist )
 }
 
 ## --------------------------------------------------------------------------
