@@ -1,8 +1,8 @@
 Package: rvgtest
 Type: Package
 Title: Tools for Analyzing Non-Uniform Pseudo-Random Variate Generators
-Version: 0.8.1
-Date: 2013-10-30
+Version: 0.8.2
+Date: 2013-11-10
 Authors@R: c(person("Josef", "Leydold", role = c("aut", "cre"),
                     email = "josef.leydold@wu.ac.at"),
              person("Sougata", "Chaudhuri", role = "ctb",
