@@ -365,7 +365,7 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
 
                 ## 'gen.time' is a single number:
                 ## use 'gen.time' for each tuple of parameters
-                emgt <- .alloc.data(dist.params, value=gen.time)
+                emgt <- .alloc.data(c(dist.params,r.params), value=gen.time)
 
         } else if (is(gen.time, "rvgt.range.time")) {
 
@@ -420,11 +420,11 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
 
 ## --- Allocate array for storing result ------------------------------------
 
-.alloc.data <- function(dist.params, value=NA_real_) {
-        dims <- as.integer(lapply(dist.params,length))
+.alloc.data <- function(params, value=NA_real_) {
+        dims <- as.integer(lapply(params,length))
         data <- rep(value, prod(dims))
         dim(data) <- dims
-        dimnames(data) <- dist.params
+        dimnames(data) <- params
         data
 }
 
@@ -434,27 +434,39 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                                     test.routine, test.params, duration,
                                     verbose) {
 
+        ## combine all parameters
+        params <- c(dist.params,r.params)
+
         ## allocate array for results
-        result <- .alloc.data(dist.params)
+        result <- .alloc.data(params)
 
         ## run test on each tuple of parameters
         for (pos in 1:length(result)) {
 
                 ## position in array
                 coord <- pos2coord(pos, dim(result))
+
                 ## corresponding list of parameters
-                dp <- lapply(1:length(coord), function(i){(dist.params[[i]])[coord[i]]})
+                p <- lapply(1:length(coord), function(i){(params[[i]])[coord[i]]})
+
+                dp <- head(p, length(dist.params))
                 names(dp) <- names(dist.params)
 
+                rp <- list()
+                if (length(r.params) >= 1L) {
+                        rp <- tail(p, length(r.params))
+                        names(rp) <- names(r.params)
+                }
+                
                 ## print parameters
                 if (verbose) {
-                        ap <- c(r.params, dp)
+                        ap <- c(rp, dp)
                         lapply(1:length(ap),
                                function(i) {cat(names(ap)[i]," = ",ap[[i]],", ",sep="")} )
                 }
 
                 ## compute and store
-                result[pos] <- test.routine(rdist=rdist, dist.params=dp, r.params=r.params,
+                result[pos] <- test.routine(rdist=rdist, dist.params=dp, r.params=rp,
                                             emgt=as.numeric(emgt[pos]),
                                             test.params=test.params, duration=duration,
                                             verbose=verbose)
@@ -477,11 +489,14 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                             ncores, timeout, timeout.val,
                             verbose) {
 
+        ## combine all parameters
+        params <- c(dist.params,r.params)
+
         ## allocate array for results
-        result <- .alloc.data(dist.params)
+        result <- .alloc.data(params)
 
         ## bookkeeping
-        finished <- .alloc.data(dist.params, value=FALSE)
+        finished <- .alloc.data(params, value=FALSE)
 
         while(!all(finished==TRUE)) {
                 ## we use a simple strategy:
@@ -496,20 +511,27 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                 test.routine.mc <- function (pos) {
                         ## position in array
                         coord <- pos2coord(pos, dim(result))
-                        ## corresponding list of parameters
-                        dp <- lapply(1:length(coord), function(i){(dist.params[[i]])[coord[i]]})
-                        names(dp) <- names(dist.params)
 
+                        ## corresponding list of parameters
+                        p <- lapply(1:length(coord), function(i){(params[[i]])[coord[i]]})
+                        dp <- head(p, length(dist.params))
+                        names(dp) <- names(dist.params)
+                        rp <- list()
+                        if (length(r.params) >= 1L) {
+                                rp <- tail(p, length(r.params))
+                                names(rp) <- names(r.params)
+                        }
+                        
                         ## print parameters
                         if (verbose) {
-                                ap <- c(r.params, dp)
+                                ap <- c(rp, dp)
                                 lapply(1:length(ap),
                                        function(i) {cat(names(ap)[i]," = ",ap[[i]],", ",sep="")} )
                         }
                         
                         ## start thread that performs a single test
                         parallel::mcparallel(
-                          test.routine(rdist=rdist, dist.params=dp, r.params=r.params,
+                          test.routine(rdist=rdist, dist.params=dp, r.params=rp,
                                        emgt=as.numeric(emgt[pos]),
                                        test.params=test.params, duration=duration,
                                        verbose=verbose))

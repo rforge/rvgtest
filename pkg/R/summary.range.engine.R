@@ -59,7 +59,8 @@ summary.rvgt.range <- function(object,...) {
         if (length(object$r.params)>0) {
                 cat("\n Additional Parameters:\n")
                 for (i in 1:length(object$r.params)) {
-                        cat("  ",names(object$r.params)[i],"\n")
+                        cat("  ",names(object$r.params)[i],
+                            "(", length(object$r.params[[i]]), ")\n")
                         print(object$r.param[[i]])
                 }
         }

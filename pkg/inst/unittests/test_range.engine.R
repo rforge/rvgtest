@@ -4,10 +4,12 @@
 ##
 ## --------------------------------------------------------------------------
 
-trunit <- function(rdist,dist.params,...) { prod(as.numeric(dist.params)) }
-tremgt <- function(emgt,...) { emgt }
+trunit <- function(rdist, dist.params, r.params=list(), ...) {
+        prod(as.numeric(dist.params)) * prod(as.numeric(r.params)) }
 
-trwait <- function(rdist,dist.params,...) {
+tremgt <- function(emgt, ...) { emgt }
+
+trwait <- function(rdist, dist.params, ...) {
         if (dist.params[[1]] > 9 && dist.params[[1]] < 100) {
                 wait.while.process(dist.params[[1]]) }
         return (dist.params[[1]]^2)
@@ -174,10 +176,11 @@ test_that("[pre-001mc1tonocores] list entries returned by rvgt.range.engine: tim
 }
 
 test_that("[pre-002] list entries returned by rvgt.range.engine: length(dist.params)=2", {
-        dp <- list(alpha=c(2,3),beta=c(5,7,11))
+        dp <- list(alpha=c(2,3), beta=c(5,7,11))
+        rp <- list(gamma=13)
         res <- rvgt.range.engine(rdist=rnorm,
                                  dist.params=dp,
-                                 r.params=list(gamma=99),
+                                 r.params=rp,
                                  test.routine=trunit,
                                  test.class="unit.test",
                                  test.name="Unit Test"
@@ -190,35 +193,41 @@ test_that("[pre-002] list entries returned by rvgt.range.engine: length(dist.par
                       paste("^ \\* Test ranges of parameters - Summary:\\s+",
                             "Test:\\s+unit\\.test\\s+Unit Test\\s+",
                             "RVG:\\s+rnorm\\s+",
-                            "Parameters:\\s+alpha \\( 2 \\)\\[1\\] 2 3\\s+",
+                            "Parameters:\\s+",
+                            "alpha \\( 2 \\)\\[1\\] 2 3\\s+",
                             "beta \\( 3 \\)\\[1\\]\\s+5\\s+7\\s+11\\s+",
-                            "Additional Parameters:\\s+gamma\\s+\\[1\\]\\s+99\\s+",
+                            "Additional Parameters:\\s+",
+                            "gamma \\( 1 \\)\\[1\\]\\s+13\\s+",
                             "Results:\\s+",
                             "Min. 1st Qu.  Median    Mean 3rd Qu.    Max.\\s+",
-                            "10\\.00\\s+14\\.25\\s+18\\.00\\s+19\\.17\\s+21\\.75\\s+33.00\\s*",
+                            "130\\.0\\s+185\\.2\\s+234\\.0\\s+249\\.2\\s+282\\.8\\s+429.0\\s*",
                             "Tests started at.*",
                             "Total runtime:.*$",
                             sep=""))
-        
-        p <- res$dist.params
-        expect_identical(p, dp)
+
+        expect_identical(res$dist.params, dp)
+        expect_identical(res$r.params, rp)
 
         r <- res$data
         expect_identical(length(r), 6L)
-        expect_identical(dim(r), c(2L,3L))
-        expect_identical(dimnames(r), lapply(dp,as.character))
+        expect_identical(dim(r), c(2L,3L,1L))
+        expect_identical(dimnames(r), lapply(c(dp,rp),as.character))
 
-        re <- c(2,3) %o% c(5,7,11)
-        dim(re) <- c(2L,3L)
-        dimnames(re) <- dp
+        re <- c(2,3) %o% c(5,7,11) %o% c(13)
+        dim(re) <- c(2L,3L,1L)
+        dimnames(re) <- c(dp,rp)
+        print(r)
+        print(re)
         expect_identical(r, re)
 })
 
 if (.Platform$OS.type == "unix") {
 test_that("[pre-002mc1] list entries returned by rvgt.range.engine: length(dist.params)=2", {
         dp <- list(alpha=c(2,3),beta=c(5,7,11))
+        rp <- list(gamma=99)
         res0 <- rvgt.range.engine(rdist=rnorm,
                                   dist.params=dp,
+                                  r.params=rp,
                                   test.routine=trunit,
                                   test.class="unittest"
                                   )
@@ -228,6 +237,7 @@ test_that("[pre-002mc1] list entries returned by rvgt.range.engine: length(dist.
 
         res1 <- rvgt.range.engine(rdist=rnorm,
                                   dist.params=dp,
+                                  r.params=rp,
                                   test.routine=trunit,
                                   test.class="unittest",
                                   ncores=1L
@@ -238,6 +248,90 @@ test_that("[pre-002mc1] list entries returned by rvgt.range.engine: length(dist.
 
         res2 <- rvgt.range.engine(rdist=rnorm,
                                   dist.params=dp,
+                                  r.params=rp,
+                                  test.routine=trunit,
+                                  test.class="unittest",
+                                  ncores=2L
+                                  )
+        res2$started <- NA
+        res2$runtime <- NA
+        expect_identical(res0, res2)
+})
+}
+
+test_that("[pre-002r] list entries returned by rvgt.range.engine: length(dist.params)=2", {
+        dp <- list(alpha=c(2,3),beta=c(5,7,11))
+        rp <- list(gamma=13, delta=c(17,19))
+        res <- rvgt.range.engine(rdist=rnorm,
+                                 dist.params=dp,
+                                 r.params=rp,
+                                 test.routine=trunit,
+                                 test.class="unit.test",
+                                 test.name="Unit Test"
+                                 )
+        expect_is(res, "rvgt.range.unit.test")
+        expect_is(res, "rvgt.range.unit")
+        expect_is(res, "rvgt.range")
+
+        expect_output(summary(res),
+                      paste("^ \\* Test ranges of parameters - Summary:\\s+",
+                            "Test:\\s+unit\\.test\\s+Unit Test\\s+",
+                            "RVG:\\s+rnorm\\s+",
+                            "Parameters:\\s+",
+                            "alpha \\( 2 \\)\\[1\\] 2 3\\s+",
+                            "beta \\( 3 \\)\\[1\\]\\s+5\\s+7\\s+11\\s+",
+                            "Additional Parameters:\\s+",
+                            "gamma \\( 1 \\)\\[1\\]\\s+13\\s+",
+                            "delta \\( 2 \\)\\[1\\]\\s+17\\s+19\\s+", 
+                            "Results:\\s+",
+                            "Min. 1st Qu.  Median    Mean 3rd Qu.    Max.\\s+",
+                            "2210\\s+3260\\s+4173\\s+4485\\s+5249\\s+8151\\s*",  
+                            "Tests started at.*",
+                            "Total runtime:.*$",
+                            sep=""))
+        
+        expect_identical(res$dist.params, dp)
+        expect_identical(res$r.params, rp)
+
+        r <- res$data
+        expect_identical(length(r), 12L)
+        expect_identical(dim(r), c(2L,3L,1L,2L))
+        expect_identical(dimnames(r), lapply(c(dp,rp),as.character))
+
+        re <- c(2,3) %o% c(5,7,11) %o% c(13) %o% c(17,19)
+        dim(re) <- c(2L,3L,1L,2L)
+        dimnames(re) <- c(dp,rp)
+        expect_identical(r, re)
+})
+
+if (.Platform$OS.type == "unix") {
+test_that("[pre-002rmc1] list entries returned by rvgt.range.engine: length(dist.params)=2", {
+        dp <- list(alpha=c(2,3),beta=c(5,7,11))
+        rp <- list(gamma=13, delta=c(17,19))
+        res0 <- rvgt.range.engine(rdist=rnorm,
+                                  dist.params=dp,
+                                  r.params=rp,
+                                  test.routine=trunit,
+                                  test.class="unittest"
+                                  )
+        ## remove volatile parts
+        res0$started <- NA
+        res0$runtime <- NA
+
+        res1 <- rvgt.range.engine(rdist=rnorm,
+                                  dist.params=dp,
+                                  r.params=rp,
+                                  test.routine=trunit,
+                                  test.class="unittest",
+                                  ncores=1L
+                                  )
+        res1$started <- NA
+        res1$runtime <- NA
+        expect_identical(res0, res1)
+
+        res2 <- rvgt.range.engine(rdist=rnorm,
+                                  dist.params=dp,
+                                  r.params=rp,
                                   test.routine=trunit,
                                   test.class="unittest",
                                   ncores=2L
