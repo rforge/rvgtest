@@ -226,10 +226,14 @@ rvgt.range.marginal <- function (rdist, dist.params, r.params=list(), el.time=NA
                 if (isTRUE(is.finite(trc))) {
                         ## required sample size
                         n <- round(1. / (test.params$el.time * trc))
-                } else {
+                } else if (is.null(trc)) {
                         ## property 'trc' not available
                         stop(paste("Argument 'el.time' cannot be used",
                                    "(returned value of 'rdist' must have attribute 'trc')"))
+                } else {
+                        ## 'trc' is either Inf or NaN
+                        if (verbose) cat("\t---> invalid values!")
+                        return (NA)
                 }
         }        
 
