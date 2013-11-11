@@ -232,7 +232,7 @@ rvgt.range.marginal <- function (rdist, dist.params, r.params=list(), el.time=NA
                                    "(returned value of 'rdist' must have attribute 'trc')"))
                 } else {
                         ## 'trc' is either Inf or NaN
-                        if (verbose) cat("\t---> invalid values!")
+                        if (verbose) cat("\t---> invalid value!")
                         return (NA)
                 }
         }        
@@ -272,6 +272,11 @@ rvgt.range.marginal <- function (rdist, dist.params, r.params=list(), el.time=NA
         ## we only run the test the expected runtime is not too large
         ## i.e., when the sample size is > 0
         if (verbose) cat("n =", n)
+        n <- as.integer(n)
+        if (! is.finite(n)) {
+                if (verbose) cat("\t---> invalid value (maybe too large)!")
+                return (NA)
+        }
         if (!isTRUE(n > 0)) {
                 if (verbose) cat("\t---> too slow!")
                 return (Inf)
