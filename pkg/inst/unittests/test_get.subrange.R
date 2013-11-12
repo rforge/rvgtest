@@ -104,6 +104,40 @@ test_that("[gsr-104] calling get.subrange", {
         expect_identical(res1, res1t)
 })
 
+test_that("[gsr-114] calling get.subrange", {
+        dp <- list(alpha=c(1,2), beta=c(3,5,7))
+        rp <- list(gamma=c(11,13,17,19))
+        res <- rvgt.range.engine(rdist=rnorm,
+                                 dist.params=dp,
+                                 r.params=rp,
+                                 test.routine=trunit,
+                                 test.class="unittest"
+                                 )
+        ## remove volatile parts
+        res$started <- NA
+        res$runtime <- NA
+
+        dp1 <- list(alpha=c(1), beta=c(3,7))
+        rp1 <- list(gamma=c(17))
+        res1 <- rvgt.range.engine(rdist=rnorm,
+                                  dist.params=dp1,
+                                  r.params=rp1,
+                                  test.routine=trunit,
+                                  test.class="unittest"
+                                  )
+        res1$started <- NA
+        res1$runtime <- NA
+
+        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
+        expect_identical(res1, res1f)
+
+        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
+        res1$data <- res1$data[,,,drop=TRUE]
+        dim(res1$data) <- 2
+        dimnames(res1$data) <- list(beta=c(3,7))
+        expect_identical(res1, res1t)
+})
+
 ## --------------------------------------------------------------------------
 
 context("[get.subrange] - Invalid arguments")
@@ -118,8 +152,10 @@ test_that("[gsr-i01] calling get.subrange with invalid arguments: obj", {
 
 test_that("[gsr-i02] calling get.subrange with invalid arguments: sub.params", {
         dp <- list(alpha=c(1,2), beta=c(3,5,7), gamma=c(11,13,17,19))
+        rp <- list(delta=c(23,29))
         res <- rvgt.range.engine(rdist=rnorm,
                                  dist.params=dp,
+                                 r.params=rp,
                                  test.routine=trunit,
                                  test.class="unittest"
                                  )
@@ -145,9 +181,17 @@ test_that("[gsr-i02] calling get.subrange with invalid arguments: sub.params", {
         expect_error(get.subrange(res, sub.params=list(gamma=1.0)),  msg)
         expect_error(get.subrange(res, sub.params=list(gamma=c(1.0,2.0,3.0))),  msg)
 
+        msg <- "Argument 'sub.params\\$delta' must be integer vector or a pair of numerics."
+        expect_error(get.subrange(res, sub.params=list(delta=1.0)),  msg)
+        expect_error(get.subrange(res, sub.params=list(delta=c(1.0,2.0,3.0))),  msg)
+
         msg <- "Argument 'sub.params\\$gamma' has no valid entries."
         expect_error(get.subrange(res, sub.params=list(gamma=integer())),  msg)
         expect_error(get.subrange(res, sub.params=list(gamma=c(100.0,200.0))),  msg)
+
+        msg <- "Argument 'sub.params\\$delta' has no valid entries."
+        expect_error(get.subrange(res, sub.params=list(delta=integer())),  msg)
+        expect_error(get.subrange(res, sub.params=list(delta=c(100.0,200.0))),  msg)
 })
         
 ## --------------------------------------------------------------------------

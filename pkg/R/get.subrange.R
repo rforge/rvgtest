@@ -83,12 +83,10 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
 
         ## --- all indices of parameter lists
 
-        idx.params <- lapply(obj$dist.params, function(x){1:length(x)})
+        params <- c(obj$dist.params, obj$r.params)
+        idx.params <- lapply(params, function(x){1:length(x)})
 
         ## --- missing sub.params
-
-        ## we have to handle the case where there is just one entry
-        ## in a dimension.
 
         if (identical(sub.params, list()))
                 sub.params <- idx.params
@@ -99,7 +97,7 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                 stop("Argument 'sub.params' is invalid.")
         if (is.null(names(sub.params)) || "" %in% names(sub.params))
                 stop("Parameters in 'sub.params' must have names.")
-        if (! all(names(sub.params) %in% names(obj$dist.params))) 
+        if (! all(names(sub.params) %in% names(params))) 
                 stop("Parameter names in 'sub.params' must occur in 'obj'.")
 
         ## --- find sub ranges
@@ -109,7 +107,7 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                 ## read input
                 param <- sub.params[[i]]
                 param.name <- names(sub.params[i])
-                orig.param <- obj$dist.params[[param.name]]
+                orig.param <- params[[param.name]]
 
                 ## get indices for particular parameter
                 if (is.integer(param)) {
@@ -136,13 +134,19 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                 ## update list of indices
                 idx.params[[param.name]] <- iparam
 
-                ## update 'obj$dist.params'
-                obj$dist.params[[param.name]] <- (obj$dist.params[[param.name]])[iparam]
+                ## update 'obj$dist.params' or 'obj$r.params'
+                if (param.name %in% names(obj$dist.params)) {
+                        obj$dist.params[[param.name]] <- (obj$dist.params[[param.name]])[iparam]
+                } else if (param.name %in% names(obj$r.params)) {
+                        obj$r.params[[param.name]] <- (obj$r.params[[param.name]])[iparam]
+                } else {
+                        stop("internal error")
+                }
         }
 
         ## copy data for test result
         cmd <- paste("obj$data[")
-        for (i in 1:length(obj$dist.params))
+        for (i in 1:length(c(obj$dist.params, obj$r.params)))
                 cmd <- paste(cmd, "idx.params[[",i,"]],")
         cmd <- paste(cmd, "drop=drop]")
         result <- eval(parse(text=cmd))
@@ -152,8 +156,9 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
         ## so we have to set it again.
         if (is.null(dim(result)) && length(result) > 1L) {
                 dim(result) <- length(result)
-                pname <- names(obj$dist.params)[lapply(obj$dist.params, length)>1L]
-                dimnames(result) <- obj$dist.params[pname]
+                params <- c(obj$dist.params, obj$r.params)
+                pname <- names(params)[lapply(params, length)>1L]
+                dimnames(result) <- params[pname]
         }
         
         ## return result
