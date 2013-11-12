@@ -481,17 +481,17 @@ test_that("[pre-102] emgt is numeric", {
 
 })
 
-test_that("[pre-103] emgt is object of class 'rvgt.range.mgt'", {
+test_that("[pre-103] emgt is object of class 'rvgt.range.time'", {
         dp <- list(mean=c(1,2),sd=c(3,4,5))
 
         ## create object of class "rvgt.range.time"
         emgt <- rvgt.range.engine(rdist=rnorm,
-                                 dist.params=dp,
-                                 test.routine=tremgt,
-                                 test.class="time.marginal",
-                                 gen.time=12345
-                                 )
-
+                                  dist.params=dp,
+                                  test.routine=tremgt,
+                                  test.class="time.marginal",
+                                  gen.time=12345
+                                  )
+        
         ## now rerun with 'emgt' as expected generation times
         res <- rvgt.range.engine(rdist=rnorm,
                                  dist.params=dp,
@@ -506,6 +506,46 @@ test_that("[pre-103] emgt is object of class 'rvgt.range.mgt'", {
         expect_identical(r, re)
 
 })
+
+## --------------------------------------------------------------------------
+
+context("[rvgt.range.engine] - extract params from gen.time")
+
+## --------------------------------------------------------------------------
+
+test_that("[pre-201] extract 'rdist', 'dist.params', 'r.params'", {
+        dp <- list(a=c(2,3),b=c(5,7,11))
+        rp <- list(z=13)
+
+        rvg <- function(n,a,b,z) { rep(a*b*z, n) }
+        
+        tr <- function(rdist, dist.params, r.params, ...) {
+                rdist(1,dist.params$a,dist.params$b,r.params$z)
+        }
+                
+        ## create object of class "rvgt.range.time"
+        emgt <- rvgt.range.engine(rdist=rvg,
+                                  dist.params=dp,
+                                  r.params=rp,
+                                  test.routine=tr,
+                                  test.class="time.marginal",
+                                  gen.time=12345
+                                  )
+
+        ## now extract 'rdist' from 'emgt'
+        res <- rvgt.range.engine(test.routine=tr,
+                                 test.class="testgentime",
+                                 gen.time=emgt
+                                 )
+
+        r <- res$data
+        re <- dp$a %o% dp$b %o% rp$z
+        dim(re) <- c(2L,3L,1L)
+        dimnames(re) <- c(dp,rp)
+        expect_identical(r, re)
+})
+
+
 
 ## --------------------------------------------------------------------------
 

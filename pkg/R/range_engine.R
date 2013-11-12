@@ -238,8 +238,11 @@
 ##'        array that holds the test results for each combination of
 ##'        parameters of the distribution
 ##'        (array of numeric values).}
-##' \item{rdist.name}{
+##' \item{rdist}{
 ##'        given function for calling random generator
+##'        (function copied from input).}
+##' \item{rdist.name}{
+##'        name of given function for calling random generator
 ##'        (character string copied from input).}
 ##' \item{dist.params}{
 ##'        given list of parameter for the distribution
@@ -276,9 +279,30 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
 
         started <- Sys.time()
         
-        ## --- arguments for RVG and distribution
+        ## --- arguments 'rdist', 'dist.params' and 'r.params'
 
-        if (missing(rdist) || !is.function(rdist))
+        ## these arguments may be read from gen.time.
+        ## So we set them to NULL if they are missing.
+
+        if (missing(rdist)) { rdist <- NULL }
+        if (missing(dist.params)) { dist.params <- NULL }
+
+        if (is(gen.time, "rvgt.range.time")) {
+                ## we extract the parameters from object 'gen.time'
+                if (is.null(rdist)) {
+                        rdist <- gen.time$rdist
+                }
+                if (is.null(dist.params)) {
+                        dist.params <- gen.time$dist.params
+                }
+                if (identical(r.params, list())) {
+                        r.params <- gen.time$r.params
+                }
+        }
+
+        ## --- arguments for RVG
+
+        if (is.null(rdist) || !is.function(rdist))
                 stop("RVG 'rdist' is missing or invalid")
 
         if (!is.list(r.params))
@@ -287,7 +311,7 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
         ## --- parameters for distribution (used by 'rdist')
 
         ## check arguments for distributions
-        if (missing(dist.params) ||
+        if (is.null(dist.params) ||
             !is.list(dist.params) ||
             identical(length(dist.params), 0L))
                 stop("Argument 'dist.params' missing or invalid")
@@ -395,6 +419,7 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
         ## --- combine all data into list
 
         retval <- list(data=result,
+                       rdist=rdist,
                        rdist.name=deparse(substitute(rdist)),
                        dist.params=dist.params,
                        r.params=r.params,

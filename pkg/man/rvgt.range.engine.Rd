@@ -80,7 +80,9 @@
   The list has the following components: \item{data}{ array
   that holds the test results for each combination of
   parameters of the distribution (array of numeric
-  values).} \item{rdist.name}{ given function for calling
+  values).} \item{rdist}{ given function for calling random
+  generator (function copied from input).}
+  \item{rdist.name}{ name of given function for calling
   random generator (character string copied from input).}
   \item{dist.params}{ given list of parameter for the
   distribution (list copied from input).} \item{r.params}{
