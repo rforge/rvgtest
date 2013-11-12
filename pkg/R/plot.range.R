@@ -220,7 +220,7 @@ plot.rvgt.range <- function (x, sub.params=list(),
                                )
                 ## FIXME
         } else {
-                stop("plot.rvgt.range() handles arrays of rank 1 or 2 only")
+                stop("plot.rvgt.range() handles arrays of order 1 or 2 only")
         }
         
         ## FIXME
