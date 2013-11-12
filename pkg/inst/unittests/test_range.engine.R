@@ -15,6 +15,12 @@ trwait <- function(rdist, dist.params, ...) {
         return (dist.params[[1]]^2)
 }
 
+trstop <- function(rdist, dist.params, ...) {
+        if (dist.params[[1]] > 2 && dist.params[[1]] < 4) {
+                stop("test error handling") }
+        return (dist.params[[1]]^2)
+}
+
 ## --------------------------------------------------------------------------
 
 context("[rvgt.range.engine] - List entries")
@@ -216,8 +222,6 @@ test_that("[pre-002] list entries returned by rvgt.range.engine: length(dist.par
         re <- c(2,3) %o% c(5,7,11) %o% c(13)
         dim(re) <- c(2L,3L,1L)
         dimnames(re) <- c(dp,rp)
-        print(r)
-        print(re)
         expect_identical(r, re)
 })
 
@@ -413,6 +417,29 @@ test_that("[pre-003mc1] list entries returned by rvgt.range.engine: length(dist.
         res2$started <- NA
         res2$runtime <- NA
         expect_identical(res0, res2)
+})
+}
+
+if (.Platform$OS.type == "unix") {
+test_that("[pre-010] timeout with aborting 'rdist'", {
+        dp <- list(alpha=c(2,3,4),beta=c(5))
+        res <- rvgt.range.engine(rdist=rnorm,
+                                 dist.params=dp,
+                                 test.routine=trstop,
+                                 test.class="unittest",
+                                 timeout=1
+                                 )
+
+        r <- res$data
+        expect_identical(length(r), 3L)
+        expect_identical(dim(r), c(3L,1L))
+        expect_identical(dimnames(r), lapply(dp,as.character))
+
+        re <- c(4,NA,16)
+        dim(re) <- c(3L,1L)
+        dimnames(re) <- dp
+
+        expect_identical(r, re)
 })
 }
 

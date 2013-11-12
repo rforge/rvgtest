@@ -578,14 +578,19 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                                 r <- parallel:::readChild(ch)
                                 i <- run.idx[(which(jobIDs==ch)[1])]
                                 if (is.raw(r)) {
-                                        result[i] <- unserialize(r) 
+                                        res <- unserialize(r)
+                                        if (! is.numeric(res)) {
+                                                if (verbose) cat("\t --> error!")
+                                                res <- NA_real_
+                                        }
+                                        result[i] <- res
                                         finished[i] <- TRUE
                                         if (verbose) cat("\n")
                                 }
                         }
                 }
         }
-
+        
         ## return result
         result
 }
