@@ -82,7 +82,7 @@ test_that("[prr-i01] calling plot.rvgt.range with invalid arguments", {
                                  test.class="unittest"
                                  )
 
-        msg <- "plot.rvgt.range\\(\\) handles arrays of rank 1 or 2 only."
+        msg <- "plot.rvgt.range\\(\\) handles arrays of order 1 or 2 only."
         expect_error(plot(res),  msg)
         expect_error(plot(res, sub.params=list(alpha=1L,beta=3L,gamma=2L)),  msg)
 
