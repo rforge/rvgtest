@@ -1,6 +1,6 @@
 
 ## importFrom(parallel, mcparallel)
-importFrom(stringr, str_split)
+importFrom(stringr, str_detect, str_replace, str_split)
 importFrom(Runuran, uq, ur, unuran.is.inversion, unuran.details)
 
 export(rvgt.ftable)

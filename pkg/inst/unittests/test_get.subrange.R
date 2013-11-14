@@ -65,13 +65,12 @@ test_that("[gsr-103] calling get.subrange", {
         res1$started <- NA
         res1$runtime <- NA
 
-        res1f <- get.subrange(res, sub.params=list(gamma=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
+        res1f <- get.subrange(res, sub.params=list(gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
         expect_identical(res1, res1f)
 
-        res1t <- get.subrange(res, sub.params=list(gamma=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
+        res1t <- get.subrange(res, sub.params=list(gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
         res1$data <- res1$data[,,,drop=TRUE]
         expect_identical(res1, res1t)
-
 })
 
 test_that("[gsr-104] calling get.subrange", {
@@ -94,10 +93,10 @@ test_that("[gsr-104] calling get.subrange", {
         res1$started <- NA
         res1$runtime <- NA
 
-        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
+        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
         expect_identical(res1, res1f)
 
-        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
+        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
         res1$data <- res1$data[,,,drop=TRUE]
         dim(res1$data) <- 2
         dimnames(res1$data) <- list(beta=c(3,7))
@@ -128,10 +127,10 @@ test_that("[gsr-114] calling get.subrange", {
         res1$started <- NA
         res1$runtime <- NA
 
-        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
+        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
         expect_identical(res1, res1f)
 
-        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
+        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
         res1$data <- res1$data[,,,drop=TRUE]
         dim(res1$data) <- 2
         dimnames(res1$data) <- list(beta=c(3,7))
@@ -177,21 +176,21 @@ test_that("[gsr-i02] calling get.subrange with invalid arguments: sub.params", {
         expect_error(get.subrange(res, sub.params=list(alpha=0L)),  msg)
         expect_error(get.subrange(res, sub.params=list(alpha=c(1L,2L,3L))),  msg)
 
-        msg <- "Argument 'sub.params\\$gamma' must be integer vector or a pair of numerics."
-        expect_error(get.subrange(res, sub.params=list(gamma=1.0)),  msg)
-        expect_error(get.subrange(res, sub.params=list(gamma=c(1.0,2.0,3.0))),  msg)
+        msg <- "Argument 'sub.params\\$gamma\\.lim' must be a pair of numerics."
+        expect_error(get.subrange(res, sub.params=list(gamma.lim=1.0)),  msg)
+        expect_error(get.subrange(res, sub.params=list(gamma.lim=c(1.0,2.0,3.0))),  msg)
 
-        msg <- "Argument 'sub.params\\$delta' must be integer vector or a pair of numerics."
-        expect_error(get.subrange(res, sub.params=list(delta=1.0)),  msg)
-        expect_error(get.subrange(res, sub.params=list(delta=c(1.0,2.0,3.0))),  msg)
+        msg <- "Argument 'sub.params\\$delta\\.lim' must be a pair of numerics."
+        expect_error(get.subrange(res, sub.params=list(delta.lim=1.0)),  msg)
+        expect_error(get.subrange(res, sub.params=list(delta.lim=c(1.0,2.0,3.0))),  msg)
 
         msg <- "Argument 'sub.params\\$gamma' has no valid entries."
         expect_error(get.subrange(res, sub.params=list(gamma=integer())),  msg)
-        expect_error(get.subrange(res, sub.params=list(gamma=c(100.0,200.0))),  msg)
+        expect_error(get.subrange(res, sub.params=list(gamma.lim=c(100.0,200.0))),  msg)
 
         msg <- "Argument 'sub.params\\$delta' has no valid entries."
         expect_error(get.subrange(res, sub.params=list(delta=integer())),  msg)
-        expect_error(get.subrange(res, sub.params=list(delta=c(100.0,200.0))),  msg)
+        expect_error(get.subrange(res, sub.params=list(delta.lim=c(100.0,200.0))),  msg)
 })
         
 ## --------------------------------------------------------------------------

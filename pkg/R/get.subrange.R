@@ -95,9 +95,12 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
 
         if (! is.list(sub.params))
                 stop("Argument 'sub.params' is invalid.")
+
         if (is.null(names(sub.params)) || "" %in% names(sub.params))
                 stop("Parameters in 'sub.params' must have names.")
-        if (! all(names(sub.params) %in% names(params))) 
+
+        pnames <- str_replace(names(sub.params), "\\.lim$", "")
+        if (! all(pnames %in% names(params))) 
                 stop("Parameter names in 'sub.params' must occur in 'obj'.")
 
         ## --- find sub ranges
@@ -110,21 +113,34 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                 orig.param <- params[[param.name]]
 
                 ## get indices for particular parameter
-                if (is.integer(param)) {
+                if (isTRUE(str_detect(param.name, "\\.lim$"))) {
+                        ## case: lower and uppper bound 
+                        if (! identical(length(param), 2L))
+                                stop(paste("Argument 'sub.params$", param.name,
+                                           "' must be a pair of numerics.", sep=""))
+                        ## strip postfix '.lim'
+                        param.name <- str_replace(param.name, "\\.lim$", "")
+                        orig.param <- params[[param.name]]
+                        ## get indices
+                        iparam <- which(orig.param >= param[1] & orig.param <= param[2])
+                        
+                } else if (is.integer(param)) {
                         ## case: integer vector --> list of indices
                         iparam <- param
+
                 } else if (is.numeric(param)) {
                         ## case: pair of numerics --> lower and uppper bound 
                         if (! identical(length(param), 2L))
                                 stop(paste("Argument 'sub.params$", param.name,
                                            "' must be integer vector or a pair of numerics.", sep=""))
                         iparam <- which(orig.param >= param[1] & orig.param <= param[2])
+
                 } else {
                         stop(paste("Argument 'sub.params$", param.name,
                                    "' has invalid type (requires integer or numeric).", sep=""))
                 }
 
-                ## check input
+                ## check result
                 if (! all( iparam >= 1L & iparam <= length(orig.param))) {
                         stop(paste("Argument 'sub.params$", param.name, "' out of range.", sep=""))
                 }
@@ -160,7 +176,7 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                 pname <- names(params)[lapply(params, length)>1L]
                 dimnames(result) <- params[pname]
         }
-        
+
         ## return result
         obj$data <- result
         obj
