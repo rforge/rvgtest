@@ -21,7 +21,7 @@ test_that("[prr-101] calling plot.rvgt.range (dim=1)", {
                                  )
         plot(res, main="[prr-101] A")
         plot(res, sub.params=list(alpha=c(30L:50L)), main="[prr-101] B")
-        plot(res, sub.params=list(alpha=c(40,70)), main="[prr-101] C")
+        plot(res, sub.params=list(alpha.lim=c(40,70)), main="[prr-101] C")
 
         plot(res, xscale="log", main="[prr-101] D")
         plot(res, zscale="log", main="[prr-101] E")
@@ -36,7 +36,7 @@ test_that("[prr-102] calling plot.rvgt.range (dim=2)", {
                                  test.class="unittest"
                                  )
         plot(res, main="[prr-102] A")
-        plot(res, sub.params=list(alpha=c(2,5)), main="[prr-102] B")
+        plot(res, sub.params=list(alpha.lim=c(2,5)), main="[prr-102] B")
 
         plot(res, xscale="log", main="[prr-102] C")
         plot(res, yscale="log", main="[prr-102] D")
@@ -63,9 +63,9 @@ test_that("[prr-104] calling plot.rvgt.range (dim=3)", {
                                  test.class="unittest"
                                  )
         plot(res, sub.params=list(beta=3L), main="[prr-104] A")
-        plot(res, sub.params=list(gamma=c(1.5,2.5)), main="[prr-104] B")
+        plot(res, sub.params=list(gamma.lim=c(1.5,2.5)), main="[prr-104] B")
 
-        plot(res, sub.params=list(alpha=5L,gamma=c(1.5,2.5)), main="[prr-104] C")
+        plot(res, sub.params=list(alpha=5L,gamma.lim=c(1.5,2.5)), main="[prr-104] C")
 })
         
 ## --------------------------------------------------------------------------

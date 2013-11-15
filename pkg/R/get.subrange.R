@@ -115,7 +115,7 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                 ## get indices for particular parameter
                 if (isTRUE(str_detect(param.name, "\\.lim$"))) {
                         ## case: lower and uppper bound 
-                        if (! identical(length(param), 2L))
+                        if (! (is.numeric(param) && identical(length(param), 2L)))
                                 stop(paste("Argument 'sub.params$", param.name,
                                            "' must be a pair of numerics.", sep=""))
                         ## strip postfix '.lim'
@@ -129,12 +129,8 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                         iparam <- param
 
                 } else if (is.numeric(param)) {
-                        ## case: pair of numerics --> lower and uppper bound 
-                        if (! identical(length(param), 2L))
-                                stop(paste("Argument 'sub.params$", param.name,
-                                           "' must be integer vector or a pair of numerics.", sep=""))
-                        iparam <- which(orig.param >= param[1] & orig.param <= param[2])
-
+                        ## case: numerics --> list of values
+                        iparam <- findidx (orig.param, param)
                 } else {
                         stop(paste("Argument 'sub.params$", param.name,
                                    "' has invalid type (requires integer or numeric).", sep=""))
@@ -180,6 +176,83 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
         ## return result
         obj$data <- result
         obj
+}
+
+## --- Extract subvector  ---------------------------------------------------
+
+findidx <- function(vec, s) {
+        ## find positions of entries in 's' in vector 'vec'.
+        ## 'vec' and 's' may be floats.
+
+        ## tolerance for comparing floats.
+        ## it is assumed that differences are just due to truncation
+        ## errors when storing the numbers.
+        tol <- 8 * .Machine$double.eps
+
+        ## find positions
+        sapply(s, function(e){which(sapply(vec, function(v){.unur.FP.equal(v,e)}))})
+}
+
+## --- Compare two floats ---------------------------------------------------
+
+.unur.FP.cmp <- function(x,y,eps) {
+        ## Compare two floats:
+        ##  x eq y iff |x-y| <= min(|x|,|y|) * eps
+        ## 
+        ## parameters:
+        ##   x   ... numeric
+        ##   y   ... numeric
+        ##   eps ... maximal relative deviation
+        ##
+        ## return:
+        ##   -1 if x < y
+        ##    0 if x eq y
+        ##   +1 if x > y
+        ##
+        ## remark:
+        ##   This is similar to Knuth's algorithm. However, we use
+        ##   min(|x|,|y|) instead of max(|x|,|y|).
+        ##   We also have to deal with +-Inf correctly.
+        ##
+        ##   (For an implementation of Knuth's algorithm see
+        ##   fcmp 1.2.2 Copyright (c) 1998-2000 Theodore C. Belding
+        ##   University of Michigan Center for the Study of Complex Systems
+        ##   Ted.Belding@umich.edu)
+        ## ..................................................................
+
+        fx = ifelse(x>=0, x, -x)
+        fy = ifelse(y>=0, y, -y)
+        delta = eps * min(fx,fy)
+        difference = x - y
+
+        ## we have to take care about Inf
+        if (is.infinite(delta)) {
+                delta = eps * .Machine$double.xmax
+        }
+
+        ## denormalized numbers (close to zero) may cause problems.
+        ## so we check this special case.
+        if (isTRUE(fx <= 2 * .Machine$double.xmin && fy <= 2 * .Machine$double))
+                return(0)
+
+        if (difference > delta) { ## x > y
+                return (+1)
+        } else if (difference < -delta) { ## x < y
+                return (-1)
+        } else { ## -delta <= difference <= delta
+                return (0)   
+        }
+
+} ## end of .unur.FP.cmp() ##
+
+.unur.FP.equal <- function(x,y) {
+        ## tolerance for comparing floats.
+        ## it is assumed that differences are just due to truncation
+        ## errors when storing the numbers.
+        ## so these may differ in the 3 least significant bits
+        tol <- 8 * .Machine$double.eps
+
+        ifelse(.unur.FP.cmp(x,y,tol)==0, TRUE, FALSE)
 }
 
 ## --- End ------------------------------------------------------------------

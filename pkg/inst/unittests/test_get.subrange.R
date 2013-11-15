@@ -137,6 +137,38 @@ test_that("[gsr-114] calling get.subrange", {
         expect_identical(res1, res1t)
 })
 
+test_that("[gsr-201] calling get.subrange", {
+        dp <- list(alpha=c(1,2), beta=c(3,5,7))
+        rp <- list(gamma=c(11,13,17,19))
+        res <- rvgt.range.engine(rdist=rnorm,
+                                 dist.params=dp,
+                                 r.params=rp,
+                                 test.routine=trunit,
+                                 test.class="unittest"
+                                 )
+        ## remove volatile parts
+        res$started <- NA
+        res$runtime <- NA
+
+        dp1 <- list(alpha=c(2), beta=c(3,7))
+        rp1 <- list(gamma=c(13,19))
+        res1 <- rvgt.range.engine(rdist=rnorm,
+                                  dist.params=dp1,
+                                  r.params=rp1,
+                                  test.routine=trunit,
+                                  test.class="unittest"
+                                  )
+        res1$started <- NA
+        res1$runtime <- NA
+
+        res1f <- get.subrange(res, sub.params=list(alpha=c(2),gamma=c(13,19),beta=c(1L,3L)), drop=FALSE)
+        expect_identical(res1, res1f)
+
+        res1t <- get.subrange(res, sub.params=list(alpha=c(2),gamma=c(13,19),beta=c(1L,3L)), drop=TRUE)
+        res1$data <- res1$data[,,,drop=TRUE]
+        expect_identical(res1, res1t)
+})
+
 ## --------------------------------------------------------------------------
 
 context("[get.subrange] - Invalid arguments")
@@ -179,10 +211,12 @@ test_that("[gsr-i02] calling get.subrange with invalid arguments: sub.params", {
         msg <- "Argument 'sub.params\\$gamma\\.lim' must be a pair of numerics."
         expect_error(get.subrange(res, sub.params=list(gamma.lim=1.0)),  msg)
         expect_error(get.subrange(res, sub.params=list(gamma.lim=c(1.0,2.0,3.0))),  msg)
+        expect_error(get.subrange(res, sub.params=list(gamma.lim=c("a","b"))),  msg)
 
         msg <- "Argument 'sub.params\\$delta\\.lim' must be a pair of numerics."
         expect_error(get.subrange(res, sub.params=list(delta.lim=1.0)),  msg)
         expect_error(get.subrange(res, sub.params=list(delta.lim=c(1.0,2.0,3.0))),  msg)
+        expect_error(get.subrange(res, sub.params=list(delta.lim=c("a","b"))),  msg)
 
         msg <- "Argument 'sub.params\\$gamma' has no valid entries."
         expect_error(get.subrange(res, sub.params=list(gamma=integer())),  msg)

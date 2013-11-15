@@ -90,14 +90,14 @@
 ##' ## the lower and upper bound, resp.
 ##' ## Notice that exact comparisons of floating point numbers can sometimes
 ##' ## have surprising results. So it is recommended to add some tolerance.
-##' plot(samp, sub.params=list(mean=c(6.99,9.01)))
+##' plot(samp, sub.params=list(mean.lim=c(6.99,9.01)))
 ##'
 ##' ## Plot samples where 'mean' equals 7
 ##' ## (again we have to use a pair of numeric values).
-##' plot(samp, sub.params=list(mean=c(6.99,7.01)))
+##' plot(samp, sub.params=list(mean=7))
 ##'
 ##' ## Zoom into the region with smalls values for 'mean' and 'sd'.
-##' plot(samp, sub.params=list(mean=c(0,5.01), sd=c(0,5.01)))
+##' plot(samp, sub.params=list(mean.lim=c(0,5.01), sd.lim=c(0,5.01)))
 ##' 
 ## --------------------------------------------------------------------------
 ##'
