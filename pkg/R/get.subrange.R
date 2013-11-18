@@ -1,45 +1,45 @@
 ## --------------------------------------------------------------------------
 ##'
-##' Get subset of parameters in object of class "rvgt.range"
+##' Extract object of class "rvgt.range" for a subset of parameter values
 ##' (internal function) 
 ## 
 ## --------------------------------------------------------------------------
 ##
 ##  @description
 ##'
-##' Get subset of parameters in object of class \code{"rvgt.range"}.
+##' Extract an object of class \code{"rvgt.range"} from a given one.
+##' The new object corresponds to a test with a subset of parameters.
 ##' -- (internal function)
 ##' 
 ## --------------------------------------------------------------------------
 ##
 ##  @details
 ## 
-##' Function \code{get.subrange} extracts a subset of parameter values from
-##' an object of class \code{"rvgt.range"}.
+##' Function \code{get.subrange} extracts an object of class \code{"rvgt.range"}
+##' from a given one. The new object corresponds to a test with a subset of
+##' parameters.
 ##' This can be useful if one wants to \dQuote{zoom} into a region of interest,
 ##' or if the number of dimensions have to be reduces (using \code{drop=TRUE})
 ##' in order to visualize the results by means of plots.
 ##'
-##' Each list entry in argument \code{sub.params} must correspond to a name
-##' in list \code{obj$dist.params} or list \code{obj$r.params}.
-##' Each member of this list entry is either
+##' The subset of parameters is given by argument \code{sub.params}.
+##' Each of its entry must correspond to a name in lists \code{obj$dist.params}
+##' or \code{obj$r.params}. The subset can be selected by either
 ##' \itemize{
 ##'   \item
-##'   a (non-empty) vector of integers which represents indices, or 
+##'   a list of indices given as a vector of type \code{"integer"}, or
 ##'   \item
-##'   a (non-empty) vector of floats which represent values.
+##'   a list of values given as a vector of type \code{"double"}.
 ##' }
-##' The corresponding elements with the given indices and values, resp.,
-##' are then included in the subset.
-##'
 ##' Alternatively, a name in argument \code{sub.params} can also be one
 ##' of the names in \code{obj$dist.params} or \code{obj$r.params} with
 ##' suffix \code{.lim} appended and the corresponding entry must be
-##' pairs of numeric values that are interpreted as lower and upper bound,
+##' pairs of type \code{"double"} that are interpreted as lower and upper bound,
 ##' resp., for the values to be included in the object with subsets.
 ##'
-##' If a parameter from \code{obj$dist.params} is omitted in \code{sub.params},
-##' then all its values are included in the new object.
+##' If a parameter from \code{obj$dist.params} or \code{obj$r.params}
+##' is omitted in \code{sub.params}, then all its values are included
+##' in the new object.
 ##' 
 ## --------------------------------------------------------------------------
 ##'
@@ -57,6 +57,26 @@
 ##'
 ##' @author Josef Leydold \email{josef.leydold@@wu.ac.at}
 ##'
+## --------------------------------------------------------------------------
+##'
+##' @examples
+##' ## create an initial object with timing data
+##' mgt <- rvgt.range.marginal(rdist = rbeta,
+##'                            dist.params = list(
+##'                              shape1=c(0.1,1,10),
+##'                              shape2=c(0.1,1,10)),
+##'                            duration = 0.01, gen.time = 1e-5)
+##'
+##' ## extract an object where shape1 is the second entry
+##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=2L))
+##' 
+##' ## extract an object where shape1 is the first and third entry
+##' ## and shape2 is 0.1 and 1
+##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=c(1L,3L), shape2=c(0.1,1)))
+##' 
+##' ## extract an object where shape2 is in closed interval 0.1, 1
+##' rvgtest:::get.subrange(mgt, sub.params=list(shape2.lim=c(0.1,1)))
+##' 
 ## --------------------------------------------------------------------------
 ##'
 ##  Arguments:
