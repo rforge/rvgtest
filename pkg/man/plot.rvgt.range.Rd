@@ -11,10 +11,6 @@
   \item{x}{object of class \code{"rvgt.range"} to be
   plotted.}
 
-  \item{sub.params}{subset of parameter values which should
-  be plotted (list).  This allows to restrict the plotting
-  region.}
-
   \item{xscale}{type of scale used for first coordinate.}
 
   \item{yscale}{type of scale used for second coordinate.}
@@ -23,6 +19,15 @@
 
   \item{...}{graphical parameters (see \code{\link{plot}}
   and \code{\link{par}}).}
+
+  \item{sub.params}{list that contains the subset of
+  parameter values for the distribution parameters or for
+  additional parameters of the random variate generator.
+  These can be either indices given as integers like
+  \code{c(1L,3L)} or \code{2:5}, or values given by doubles
+  like \code{c(1,3,5)}.  Alternatively, lower and upper
+  bound can be given as a pair of numbers when the name of
+  the parameter is postfixed by \code{.lim}.}
 }
 \description{
   \code{plot} method for class \code{"rvgt.range"}.
@@ -33,10 +38,9 @@
   depends on the number of parameters where a range of
   values if given. If there is one such parameter then the
   output of the test routine are plotted against this
-  single parameter. If two such parameters with ranges of
-  values are given then the output is presented by means of
-  an image plot. Three or more such parameters are not
-  supported.
+  single parameter. If two such parameters are given then
+  the output is presented by means of an image plot. Three
+  or more of such parameters are not supported.
 
   Argument \code{sub.params} allows to restrict the given
   parameter values before plotting. This allows to
@@ -48,17 +52,14 @@
   The entries of \code{sub.params} correspond to the
   parameters of the distribution as given in argument
   \code{x}. Each member of this list is either \itemize{
-  \item a (non-empty) vector of integers, or \item a pair
-  of numeric values. } Integer vectors give the indices of
-  the elements in the vector of values of the corresponding
-  parameter as listed in \code{x$dist.params}. These are
-  then included in the subset. Pairs of numeric values are
-  interpreted as lower and upper bound, resp., for the
-  values to be included in the object with subsets. If a
-  parameter from \code{x$dist.params} is omitted in
-  \code{sub.params}, then all its values are included in
-  the new object. (The subset of parameters is actually
-  created by means of function \code{\link{get.subrange}}.)
+  \item a list of indices given as a vector of type
+  \code{"integer"}, or \item a list of values given as a
+  vector of type \code{"double"}. } Alternatively, a name
+  in argument \code{sub.params} can also be one of the
+  names in \code{x$dist.params} or \code{x$r.params} with
+  suffix \code{.lim} appended and the corresponding entries
+  must be pairs of type \code{"double"} for the lower and
+  upper bound, resp., for the parameter values.
 
   Arguments \code{xscale}, \code{yscale}, and \code{zscale}
   allow to select a particular scaling (\code{"linear"} or
