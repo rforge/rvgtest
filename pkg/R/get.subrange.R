@@ -8,7 +8,7 @@
 ##  @description
 ##'
 ##' Extract an object of class \code{"rvgt.range"} from a given one.
-##' The new object corresponds to a test with a subset of parameters.
+##' The new object corresponds to a test with the given subset of parameters.
 ##' -- (internal function)
 ##' 
 ## --------------------------------------------------------------------------
@@ -16,15 +16,16 @@
 ##  @details
 ## 
 ##' Function \code{get.subrange} extracts an object of class \code{"rvgt.range"}
-##' from a given one. The new object corresponds to a test with a subset of
-##' parameters.
+##' from a given one. The new object corresponds to a test with the given subset
+##' of parameters.
 ##' This can be useful if one wants to \dQuote{zoom} into a region of interest,
 ##' or if the number of dimensions have to be reduces (using \code{drop=TRUE})
-##' in order to visualize the results by means of plots.
+##' in order to visualize the results.
 ##'
 ##' The subset of parameters is given by argument \code{sub.params}.
-##' Each of its entry must correspond to a name in lists \code{obj$dist.params}
-##' or \code{obj$r.params}. The subset can be selected by either
+##' Each of its entry must correspond to a name in list
+##' \code{obj$dist.params} or list \code{obj$r.params}.
+##' The subset can be selected by either
 ##' \itemize{
 ##'   \item
 ##'   a list of indices given as a vector of type \code{"integer"}, or
@@ -33,9 +34,9 @@
 ##' }
 ##' Alternatively, a name in argument \code{sub.params} can also be one
 ##' of the names in \code{obj$dist.params} or \code{obj$r.params} with
-##' suffix \code{.lim} appended and the corresponding entry must be
-##' pairs of type \code{"double"} that are interpreted as lower and upper bound,
-##' resp., for the values to be included in the object with subsets.
+##' suffix \code{.lim} appended and the corresponding entries must be
+##' pairs of type \code{"double"} for the lower and upper bound,
+##' resp., for the parameter values.
 ##'
 ##' If a parameter from \code{obj$dist.params} or \code{obj$r.params}
 ##' is omitted in \code{sub.params}, then all its values are included
@@ -83,7 +84,16 @@
 ##' @param obj
 ##'        object of class \code{"rvgt.range"}.
 ##' @param sub.params
-##'        subset of parameter values (list).
+##'        list that contains the subset of parameter values for the
+##'        distribution parameters or for additional parameters of the
+##'        random variate generator.
+##'        These can be
+##'        either indices given as integers like \code{c(1L,3L)}
+##'        or \code{2:5},
+##'        or values given by doubles like \code{c(1,3,5)}.
+##'        Alternatively, lower and upper bound can be given as a pair of
+##'        numbers when the name of the parameter is postfixed by
+##'        \code{.lim}.
 ##' @param drop
 ##'        if TRUE then dimensions with 1 entry are removed (boolean).
 ##'
