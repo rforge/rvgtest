@@ -16,9 +16,9 @@
 ##' Routine \code{rvgt.range.engine} is the workhorse for performing tests
 ##' encoded in function \code{test.routine} on the output of random variate
 ##' generator \code{rdist} for a given set of parameter values.
-##' This set is provided by argument \code{dist.params} where each entry
-##' of this list corresponds to a parameter and holds the vector of possible
-##' values.
+##' This set is provided by arguments \code{dist.params} and \code{r.params}
+##' where each entry of this list corresponds to a parameter and holds the
+##' vector of possible values.
 ##'
 ##' Detailed description of the arguments of this functions are given in the
 ##' sections below.
@@ -44,18 +44,19 @@
 ##' need not be listed in argument \code{dist.params}.)
 ##'
 ##' Function \code{rdist} may also have some additional arguments,
-##' e.g., debugging flags. This can be useful for testing experimental
-##' generators. Additional arguments can be provided via argument
-##' \code{r.params}. The entries of this list (if non-empty) are used as-is
-##' as arguments for \code{rdist}.
+##' e.g., debugging flags or parameters for modifying the algorithm.
+##' This can be useful for testing experimental generators.
+##' These additional arguments can be provided via argument
+##' \code{r.params}. The entries of this list are handled in the same
+##' way as those in \code{dist.params}.
 ##'
 ##' Some tests require propoerties of the random variate generator that
 ##' can only be collected during setup (like the rejection constant)
 ##' or running the random variate generator \code{rdist}
-##' (like the rejection rate).
+##' (like the observed rejection rate).
 ##' These properties must be stored in the returned sample
 ##' as attributes. 
-##' In order to run these tests function \code{rdist}
+##' In order to run such tests function \code{rdist}
 ##' \itemize{
 ##' \item must except argument \code{show.properties},
 ##' \item must return its properties (like the rejection constant)
@@ -68,22 +69,23 @@
 ##' @section Test routine:
 ##' 
 ##' Routine \code{test.routine} actually performs the test on a
-##' single combination of parameter values.
+##' particular combination of parameter values.
 ##' It has to accept the following arguments:
 ##' \describe{
-##'   \item{\code{rdist}}{%
+##'   \item{\code{rdist}}{
 ##'         random number generator of distribution (function).}
-##'   \item{\code{dist.params}}{%
+##'   \item{\code{dist.params}}{
 ##'         parameters for distribution (list).}
-##'   \item{\code{r.params}}{%
+##'   \item{\code{r.params}}{
 ##'         additional arguments for \code{rdist} (list).}
-##'   \item{\code{emgt}}{%
-##'         expected (approximate) marginal generation of \code{rdist} (in seconds).}
-##'   \item{\code{test.params}}{%
+##'   \item{\code{emgt}}{
+##'         expected (approximate) marginal generation time of
+##'         \code{rdist} (in seconds).}
+##'   \item{\code{test.params}}{
 ##'         additional arguments for \code{test.routine} (list).}
-##'   \item{\code{duration}}{%
-##'         scheduled duration for test (in seconds).}
-##'   \item{\code{verbose}}{%
+##'   \item{\code{duration}}{
+##'         scheduled duration for the test (in seconds).}
+##'   \item{\code{verbose}}{
 ##'         if TRUE show progress (logical).}
 ##' }
 ##' Thus the function prototype reads
@@ -91,8 +93,9 @@
 ##' 
 ##' When \code{test.routine} is called then the corresponding arguments
 ##' from \code{rvgt.range.engine} are just passed to this function.
-##' However, each entry in \code{dist.params} contains one of the
-##' possible values. Argument \code{emgt} contains the corresponding
+##' However, each entry in \code{dist.params} or \code{r.params}
+##' contains one of the possible values.
+##' Argument \code{emgt} contains the corresponding
 ##' generation time as given by \code{gen.time}.
 ##'
 ##' Further arguments that are needed to run a test (e.g., the CDF
@@ -110,7 +113,7 @@
 ##' When testing a wide range of parameter settings running time is an issue.
 ##' Each test must run sufficiently long in order to get a sensible result.
 ##' On the other hand the total running time of the test suite must not exceed
-##' some constraints.
+##' some time limits.
 ##'
 ##' Function \code{rvgt.range.engine} provides a simple
 ##' mechanism to control running times. By argument \code{gen.time} one can
