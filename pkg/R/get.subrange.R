@@ -162,7 +162,7 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
 
                 } else if (is.numeric(param)) {
                         ## case: numerics --> list of values
-                        iparam <- findidx (orig.param, param)
+                        iparam <- floatmatch (param, orig.param, param.name)
                 } else {
                         stop(paste("Argument 'sub.params$", param.name,
                                    "' has invalid type (requires integer or numeric).", sep=""))
@@ -172,8 +172,9 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                 if (! all( iparam >= 1L & iparam <= length(orig.param))) {
                         stop(paste("Argument 'sub.params$", param.name, "' out of range.", sep=""))
                 }
-                if (identical(length(iparam), 0L))
+                if (identical(length(iparam), 0L)) {
                         stop(paste("Argument 'sub.params$", param.name, "' has no valid entries.", sep=""))
+                }
                 
                 ## update list of indices
                 idx.params[[param.name]] <- iparam
@@ -212,17 +213,19 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
 
 ## --- Extract subvector  ---------------------------------------------------
 
-findidx <- function(vec, s) {
-        ## find positions of entries in 's' in vector 'vec'.
-        ## 'vec' and 's' may be floats.
+floatmatch <- function(s, vec, msg) {
+        ## 'floatmatch' returns a vector of the positions of matches of
+        ## its first argument in its second.
 
-        ## tolerance for comparing floats.
-        ## it is assumed that differences are just due to truncation
-        ## errors when storing the numbers.
-        tol <- 8 * .Machine$double.eps
-
-        ## find positions
-        sapply(s, function(e){which(sapply(vec, function(v){.unur.FP.equal(v,e)}))})
+        idx <- integer(0)
+        for (x in s) {
+                pos <- which(sapply(vec, function(v){.unur.FP.equal(v,x)}))
+                if (identical(length(pos), 0L)) {
+                        warning("Cannot find entry '",x,"' in parameter '",msg,"'.")
+                }
+                idx <- c(idx, pos)
+        }
+        idx
 }
 
 ## --- Compare two floats ---------------------------------------------------

@@ -225,6 +225,9 @@ test_that("[gsr-i02] calling get.subrange with invalid arguments: sub.params", {
         msg <- "Argument 'sub.params\\$delta' has no valid entries."
         expect_error(get.subrange(res, sub.params=list(delta=integer())),  msg)
         expect_error(get.subrange(res, sub.params=list(delta.lim=c(100.0,200.0))),  msg)
+
+        msg <- "Cannot find entry '6' in parameter 'beta'."
+        expect_warning(get.subrange(res, sub.params=list(beta=c(5,6,7))),  msg)
 })
         
 ## --------------------------------------------------------------------------
