@@ -10,5 +10,6 @@ Authors@R: c(person("Josef", "Leydold", role = c("aut", "cre"),
 Imports: Runuran (>= 0.18), parallel, stringr
 Suggests: testthat
 Description: Test suite for non-uniform pseudo-random number generators.
+Roxygen: list(wrap = FALSE, roclets = c("rd"))
 License: GPL-2
 URL: http://statmath.wu.ac.at/unuran/
