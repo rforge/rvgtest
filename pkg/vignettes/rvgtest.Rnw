@@ -89,7 +89,7 @@ abstract=true       %% print header "Abstract"
 
 %% -- Layout ----------------------------------------------------------------
 
-\pagestyle{headings}
+%% \pagestyle{headings}  %% -- this does not work with v3.12 KOMA-Script package
 
 \setlength{\parskip}{0pt}
 
