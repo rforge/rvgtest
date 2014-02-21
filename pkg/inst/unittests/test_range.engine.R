@@ -39,18 +39,18 @@ test_that("[pre-001] list entries returned by rvgt.range.engine: length(dist.par
         expect_is(res, "rvgt.range")
 
         expect_output(summary(res),
-                      paste("^ \\* Test ranges of parameters - Summary:\\s+",
+                      paste("^\\s+\\* Test ranges of parameters - Summary:\\s+",
                             "Test:\\s+unittest\\s+",
                             "run unit test\\s+",
                             "RVG:\\s+rnorm\\s+",
-                            "Parameters:\\s+alpha \\( 2 \\)\\[1\\] 1 2\\s+",
+                            "Parameters:\\s+alpha \\( 2 \\)\\n\\[1\\] 1 2\\s+",
                             "Results:\\s+",
                             "Min. 1st Qu.  Median    Mean 3rd Qu.    Max.\\s+",
                             "1\\.00\\s+1\\.25\\s+1\\.50\\s+1\\.50\\s+1\\.75\\s+2\\.00\\s*", 
                             "Tests started at.*",
                             "Total runtime:.*$",
                             sep=""))
-        
+
         p <- res$dist.params
         expect_identical(p, dp)
 
@@ -196,14 +196,14 @@ test_that("[pre-002] list entries returned by rvgt.range.engine: length(dist.par
         expect_is(res, "rvgt.range")
 
         expect_output(summary(res),
-                      paste("^ \\* Test ranges of parameters - Summary:\\s+",
+                      paste("^\\s*\\* Test ranges of parameters - Summary:\\s+",
                             "Test:\\s+unit\\.test\\s+Unit Test\\s+",
                             "RVG:\\s+rnorm\\s+",
                             "Parameters:\\s+",
-                            "alpha \\( 2 \\)\\[1\\] 2 3\\s+",
-                            "beta \\( 3 \\)\\[1\\]\\s+5\\s+7\\s+11\\s+",
+                            "alpha \\( 2 \\)\\s*\\[1\\] 2 3\\s+",
+                            "beta \\( 3 \\)\\s*\\[1\\]\\s+5\\s+7\\s+11\\s+",
                             "Additional Parameters:\\s+",
-                            "gamma \\( 1 \\)\\[1\\]\\s+13\\s+",
+                            "gamma \\( 1 \\)\\s*\\[1\\]\\s+13\\s+",
                             "Results:\\s+",
                             "Min. 1st Qu.  Median    Mean 3rd Qu.    Max.\\s+",
                             "130\\.0\\s+185\\.2\\s+234\\.0\\s+249\\.2\\s+282\\.8\\s+429.0\\s*",
@@ -278,15 +278,15 @@ test_that("[pre-002r] list entries returned by rvgt.range.engine: length(dist.pa
         expect_is(res, "rvgt.range")
 
         expect_output(summary(res),
-                      paste("^ \\* Test ranges of parameters - Summary:\\s+",
+                      paste("^\\s*\\* Test ranges of parameters - Summary:\\s+",
                             "Test:\\s+unit\\.test\\s+Unit Test\\s+",
                             "RVG:\\s+rnorm\\s+",
                             "Parameters:\\s+",
-                            "alpha \\( 2 \\)\\[1\\] 2 3\\s+",
-                            "beta \\( 3 \\)\\[1\\]\\s+5\\s+7\\s+11\\s+",
+                            "alpha \\( 2 \\)\\s*\\[1\\] 2 3\\s+",
+                            "beta \\( 3 \\)\\s*\\[1\\]\\s+5\\s+7\\s+11\\s+",
                             "Additional Parameters:\\s+",
-                            "gamma \\( 1 \\)\\[1\\]\\s+13\\s+",
-                            "delta \\( 2 \\)\\[1\\]\\s+17\\s+19\\s+", 
+                            "gamma \\( 1 \\)\\s*\\[1\\]\\s+13\\s+",
+                            "delta \\( 2 \\)\\s*\\[1\\]\\s+17\\s+19\\s+", 
                             "Results:\\s+",
                             "Min. 1st Qu.  Median    Mean 3rd Qu.    Max.\\s+",
                             "2210\\s+3260\\s+4173\\s+4485\\s+5249\\s+8151\\s*",  
@@ -359,12 +359,12 @@ test_that("[pre-003] list entries returned by rvgt.range.engine: length(dist.par
         expect_is(res, "rvgt.range")
 
         expect_output(summary(res),
-                      paste("^ \\* Test ranges of parameters - Summary:\\s+",
+                      paste("^\\s*\\* Test ranges of parameters - Summary:\\s+",
                             "Test:\\s+unit\\.test\\.a\\s+",
                             "RVG:\\s+rnorm\\s+",
-                            "Parameters:\\s+alpha \\( 2 \\)\\[1\\] 2 3\\s+",
-                            "beta \\( 3 \\)\\[1\\]\\s+5\\s+7\\s+11\\s+",
-                            "gamma \\( 4 \\)\\[1\\]\\s+13\\s+17\\s+19\\s+23\\s+",
+                            "Parameters:\\s+alpha \\( 2 \\)\\s*\\[1\\] 2 3\\s+",
+                            "beta \\( 3 \\)\\s*\\[1\\]\\s+5\\s+7\\s+11\\s+",
+                            "gamma \\( 4 \\)\\s*\\[1\\]\\s+13\\s+17\\s+19\\s+23\\s+",
                             "Results:\\s+",
                             "Min. 1st Qu.  Median    Mean 3rd Qu.    Max.\\s+",
                             "130\\.0\\s+236\\.0\\s+304\\.0\\s+345\\.0\\s+420\\.8\\s+759\\.0\\s*",
