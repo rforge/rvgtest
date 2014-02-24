@@ -213,9 +213,6 @@ test_that("[ft-i15] calling rvgt.ftable with invalid arguments: breaks", {
         msg <- "Number of break points too small"
         expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=2),                  msg)
 
-        msg <- "cannot allocate vector"
-        expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=2e9),                msg)
-
         msg <- "Number of break points too small"
         expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=c(0,1)),             msg)
 
@@ -228,6 +225,10 @@ test_that("[ft-i15] calling rvgt.ftable with invalid arguments: breaks", {
         ## use exact location of break points
         msg <- "Argument 'exactu' must be boolean."
         expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, exactu=0), msg)
+
+        ## the following test consumes all memory. so it is disabled.
+        ## msg <- "cannot allocate vector"
+        ## expect_error(rvgt.ftable(n=100, rdist=rnorm, qdist=qnorm, breaks=2e9),                msg)
 })
 
 test_that("[ft-i16] calling rvgt.ftable with invalid arguments: exactu", {
