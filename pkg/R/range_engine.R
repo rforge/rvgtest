@@ -277,7 +277,7 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                                ncores=NULL, timeout=Inf, timeout.val=Inf,
                                verbose=FALSE) {
         ## ..................................................................
-        
+
         ## --- timing information
 
         started <- Sys.time()
@@ -517,6 +517,28 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                             ncores, timeout, timeout.val,
                             verbose) {
 
+        ## --- functions
+
+        ## Use (non-exported) functions from package 'parallel'.
+        ## Note, however, this does not work any more with R-devel (r65143)
+        ## my.mcparallel <- parallel::mcparallel
+        ## my.processID <- parallel:::processID
+        ## my.selectChildren <- parallel:::selectChildren
+        ## my.children <- parallel:::children
+        ## my.mckill <- parallel:::mckill
+        ## my.readChild <- parallel:::readChild
+
+        ## Use (exported) function from package 'multicore'.
+        ## Note, however, that this package is obsolete.
+        my.mcparallel <- multicore::mcparallel
+        my.processID <- multicore::processID
+        my.selectChildren <- multicore::selectChildren
+        my.children <- multicore::children
+        my.mckill <- multicore::kill
+        my.readChild <- multicore::readChild
+
+## ..................................................................
+        
         ## combine all parameters
         params <- c(dist.params,r.params)
 
@@ -558,7 +580,7 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                         }
                         
                         ## start thread that performs a single test
-                        parallel::mcparallel(
+                        my.mcparallel(
                           test.routine(rdist=rdist, dist.params=dp, r.params=rp,
                                        emgt=as.numeric(emgt[pos]),
                                        test.params=test.params, duration=duration,
@@ -567,13 +589,13 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
 
                 ## start all parallel threads
                 jobs <- lapply(run.idx, test.routine.mc)
-                jobIDs <- parallel:::processID(jobs)
+                jobIDs <- my.processID(jobs)
                 
                 ## get results from started jobs
                 while(TRUE) {
 
                         ## check all children for available data
-                        s <- parallel:::selectChildren(jobs,timeout)
+                        s <- my.selectChildren(jobs,timeout)
 
                         if (is.null(s)) {
                                 ## no more childs
@@ -582,14 +604,14 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                         
                         if (isTRUE(s)) {
                                 ## timeout --> kill all active jobs
-                                active.jobs <- parallel:::children(jobs)
-                                parallel:::mckill(active.jobs, tools::SIGTERM)
-                                for (ch in parallel:::processID(active.jobs)) {
+                                active.jobs <- my.children(jobs)
+                                my.mckill(active.jobs, tools::SIGTERM)
+                                for (ch in my.processID(active.jobs)) {
                                         i <- run.idx[(which(jobIDs==ch)[1])]
                                         result[i] <- timeout.val
                                         finished[i] <- TRUE
                                         ## close pipe to (terminated) child process 
-                                        parallel:::readChild(ch)
+                                        my.readChild(ch)
                                 }
                                 if (verbose) cat("\t---> timeout!\n")
                                 break
@@ -603,7 +625,7 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
 
                         ## read all results
                         for (ch in s) {
-                                r <- parallel:::readChild(ch)
+                                r <- my.readChild(ch)
                                 i <- run.idx[(which(jobIDs==ch)[1])]
                                 if (is.raw(r)) {
                                         res <- unserialize(r)

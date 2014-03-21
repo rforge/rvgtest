@@ -1,8 +1,11 @@
 
-Version 0.9.0: 2013-11-??
+Version 0.9.0: 2014-03-21
 
 	- get.subrange():
           changed argument sub.params.
+
+	- internal: 
+          replaced package 'parallel' by package 'multicore'
 
 
 Version 0.8.1: 2013-10-30
