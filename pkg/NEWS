@@ -1,4 +1,10 @@
 
+Version 0.10.0: 2014-??-??
+
+	- tests:
+	  moved unit tests from 'inst/unittests' to 'tests/testthat'.
+
+
 Version 0.9.0: 2014-03-21
 
 	- get.subrange():
