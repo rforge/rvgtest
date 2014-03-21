@@ -24,7 +24,7 @@ check: # same as 'test'
 
 clean:
 	@echo "clear working space ..."
-	@rm -vf Rplots.pdf *~
+	@rm -vf .RData Rplots.pdf *~
 
 .PHONY: all check clean inst test
 
