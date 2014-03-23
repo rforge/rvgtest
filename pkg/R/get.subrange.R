@@ -1,14 +1,15 @@
 ## --------------------------------------------------------------------------
 ##'
-##' Extract object of class "rvgt.range" for a subset of parameter values
+##' Extract submatrix from an object of class "rvgt.range"
 ##' (internal function) 
 ## 
 ## --------------------------------------------------------------------------
 ##
 ##  @description
 ##'
-##' Extract an object of class \code{"rvgt.range"} from a given one.
-##' The new object corresponds to a test with the given subset of parameters.
+##' Extract a submatrix from an object of class \code{"rvgt.range"}.
+##' The new object also is of class \code{"rvgt.range"} and 
+##' corresponds to a test with the given subset of parameters.
 ##' -- (internal function)
 ##' 
 ## --------------------------------------------------------------------------
