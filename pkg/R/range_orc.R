@@ -35,6 +35,8 @@
 ##' @seealso
 ##' \code{\link{rvgt.range.engine}} for a description of objects of class
 ##' \code{"rvgt.range"}.
+##' \code{\link{rvgt.range.rdist.example}} for an example of a random
+##' variate generator that sets attribute \code{"orc"}.
 ##' \code{\link{summary.rvgt.range}} for a summary of test results,
 ##' \code{\link{plot.rvgt.range}} for plotting the test results.
 ##' 
@@ -45,39 +47,17 @@
 ## --------------------------------------------------------------------------
 ##
 ##' @examples
-##' ## a simple generator for the beta distribution 
-##' myrbeta <- function(n, shape1, shape2, show.properties=FALSE) {
-##'    if (shape1 <= 1 || shape2 <= 1 || n < 0) stop("arguments invalid")
-##'    mode <- (shape1 - 1) / (shape1 + shape2 - 2)
-##'    fmode <- dbeta(mode,shape1,shape2)
-##'    trials <- 0
-##'    res <- numeric(n) 
-##'    for (i in 1:n) {
-##'       while(n>0) {
-##'          trials <- trials + 1
-##'          X <- runif(1)
-##'          Y <- fmode * runif(1)
-##'          if (Y <= dbeta(X,shape1,shape2)) {
-##'             res[n] <- X
-##'             break
-##'          }
-##'       }
-##'    }
-##'    if (isTRUE(show.properties)) {
-##'       trc <- fmode
-##'       attr(res,"trc") <- trc
-##'       attr(res,"orc") <- trials / n
-##'    }
-##'    res
-##' }
+##' ## Generator 'rvgt.range.rdist.example' is a simple generator for
+##' ## the beta distribution. It merely demonstrates how the "orc"
+##' ## attribute has to be set.
 ##'
 ##' ## first we need the marginal generation times
-##' mgt <- rvgt.range.marginal(rdist = myrbeta,
+##' mgt <- rvgt.range.marginal(rdist = rvgt.range.rdist.example,
 ##'                            dist.params = list(shape1=c(2,3), shape2=2),
 ##'                            duration = 0.01)
 ##'
 ##' ## test rejection constants
-##' orc <- rvgt.range.orc(rdist = myrbeta,
+##' orc <- rvgt.range.orc(rdist = rvgt.range.rdist.example,
 ##'                       dist.params = list(shape1=c(2,3), shape2=2),
 ##'                       duration = 0.01, gen.time = mgt)
 ##'

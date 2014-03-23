@@ -27,5 +27,7 @@ export(rvgt.range.trc)
 export(rvgt.range.orc)
 export(rvgt.range.chisq)
 
+export(rvgt.range.rdist.example)
+
 export(pertadd, pertsub)
 

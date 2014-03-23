@@ -63,31 +63,12 @@ Of course this property is only sensible if \code{rdist} is based on the
 acceptance-rejection method.
 }
 \examples{
-## a simple generator for the beta distribution
-myrbeta <- function(n, shape1, shape2, show.properties=FALSE) {
-   if (shape1 <= 1 || shape2 <= 1 || n < 0) stop("arguments invalid")
-   mode <- (shape1 - 1) / (shape1 + shape2 - 2)
-   fmode <- dbeta(mode,shape1,shape2)
-   res <- numeric(n)
-   for (i in 1:n) {
-      while(n>0) {
-         X <- runif(1)
-         Y <- fmode * runif(1)
-         if (Y <= dbeta(X,shape1,shape2)) {
-            res[n] <- X
-            break
-         }
-      }
-   }
-   if (isTRUE(show.properties)) {
-      trc <- fmode
-      attr(res,"trc") <- trc
-   }
-   res
-}
+## Generator 'rvgt.range.rdist.example' is a simple generator for
+## the beta distribution. It merely demonstrates how the "trc"
+## attribute has to be set.
 
 ## Collect rejection constants for a range of parameter values.
-trc <- rvgt.range.trc(rdist = myrbeta,
+trc <- rvgt.range.trc(rdist = rvgt.range.rdist.example,
                       dist.params = list(shape1=2:10,shape2=5))
 
 ## print summary
@@ -99,7 +80,9 @@ Josef Leydold \email{josef.leydold@wu.ac.at}
 \seealso{
 \code{\link{rvgt.range.engine}} for a description of objects of class
 \code{"rvgt.range"}.
-\code{\link{summary.rvgt.range}} for a summary of test results,
+\code{\link{rvgt.range.rdist.example}} for an example of a random
+variate generator that sets attribute \code{"trc"}.
+\code{\link{summary.rvgt.range}} for a summary of test results.
 \code{\link{plot.rvgt.range}} for plotting the test results.
 }
 
