@@ -16,14 +16,16 @@
 ##
 ##  @details
 ## 
-##' Function \code{get.subrange} extracts an object of class \code{"rvgt.range"}
-##' from a given one. The new object corresponds to a test with the given subset
-##' of parameters.
+##' Function \code{get.subrange} extract a submatrix from an object of
+##' class \code{"rvgt.range"}. 
+##' The new object also is of class \code{"rvgt.range"} and 
+##' corresponds to a test with the given subset of parameters.
 ##' This can be useful if one wants to \dQuote{zoom} into a region of interest,
 ##' or if the number of dimensions have to be reduces (using \code{drop=TRUE})
 ##' in order to visualize the results.
 ##'
-##' The subset of parameters is given by argument \code{sub.params}.
+##' The submatrix corresponds to parameter values that are given by
+##' named entries in a list given by argument \code{sub.params}.
 ##' Each of its entry must correspond to a name in list
 ##' \code{obj$dist.params} or list \code{obj$r.params}.
 ##' The subset can be selected by either
@@ -33,11 +35,12 @@
 ##'   \item
 ##'   a list of values given as a vector of type \code{"double"}.
 ##' }
-##' Alternatively, a name in argument \code{sub.params} can also be one
+##' Alternatively, one also can provide ranges for parameter values.
+##' Then the name in argument \code{sub.params} has to be one
 ##' of the names in \code{obj$dist.params} or \code{obj$r.params} with
 ##' suffix \code{.lim} appended and the corresponding entries must be
 ##' pairs of type \code{"double"} for the lower and upper bound,
-##' resp., for the parameter values.
+##' resp., for the range of parameter values.
 ##'
 ##' If a parameter from \code{obj$dist.params} or \code{obj$r.params}
 ##' is omitted in \code{sub.params}, then all its values are included
@@ -73,7 +76,7 @@
 ##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=2L))
 ##' 
 ##' ## extract an object where shape1 is the first and third entry
-##' ## and shape2 is 0.1 and 1
+##' ## and shape2 has values 0.1 and 1
 ##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=c(1L,3L), shape2=c(0.1,1)))
 ##' 
 ##' ## extract an object where shape2 is in closed interval 0.1, 1
@@ -93,7 +96,7 @@
 ##'        or \code{2:5},
 ##'        or values given by doubles like \code{c(1,3,5)}.
 ##'        Alternatively, lower and upper bound can be given as a pair of
-##'        numbers when the name of the parameter is postfixed by
+##'        doubles when the name of the parameter is postfixed by
 ##'        \code{.lim}.
 ##' @param drop
 ##'        if TRUE then dimensions with 1 entry are removed (boolean).

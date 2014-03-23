@@ -27,7 +27,7 @@ either indices given as integers like \code{c(1L,3L)}
 or \code{2:5},
 or values given by doubles like \code{c(1,3,5)}.
 Alternatively, lower and upper bound can be given as a pair of
-numbers when the name of the parameter is postfixed by
+doubles when the name of the parameter is postfixed by
 \code{.lim}.}
 }
 \description{
