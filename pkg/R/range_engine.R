@@ -64,8 +64,12 @@
 ##' \item must return its properties (like the rejection constant)
 ##'       as attributes when \code{show.properties=TRUE}.
 ##' }
-##' See function \code{rvgt.range.trc} or \code{rvgt.range.orc} for
-##' examples.
+##' See function \code{\link{rvgt.range.trc}} or
+##' \code{\link{rvgt.range.orc}} for examples.
+##'
+##' An example implementation of a random variate generator that
+##' stores some of its properties as attributes of the returned random
+##' vector is given by \code{\link{rvgt.range.rdist.example}}.
 ##' 
 ## ..........................................................................
 ##'
@@ -139,15 +143,18 @@
 ## --------------------------------------------------------------------------
 ##'
 ##' @seealso
-##' \code{\link{summary.rvgt.range}} for a summary of test results,
+##' \code{\link{rvgt.range.rdist.example}} for an example of a random
+##' variate generator that stores some of its properties as attributes
+##' of the returned random vector.
+##' \code{\link{summary.rvgt.range}} for a summary of test results.
 ##' \code{\link{plot.rvgt.range}} for plotting the test results.
 ##' 
 ## --------------------------------------------------------------------------
 ##'
 ##' @author Josef Leydold \email{josef.leydold@@wu.ac.at}.
 ##'
-##' Thanks to Simon Urbanek for helpful explanations of the low level functions of
-##' the \pkg{parallel}/\pkg{multicore} package.
+##' Thanks to Simon Urbanek for helpful explanations of the low level
+##' functions of the \pkg{parallel}/\pkg{multicore} package.
 ##' 
 ## --------------------------------------------------------------------------
 ##'
