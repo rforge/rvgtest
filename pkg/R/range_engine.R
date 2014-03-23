@@ -1,6 +1,6 @@
 ## --------------------------------------------------------------------------
 ##'
-##' Engine for performing tests for a set of parameters
+##' Engine for performing tests for a set of parameter values
 ## 
 ## --------------------------------------------------------------------------
 ##
@@ -33,10 +33,12 @@
 ##' the first argument must be the sample size \code{n} followed by the
 ##' parameters of the distribution.
 ##'
-##' The values for the parameters of the distribution must be given in
-##' argument \code{dist.params} as list.
+##' The values for the parameters of the distribution must be passed to
+##' routine \code{rvgt.range.engine} by means of argument
+##' \code{dist.params} as list.
 ##' Each entry of this list corresponds to a paramter as used in the call
-##' to \code{rdist}. Each of these entries contains either a number when
+##' to \code{rdist}.
+##' Each of these entries contains either a number when
 ##' the value for that parameter is kept fixed or a vector of numbers.
 ##' In the latter case \code{rvgt.range.engine} runs through all possible
 ##' combinations of parameter values.
@@ -44,25 +46,26 @@
 ##' need not be listed in argument \code{dist.params}.)
 ##'
 ##' Function \code{rdist} may also have some additional arguments,
-##' e.g., debugging flags or parameters for modifying the algorithm.
+##' e.g., debugging flags or parameters for adjusting the algorithm.
 ##' This can be useful for testing experimental generators.
 ##' These additional arguments can be provided via argument
 ##' \code{r.params}. The entries of this list are handled in the same
 ##' way as those in \code{dist.params}.
 ##'
-##' Some tests require propoerties of the random variate generator that
-##' can only be collected during setup (like the rejection constant)
-##' or running the random variate generator \code{rdist}
-##' (like the observed rejection rate).
+##' \emph{Some} tests require properties of the random variate
+##' generator that can only be collected during setup (like the
+##' rejection constant) or running the random variate generator
+##' \code{rdist} (like the observed rejection rate).
 ##' These properties must be stored in the returned sample
 ##' as attributes. 
-##' In order to run such tests function \code{rdist}
+##' In order to run \emph{such} tests function \code{rdist}
 ##' \itemize{
 ##' \item must except argument \code{show.properties},
 ##' \item must return its properties (like the rejection constant)
 ##'       as attributes when \code{show.properties=TRUE}.
 ##' }
-##' See function \code{rvgt.range.trc} or \code{rvgt.range.orc} for examples. 
+##' See function \code{rvgt.range.trc} or \code{rvgt.range.orc} for
+##' examples.
 ##' 
 ## ..........................................................................
 ##'
@@ -75,7 +78,7 @@
 ##'   \item{\code{rdist}}{
 ##'         random number generator of distribution (function).}
 ##'   \item{\code{dist.params}}{
-##'         parameters for distribution (list).}
+##'         parameter values for distribution (list).}
 ##'   \item{\code{r.params}}{
 ##'         additional arguments for \code{rdist} (list).}
 ##'   \item{\code{emgt}}{
@@ -113,18 +116,19 @@
 ##' When testing a wide range of parameter settings running time is an issue.
 ##' Each test must run sufficiently long in order to get a sensible result.
 ##' On the other hand the total running time of the test suite must not exceed
-##' some time limits.
+##' some time constraints.
 ##'
 ##' Function \code{rvgt.range.engine} provides a simple
 ##' mechanism to control running times. By argument \code{gen.time} one can
-##' provide the (approximate) marginal generation time for random variate generator
-##' \code{rdist}. By argument \code{duration} one can set the require running
-##' time for each of the tests. However, the two parameters are just passed to
-##' function \code{test.routine} and it is the task of this routine to use
-##' this information. Thus \code{duration} times the total number of tests
+##' provide the (approximate) marginal generation time for random
+##' variate generator \code{rdist}. By argument \code{duration} one
+##' can set the required running time for each of the tests. However,
+##' the two parameters are just passed to function \code{test.routine}
+##' and it is the task of this routine to make use this
+##' information. Thus \code{duration} times the total number of tests 
 ##' (i.e., the number of possible tuples created from the given
-##' \code{dist.params}) can only be used for a (very!) rough estimate of the
-##' total running time.
+##' \code{dist.params}) can only be used for a (very!) rough estimate
+##' of the total running time.
 ##'
 ##' In order to prevent one of the tests from running too long (or from
 ##' looping infinitely) argument \code{timeout} allows to set an upper limit
@@ -190,7 +194,8 @@
 ##'        (approximate) marginal generation time for \code{rdist}.
 ##'        It must be either a single positive number (numeric) or
 ##'        an object of class \code{"rvgt.range.time"} that holds the
-##'        result of a previous call to routine \code{\link{rvgt.range.marginal}}.
+##'        result of a previous call to routine
+##'        \code{\link{rvgt.range.marginal}}.
 ##'
 ##' @param ncores
 ##'        enable multicore support for performing tests in
@@ -202,7 +207,7 @@
 ##'        \item A positive integer:
 ##'              the tests run on \code{ncores} cores in parallel.
 ##'              Notice that \code{ncores=1L} is possible.
-##'              Although then only one core is used the behavior
+##'              Then only one core is used but the behavior
 ##'              is different from \code{ncores=NULL}.
 ##'        \item \code{0L}:
 ##'              the number of available cores is autodetected by means of
@@ -239,20 +244,20 @@
 ##' The list has the following components:
 ##' \item{data}{
 ##'        array that holds the test results for each combination of
-##'        parameters of the distribution
+##'        parameter values of the distribution
 ##'        (array of numeric values).}
 ##' \item{rdist}{
 ##'        given function for calling random generator
-##'        (function copied from input).}
+##'        (function, copied from input).}
 ##' \item{rdist.name}{
 ##'        name of given function for calling random generator
 ##'        (character string copied from input).}
 ##' \item{dist.params}{
-##'        given list of parameter for the distribution
-##'        (list copied from input).}
+##'        given list of parameter values for the distribution
+##'        (list, copied from input).}
 ##' \item{r.params}{
 ##'        additional arguments for \code{rdist}
-##'        (list copied from input).}
+##'        (list, copied from input).}
 ##' \item{test.class}{
 ##'        test class
 ##'        (character string, copied from input).}

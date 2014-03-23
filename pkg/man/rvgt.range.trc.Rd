@@ -22,7 +22,7 @@ rvgt.range.trc(rdist, dist.params, r.params = list(), ncores = NULL,
        \item A positive integer:
              the tests run on \code{ncores} cores in parallel.
              Notice that \code{ncores=1L} is possible.
-             Although then only one core is used the behavior
+             Then only one core is used but the behavior
              is different from \code{ncores=NULL}.
        \item \code{0L}:
              the number of available cores is autodetected by means of

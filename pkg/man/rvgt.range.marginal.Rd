@@ -26,7 +26,8 @@ the rejection method.}
 \item{gen.time}{(approximate) marginal generation time for \code{rdist}.
        It must be either a single positive number (numeric) or
        an object of class \code{"rvgt.range.time"} that holds the
-       result of a previous call to routine \code{\link{rvgt.range.marginal}}.}
+       result of a previous call to routine
+       \code{\link{rvgt.range.marginal}}.}
 
 \item{ncores}{enable multicore support for performing tests in
        parallel and for setting timeout.
@@ -37,7 +38,7 @@ the rejection method.}
        \item A positive integer:
              the tests run on \code{ncores} cores in parallel.
              Notice that \code{ncores=1L} is possible.
-             Although then only one core is used the behavior
+             Then only one core is used but the behavior
              is different from \code{ncores=NULL}.
        \item \code{0L}:
              the number of available cores is autodetected by means of
