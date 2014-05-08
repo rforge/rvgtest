@@ -10,9 +10,9 @@ coord2pos(coord, dims)
 pos2coord(pos, dims)
 }
 \arguments{
-\item{coord}{vector of coordinates (vector of integers)}
+\item{coord}{vector of coordinates. (vector of integers)}
 
-\item{dims}{dimensions of the array (vector of integers).}
+\item{dims}{dimensions of the array. (vector of integers)}
 
 \item{pos}{position in underlying vector (integer).}
 }

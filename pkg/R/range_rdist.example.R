@@ -18,7 +18,7 @@
 ##' be used with all range tests that make use of engine
 ##' \code{\link{rvgt.range.engine}}.
 ##'
-##' This prototype shows all obligatory and optional argument to 
+##' This function shows all obligatory and optional arguments to 
 ##' \code{rdist} as well as all possible return values and attributes that
 ##' are required by at least one of some tests.
 ##'
@@ -31,13 +31,13 @@
 ##' function. Its values have to be passed by 
 ##' means of argument \code{r.params} to routine
 ##' \code{\link{rvgt.range.engine}}. Of course there need not be such
-##' a parameter and there also can be no more than one such parameter.
+##' a parameter and there also can be more than one such parameter.
 ##'
 ##' Argument \code{show.properties} is used to enable storing properties
 ##' of the generator as attributes of the returned random sample.
 ##'
-##' Although this example generator returns beta random variates it only demonstrates
-##' the API for \code{rdist}.
+##' Although this example generator returns beta random variates it
+##' only demonstrates the API for \code{rdist}.
 ##'
 ## --------------------------------------------------------------------------
 ##'
@@ -57,16 +57,16 @@
 ##'
 ##  Arguments:
 ##' @param n
-##'        size of random sample (number).
+##'        size of random sample. (numeric)
 ##' @param shape1
-##'        parameter 1 for distribution (number).
+##'        parameter 1 for distribution. (numeric)
 ##' @param shape2
-##'        parameter 2 for distribution (number).
+##'        parameter 2 for distribution. (numeric)
 ##' @param kind
 ##'        parameter for generator (independent from the
-##'        parameter for the distribution (number).
+##'        parameter for the distribution. (numeric)
 ##' @param show.properties
-##'        if TRUE properties of the generator and the generated
+##'        if \code{TRUE} properties of the generator and the generated
 ##'        samples (like the rejection constant) should be stored
 ##'        as attributes of the returned vector.
 ##' 
@@ -76,7 +76,7 @@
 ##' The function returns an array of size \code{n} that contains the
 ##' requested random sample. If \code{show.properties=TRUE} then
 ##' properties of the generator are stored as attributes of the
-##' returened vector. These are properties are required by (or at least
+##' returned vector. These properties are required by (or are at least
 ##' optional for) some range tests.
 ##' Currently the following properties (attributes) are set:
 ##' \describe{

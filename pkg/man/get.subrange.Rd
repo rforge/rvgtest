@@ -20,7 +20,7 @@ Alternatively, lower and upper bound can be given as a pair of
 doubles when the name of the parameter is postfixed by
 \code{.lim}.}
 
-\item{drop}{if TRUE then dimensions with 1 entry are removed (boolean).}
+\item{drop}{if TRUE then dimensions with 1 entry are removed. (logical)}
 }
 \value{
 An object of class \code{"rvgt.range"} that contains the subset
@@ -43,7 +43,7 @@ in order to visualize the results.
 
 The submatrix corresponds to parameter values that are given by
 named entries in a list given by argument \code{sub.params}.
-Each of its entry must correspond to a name in list
+Each of its entries must correspond to a name in list
 \code{obj$dist.params} or list \code{obj$r.params}.
 The subset can be selected by either
 \itemize{

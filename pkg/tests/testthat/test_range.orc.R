@@ -50,9 +50,10 @@ test_that("[orc-001] calling rvgt.range.orc", {
 
         ## test rejection constants
         msg <- "ERROR: rejection constant too small!!!!"
-        expect_warning(orc <- rvgt.range.orc(rdist=myrbeta, dist.params=dp,
-                              duration=0.01, gen.time=mgt, verbose=FALSE),  msg)
+        expect_warning(orc <- rvgt.range.orc(gen.data=mgt, duration=0.01, verbose=FALSE),  msg)
 
+        ## FIXME: rdist defaults
+        
         expect_true(is.na(orc$data[1]))
         expect_true(is.infinite(orc$data[2]) && orc$data[2] > 0)
         expect_true(is.infinite(orc$data[3]) && orc$data[3] > 0)
@@ -80,39 +81,38 @@ test_that("[orc-i01] calling rvgt.range.orc with invalid arguments: show.propert
                                   )
 
         ## show.properties
-        msg <- "'rdist' must have argument 'show.properties'."
-        expect_error( rvgt.range.orc(
-          rdist=rnorm, dist.params=dp, gen.time=emgt), msg)
+        msg <- "'rdist' must accept argument 'show.properties'."
+        expect_error( rvgt.range.orc( gen.data=emgt), msg)
 
         ## property 'trc'
         msg <- "returned value of 'rdist' must have attribute 'trc'."
         myrnorm <- function(n,mean,sd,show.properties) { rnorm(n,mean,sd) }
         expect_error( rvgt.range.orc(
-          rdist=myrnorm, dist.params=dp, gen.time=emgt),  msg)
+          gen.data=emgt, rdist=myrnorm),  msg)
 
         ## property 'orc'
         msg <- "returned value of 'rdist' must have attribute 'orc'."
         myrnorm <- function(n,mean,sd,show.properties) {
                 X <- rnorm(n,mean,sd); attr(X,"trc") <- 1.23; X }
         expect_error( rvgt.range.orc(
-          rdist=myrnorm, dist.params=dp, gen.time=emgt),  msg)
+          gen.data=emgt, rdist=myrnorm),  msg)
 })
 
-test_that("[orc-i02] calling rvgt.range.orc with invalid arguments: gen.time", {
-        ## gen.time
+test_that("[orc-i02] calling rvgt.range.orc with invalid arguments: gen.data", {
+        ## gen.data
 
         myrnorm <- function(n,mean,sd,show.properties) {
                 X <- rnorm(n,mean,sd);
                 attr(X,"trc") <- 1.23; attr(X,"orc") <- 1.23;
                 X }
 
-        msg <- "argument \"gen.time\" is missing, with no default"
+        msg <- "argument \"gen.data\" is missing, with no default"
         expect_error( rvgt.range.orc(
           rdist=myrnorm, dist.params=list(mean=1:2,sd=1:2)), msg)
 
-        msg <- "Argument 'gen.time' must be of class \"rvgt.range.time\"."
+        msg <- "Argument 'gen.data' must be of class \"rvgt.range.time\"."
         expect_error( rvgt.range.orc(
-          rdist=myrnorm, dist.params=list(mean=1:2,sd=1:2), gen.time=1), msg)
+          gen.data=1, rdist=myrnorm, dist.params=list(mean=1:2,sd=1:2)), msg)
 
 })
 

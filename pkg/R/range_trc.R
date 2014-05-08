@@ -65,20 +65,17 @@
 ##' 
 ## --------------------------------------------------------------------------
 
-rvgt.range.trc <- function (rdist, dist.params, r.params=list(), 
+rvgt.range.trc <- function (gen.data=NULL, rdist, dist.params, r.params=list(), 
                             ncores=NULL, timeout=Inf, verbose=FALSE) {
         ## ..................................................................
 
-        ## Function 'rdist' must have argument 'show.properties'
-        if (is.null(formals(rdist)$show.properties)) {
-                stop("'rdist' must have argument 'show.properties').")
-        }
-        
-        rvgt.range.engine(rdist = rdist,
+        rvgt.range.engine(gen.data = gen.data,
+                          rdist = rdist,
                           dist.params = dist.params,
                           r.params = r.params,
                           test.routine = .run.trc,
                           test.class = "prop.trc",
+                          needs.properties = TRUE,
                           ncores = ncores,
                           timeout = timeout,
                           timeout.val = NA_real_,

@@ -23,8 +23,10 @@
 ##' The scheduled sampling time for a particular combination of parameters
 ##' is given by parameter \code{duration}. Notice that it must not be too
 ##' small compared to the resolution of the system clock.
-##' The required sample size is then estimated in a sequence of tries where
-##' the sample size is increasing after each run.
+##' The required sample size is then estimated in a sequence of trials where
+##' the sample size is \emph{increased} after each run.
+##' (So the first guess of the marginal generation time should be
+##' rather too large than too small.)
 ##' This iterative process is stopped if the total running time is close to
 ##' \code{duration}.
 ##'
@@ -82,9 +84,10 @@
 ##' @inheritParams rvgt.range.engine
 ##' 
 ##' @param repetitions
-##'        number of repetitions of the test. Then the median of the
-##'        test results is used to estimate the setup time
-##'        (positive integer).
+##'        number of repetitions of the test. (positive integer)
+##' 
+##'        The marginal generation time is estimated by the median of
+##'        all test results.
 ##'
 ## --------------------------------------------------------------------------
 ##'
@@ -97,8 +100,9 @@
 ##' 
 ## --------------------------------------------------------------------------
 
-rvgt.range.setup <- function (rdist, dist.params, r.params=list(), 
-                              duration=0.1, gen.time=duration, repetitions=1L,
+rvgt.range.setup <- function (gen.data=NULL,
+                              rdist, dist.params, r.params=list(), 
+                              duration=0.1, gen.time, repetitions=1L,
                               ncores=NULL, timeout=Inf, verbose=FALSE) {
         ## ..................................................................
 
@@ -112,7 +116,8 @@ rvgt.range.setup <- function (rdist, dist.params, r.params=list(),
 
         test.routine <- if (isTRUE(repetitions > 1L)) .run.setup.reps else .run.setup.single
         
-        rvgt.range.engine(rdist = rdist,
+        rvgt.range.engine(gen.data = gen.data,
+                          rdist = rdist,
                           dist.params = dist.params,
                           r.params = r.params,
                           test.routine = test.routine,

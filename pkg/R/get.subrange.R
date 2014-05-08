@@ -26,7 +26,7 @@
 ##'
 ##' The submatrix corresponds to parameter values that are given by
 ##' named entries in a list given by argument \code{sub.params}.
-##' Each of its entry must correspond to a name in list
+##' Each of its entries must correspond to a name in list
 ##' \code{obj$dist.params} or list \code{obj$r.params}.
 ##' The subset can be selected by either
 ##' \itemize{
@@ -99,7 +99,7 @@
 ##'        doubles when the name of the parameter is postfixed by
 ##'        \code{.lim}.
 ##' @param drop
-##'        if TRUE then dimensions with 1 entry are removed (boolean).
+##'        if TRUE then dimensions with 1 entry are removed. (logical)
 ##'
 ## --------------------------------------------------------------------------
 ##'

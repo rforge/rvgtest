@@ -449,7 +449,7 @@ context("[rvgt.range.engine] - expected marginal generation times")
 
 ## --------------------------------------------------------------------------
 
-test_that("[pre-101] emgt is default", {
+test_that("[pre-101] emgt is 'duration'", {
         dp <- list(alpha=c(1,2),beta=c(3,4,5))
         res <- rvgt.range.engine(rdist=rnorm,
                                  dist.params=dp,
@@ -465,7 +465,7 @@ test_that("[pre-101] emgt is default", {
 
 })
 
-test_that("[pre-102] emgt is numeric", {
+test_that("[pre-102] emgt is 'gen.time'", {
         dp <- list(alpha=c(1,2),beta=c(3,4,5))
         res <- rvgt.range.engine(rdist=rnorm,
                                  dist.params=dp,
@@ -493,11 +493,9 @@ test_that("[pre-103] emgt is object of class 'rvgt.range.time'", {
                                   )
         
         ## now rerun with 'emgt' as expected generation times
-        res <- rvgt.range.engine(rdist=rnorm,
-                                 dist.params=dp,
+        res <- rvgt.range.engine(gen.data=emgt,
                                  test.routine=tremgt,
-                                 test.class="testemgt",
-                                 gen.time=emgt
+                                 test.class="testemgt"
                                  )
         r <- res$data
         re <- rep(12345,6)
@@ -505,6 +503,31 @@ test_that("[pre-103] emgt is object of class 'rvgt.range.time'", {
         dimnames(re) <- dp
         expect_identical(r, re)
 
+        
+        res <- rvgt.range.engine(gen.data=emgt,
+                                 dist.params=dp,
+                                 test.routine=tremgt,
+                                 test.class="testemgt"
+                                 )
+        r <- res$data
+        re <- rep(12345,6)
+        dim(re) <- c(2L,3L)
+        dimnames(re) <- dp
+        expect_identical(r, re)
+
+        dp1 <- list(mean=c(2),sd=c(3,5))
+        res <- rvgt.range.engine(gen.data=emgt,
+                                 dist.params=dp1,
+                                 test.routine=tremgt,
+                                 test.class="testemgt"
+                                 )
+        r <- res$data
+        re <- rep(12345,2)
+        dim(re) <- c(1L,2L)
+        dimnames(re) <- dp1
+        expect_identical(r, re)
+
+        
 })
 
 ## --------------------------------------------------------------------------
@@ -533,9 +556,9 @@ test_that("[pre-201] extract 'rdist', 'dist.params', 'r.params'", {
                                   )
 
         ## now extract 'rdist' from 'emgt'
-        res <- rvgt.range.engine(test.routine=tr,
-                                 test.class="testgentime",
-                                 gen.time=emgt
+        res <- rvgt.range.engine(gen.data=emgt,
+                                 test.routine=tr,
+                                 test.class="testgentime"
                                  )
 
         r <- res$data
@@ -553,20 +576,32 @@ context("[rvgt.range.engine] - Invalid arguments")
 
 ## --------------------------------------------------------------------------
 
+test_that("[pre-i00] calling rvgt.range.engine with invalid arguments: gen.data", {
+        ## 'gen.data'
+        msg <- "Argument 'gen.data' must be of class 'rvgt.range.time'"
+        expect_error(rvgt.range.engine(gen.data=1),  msg)
+        expect_error(rvgt.range.engine(gen.data=NA),  msg)
+        expect_error(rvgt.range.engine(gen.data=list()),  msg)
+})
+
 test_that("[pre-i01] calling rvgt.range.engine with invalid arguments: rdist", {
         ## RVG 'rdist'
-        msg <- "RVG 'rdist' is missing or invalid"
+        msg <- "RVG 'rdist' is missing, with no default"
         expect_error(rvgt.range.engine(
           dist.params=list(a=1:2)), msg)
+        
+        msg <- "RVG 'rdist' is invalid"
         expect_error(rvgt.range.engine(
           rdist=1:2, dist.params=list(a=1:2)),  msg)
 })
 
 test_that("[pre-i02] calling rvgt.range.engine with invalid arguments: dist.params", {
         ## parameters for distribution
-        msg <- "Argument 'dist.params' missing or invalid"
+        msg <- "Argument 'dist.params' is missing, with no default"
         expect_error(rvgt.range.engine(
           rdist=rnorm),  msg)
+
+        msg <- "Argument 'dist.params' invalid"
         expect_error(rvgt.range.engine(
           rdist=rnorm, dist.params=c(1:2,3:4)),  msg)
         expect_error(rvgt.range.engine(
@@ -605,7 +640,13 @@ test_that("[pre-i04] calling rvgt.range.engine with invalid arguments: gen.time"
           rdist=rnorm, dist.params=list(a=1:2,b=3:4), gen.time=0,
           test.routine=trunit, test.class="test"),  msg)
 
-        msg <- "Object 'gen.time' contains incompatible element 'dist.params'"
+        dp <- list(mean=c(1,2),sd=c(3,4,5))
+        emgt <- rvgt.range.engine(
+            rdist=rnorm, dist.params=dp, test.routine=tremgt,
+            test.class="time.marginal", gen.time=12345 )
+        expect_error(rvgt.range.engine(
+            rdist=rnorm, dist.params=dp, test.routine=tremgt,
+            test.class="dummy", gen.time=emgt),  msg)
 
         ## create object of class "rvgt.range.time"
         dp0 <- list(mean=c(1,2),sd=c(3,4,5))
@@ -613,20 +654,15 @@ test_that("[pre-i04] calling rvgt.range.engine with invalid arguments: gen.time"
           rdist=rnorm, dist.params=dp0, test.routine=tremgt,
           test.class="time.marginal", gen.time=12345 )
 
+        msg <- "Cannot find entry '11' in parameter 'mean'"
         dp1 <- list(mean=c(1,2,11),sd=c(3,4,5))
-        expect_error(rvgt.range.engine(
-          rdist=rnorm, dist.params=dp1, test.routine=tremgt,
-          test.class="dummy", gen.time=emgt),  msg)
+        expect_warning(rvgt.range.engine(
+          gen.data=emgt, dist.params=dp1, test.routine=tremgt, test.class="dummy"),  msg)
 
+        msg <- "Parameter names in 'sub.params' must occur in 'obj'"   
         dp2 <- list(mu=c(1,2),sd=c(3,4,5))
         expect_error(rvgt.range.engine(
-          rdist=rnorm, dist.params=dp2, test.routine=tremgt,
-          test.class="dummy", gen.time=emgt),  msg)
-
-        dp3 <- list(sd=c(3,4,5),mean=c(1,2))
-        expect_error(rvgt.range.engine(
-          rdist=rnorm, dist.params=dp3, test.routine=tremgt,
-          test.class="dummy", gen.time=emgt),  msg)
+          gen.data=emgt, dist.params=dp2, test.routine=tremgt, test.class="dummy"),  msg)
 })
 
 test_that("[pre-i05] calling rvgt.range.engine with invalid arguments: test.routine", {
@@ -662,7 +698,16 @@ test_that("[pre-i08] calling rvgt.range.engine with invalid arguments: test.para
           test.routine=trunit, test.class="a", test.params=1),  msg)
 })
 
-test_that("[pre-i08] calling rvgt.range.engine with invalid arguments: duration", {
+test_that("[pre-i09] calling rvgt.range.engine with invalid arguments: needs.properties", {
+        ## needs.properties
+        msg <- "'rdist' must accept argument 'show.properties'."
+        expect_error(rvgt.range.engine(
+          rdist=rnorm, dist.params=list(mean=1:2,sd=3:4),
+          needs.properties=TRUE,
+          test.routine=trunit, test.class="a", test.params=list(a=1)),  msg)
+})
+
+test_that("[pre-i10] calling rvgt.range.engine with invalid arguments: duration", {
         ## duration
         msg <- "Argument 'duration' invalid"
         expect_error(rvgt.range.engine(
@@ -677,7 +722,7 @@ test_that("[pre-i08] calling rvgt.range.engine with invalid arguments: duration"
 })
 
 if (.Platform$OS.type == "unix") {
-test_that("[pre-i10] calling rvgt.range.engine with invalid arguments: ncores", {
+test_that("[pre-i11] calling rvgt.range.engine with invalid arguments: ncores", {
         ## ncores
         msg <- "Argument 'ncores' must be non-negative."
         expect_error(rvgt.range.engine(
@@ -687,7 +732,7 @@ test_that("[pre-i10] calling rvgt.range.engine with invalid arguments: ncores", 
 }
 
 if (.Platform$OS.type != "unix") {
-test_that("[pre-i11] calling rvgt.range.engine with invalid arguments: ncores", {
+test_that("[pre-i12] calling rvgt.range.engine with invalid arguments: ncores", {
         ## ncores
         msg <- "Multicore supported is not available on this plattform."
         expect_error(rvgt.range.engine(
@@ -696,7 +741,7 @@ test_that("[pre-i11] calling rvgt.range.engine with invalid arguments: ncores", 
 })
 }
 
-test_that("[pre-i12] calling rvgt.range.engine with invalid arguments: timeout", {
+test_that("[pre-i13] calling rvgt.range.engine with invalid arguments: timeout", {
         ## timeout
         msg <- "Argument 'timeout' invalid."
         expect_error(rvgt.range.engine(
@@ -708,7 +753,7 @@ test_that("[pre-i12] calling rvgt.range.engine with invalid arguments: timeout",
 })
 
 if (.Platform$OS.type != "unix") {
-test_that("[pre-i13] calling rvgt.range.engine with invalid arguments: timeout", {
+test_that("[pre-i14] calling rvgt.range.engine with invalid arguments: timeout", {
         ## ncores
         msg <- "Timeout is not supported on this plattform."
         expect_error(rvgt.range.engine(
@@ -717,7 +762,17 @@ test_that("[pre-i13] calling rvgt.range.engine with invalid arguments: timeout",
 })
 }
 
-test_that("[pre-i14] calling rvgt.range.engine with invalid arguments: verbose", {
+if (.Platform$OS.type == "unix") {
+test_that("[pre-i15] calling rvgt.range.engine with invalid arguments: timeout.val", {
+        ## ncores
+        msg <- "Argument 'timeout.val' invalid."
+        expect_error(rvgt.range.engine(
+          rdist=rnorm, dist.params=list(a=1:2,b=3:4),
+          test.routine=trunit, test.class="a", ncores=1L, timeout=1, timeout.val="error"),  msg)
+})
+}
+
+test_that("[pre-i16] calling rvgt.range.engine with invalid arguments: verbose", {
         ## verbose
         msg <- "Argument 'verbose' invalid"
         expect_error(rvgt.range.engine(
@@ -726,7 +781,7 @@ test_that("[pre-i14] calling rvgt.range.engine with invalid arguments: verbose",
 })
 
 if (.Platform$OS.type == "unix") {
-test_that("[pre-i15] calling rvgt.range.engine with invalid arguments: verbose", {
+test_that("[pre-i17] calling rvgt.range.engine with invalid arguments: verbose", {
         ## verbose
         msg <- "Argument 'verbose' ignored when 'ncores' > 1"
         expect_message(rvgt.range.engine(

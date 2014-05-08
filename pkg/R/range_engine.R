@@ -17,7 +17,7 @@
 ##' encoded in function \code{test.routine} on the output of random variate
 ##' generator \code{rdist} for a given set of parameter values.
 ##' This set is provided by arguments \code{dist.params} and \code{r.params}
-##' where each entry of this list corresponds to a parameter and holds the
+##' where each entry of these lists corresponds to a parameter and holds the
 ##' vector of possible values.
 ##'
 ##' Detailed description of the arguments of this functions are given in the
@@ -79,21 +79,21 @@
 ##' particular combination of parameter values.
 ##' It has to accept the following arguments:
 ##' \describe{
-##'   \item{\code{rdist}}{
-##'         random number generator of distribution (function).}
-##'   \item{\code{dist.params}}{
-##'         parameter values for distribution (list).}
-##'   \item{\code{r.params}}{
-##'         additional arguments for \code{rdist} (list).}
-##'   \item{\code{emgt}}{
+##'   \item{rdist:}{
+##'         random number generator of distribution. (function)}
+##'   \item{dist.params:}{
+##'         parameter values for distribution. (list)}
+##'   \item{r.params:}{
+##'         additional arguments for \code{rdist}. (list)}
+##'   \item{emgt:}{
 ##'         expected (approximate) marginal generation time of
-##'         \code{rdist} (in seconds).}
-##'   \item{\code{test.params}}{
-##'         additional arguments for \code{test.routine} (list).}
-##'   \item{\code{duration}}{
-##'         scheduled duration for the test (in seconds).}
-##'   \item{\code{verbose}}{
-##'         if TRUE show progress (logical).}
+##'         \code{rdist} in seconds. (numeric)}
+##'   \item{test.params:}{
+##'         additional arguments for \code{test.routine}. (list)}
+##'   \item{duration:}{
+##'         scheduled duration for the test in seconds. (numeric)}
+##'   \item{verbose:}{
+##'         if \code{TRUE} show progress. (logical)}
 ##' }
 ##' Thus the function prototype reads
 ##' \code{test.routine(rdist, dist.params, r.params, emgt, test.params, duration, verbose)}.
@@ -180,34 +180,59 @@
 ## --------------------------------------------------------------------------
 ##'
 ##  Arguments:
+##' @param gen.data
+##'        object of class \code{"rvgt.range.time"} that holds the
+##'        result of a previous call to \code{\link{rvgt.range.marginal}}
+##'        or \code{\link{rvgt.range.setup}}.
+##'        It provides timing information and is used as defaults for some
+##'        of the other arguments for this routine, see below.
 ##' @param rdist
-##'        random number generator for distribution (function).
+##'        random number generator for distribution,
+##'        default is read from \code{gen.data}.
+##'        (function)
 ##' @param dist.params
-##'        parameters for distribution (non-empty list).
+##'        parameters for distribution, 
+##'        default is read from \code{gen.data}.
+##'        (non-empty list)
+##' 
+##'        If both \code{gen.data} and \code{dist.params} are provided, then
+##'        \code{dist.params} is used to extract a subset of parameter values
+##'        from \code{gen.data} via routine \code{\link{get.subrange}}.
 ##' @param r.params
-##'        additional arguments for \code{rdist} (list).
+##'        additional arguments for \code{rdist},
+##'        default read from \code{gen.data}.
+##'        (list)
+##' 
+##'        If both \code{gen.data} and \code{r.params} are provided, then
+##'        \code{r.params} is used to extract a subset of parameter values
+##'        from \code{gen.data} via routine \code{\link{get.subrange}}.
 ##' 
 ##' @param test.routine
-##'        routine for performing tests (function).
+##'        routine for performing tests. (function)
 ##' @param test.class
-##'        class of test (character string).
+##'        class of test. (character string)
 ##' @param test.params
-##'        additional arguments for test.routine (list).
+##'        additional arguments for \code{test.routine}. (list)
 ##' @param test.name
-##'        a short description of the test (character string).
+##'        a short description of the test. (character string)
+##' @param needs.properties
+##'        if \code{TRUE} then it is tested whether RVG \code{rdist} accepts
+##'        argument \code{show.properties}. (logical)
 ##' @param duration
-##'        scheduled duration for a single test in seconds (numeric).
+##'        scheduled duration for a single test in seconds. (numeric)
 ##' @param gen.time
 ##'        (approximate) marginal generation time for \code{rdist}.
-##'        It must be either a single positive number (numeric) or
-##'        an object of class \code{"rvgt.range.time"} that holds the
-##'        result of a previous call to routine
-##'        \code{\link{rvgt.range.marginal}}.
+##'        (positive numeric)
+##'
+##'        It has to have length 1.
+##' 
+##'        Default is read from \code{gen.data} which is then an array
+##'        instead of a single number.
 ##'
 ##' @param ncores
 ##'        enable multicore support for performing tests in
 ##'        parallel and for setting timeout.
-##'        The following values are possible:
+##'        The following values are accepted:
 ##'        \itemize{
 ##'        \item \code{NULL}:
 ##'              the tests run sequentially on a single core.
@@ -224,68 +249,73 @@
 ##'        (basically every but Windows OSes).
 ##' 
 ##' @param timeout
-##'        set a timeout in seconds for each test (numeric).
+##'        set a timeout in seconds for each test. (numeric)
+##' 
 ##'        This allows to protect against unexpected long running times
 ##'        or infinite loops.
-##'        It requires multicore support which is enabled by setting
-##'        argument \code{ncores}.
-##'        (When a timeout is set then \code{ncores} is automatically
-##'        set to \code{1L} if it is not already set by the user.) 
+##' 
+##'        It requires multicore support.
+##'        Thus \code{ncores} defaults to \code{1L} (instead of \code{NULL})
+##'        if \code{timeout} is finite.
 ##' @param timeout.val
-##'        value returned if a timeout is reached (numeric or Inf).
+##'        value returned if a timeout is reached.  (numeric)
 ##'
 ##' @param verbose
-##'        if TRUE show progress.
-##'        Ignored when multicore support is enabled and 'ncores' > 1 (logical).
+##'        if \code{TRUE} show progress.
+##'        Ignored when multicore support is enabled and \code{ncores} > 1.
+##'        (logical)
 ##' 
 ## --------------------------------------------------------------------------
 ##'
 ##' @return
 ##' The function returns an object (list) with class attributes
-##' \code{c("rvgt.range.testclass","rvgt.range"} if \emph{testclass} is the string
-##' given by argument \code{test.class}). If string \emph{testclass} contains one
+##' \code{c("rvgt.range.testclass","rvgt.range")} if
+##' \dQuote{testclass} is the string given by argument
+##' \code{test.class}. If string \dQuote{testclass} contains one 
 ##' or more periods \code{.}, then a cascade of class names is created.
 ##' E.g., if \code{test.class="test.foo.bar"} then the class attributes is set to
 ##' \code{c("rvgt.range.test.foo.bar", "rvgt.range.test.foo", "rvgt.range.test", "rvgt.range")}.
 ##' 
-##' The list has the following components:
+##' The object (list) has the following components:
 ##' \item{data}{
 ##'        array that holds the test results for each combination of
-##'        parameter values of the distribution
-##'        (array of numeric values).}
+##'        parameter values of the distribution.
+##'        (array of numeric values)}
 ##' \item{rdist}{
-##'        given function for calling random generator
-##'        (function, copied from input).}
+##'        given function for calling random generator.
+##'        (function, copied from input)}
 ##' \item{rdist.name}{
-##'        name of given function for calling random generator
-##'        (character string copied from input).}
+##'        name of given function for calling random generator.
+##'        (character string copied from input)}
 ##' \item{dist.params}{
-##'        given list of parameter values for the distribution
-##'        (list, copied from input).}
+##'        given list of parameter values for the distribution.
+##'        (list, copied from input)}
 ##' \item{r.params}{
-##'        additional arguments for \code{rdist}
-##'        (list, copied from input).}
+##'        additional arguments for \code{rdist}.
+##'        (list, copied from input)}
 ##' \item{test.class}{
-##'        test class
-##'        (character string, copied from input).}
+##'        test class.
+##'        (character string, copied from input)}
 ##' \item{test.name}{
-##'        a short description of the test
-##'        (character string, copied from input).}
+##'        a short description of the test.
+##'        (character string, copied from input)}
 ##' \item{started}{
-##'        date and time when tests have been started
+##'        date and time when tests have been started.
 ##'        (object of class \code{"POSIXct"},
-##'        see \code{\link{Sys.time}}).}
+##'        see \code{\link{Sys.time}})}
 ##' \item{runtime}{
-##'        total running time of all tests
+##'        total running time of all tests.
 ##'        (object of class \code{"difftime"},
-##'        see \code{\link{difftime}}).}
+##'        see \code{\link{difftime}})}
 ##'
 ## --------------------------------------------------------------------------
 
-rvgt.range.engine <- function (rdist, dist.params, r.params=list(), 
+rvgt.range.engine <- function (gen.data=NULL,
+                               rdist, dist.params, r.params=list(), 
                                test.routine, test.class,
                                test.params=list(), test.name=NULL,
-                               duration=0.1, gen.time=duration,
+                               needs.properties=FALSE,
+                               duration=0.1, gen.time,
                                ncores=NULL, timeout=Inf, timeout.val=Inf,
                                verbose=FALSE) {
         ## ..................................................................
@@ -293,51 +323,85 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
         ## --- timing information
 
         started <- Sys.time()
-        
-        ## --- arguments 'rdist', 'dist.params' and 'r.params'
 
-        ## these arguments may be read from gen.time.
-        ## So we set them to NULL if they are missing.
+        ## --- 'gen.data'
 
-        if (missing(rdist)) { rdist <- NULL }
-        if (missing(dist.params)) { dist.params <- NULL }
+        if (! (is.null(gen.data) || is(gen.data, "rvgt.range.time")) )
+                stop("Argument 'gen.data' must be of class 'rvgt.range.time'")
 
-        if (is(gen.time, "rvgt.range.time")) {
-                ## we extract the parameters from object 'gen.time'
-                if (is.null(rdist)) {
-                        rdist <- gen.time$rdist
-                }
-                if (is.null(dist.params)) {
-                        dist.params <- gen.time$dist.params
-                }
-                if (identical(r.params, list())) {
-                        r.params <- gen.time$r.params
-                }
+        ## --- argument 'rdist'
+
+        ## set defaults
+        if (missing(rdist)) {
+            if (!is.null(gen.data))
+                rdist <- gen.data$rdist
+            else
+                stop("RVG 'rdist' is missing, with no default")
         }
+        
+        if (!is.function(rdist))
+                stop("RVG 'rdist' is invalid")
 
-        ## --- arguments for RVG
+        ## --- must function 'rdist' have argument 'show.properties' ?
 
-        if (is.null(rdist) || !is.function(rdist))
-                stop("RVG 'rdist' is missing or invalid")
+        if (isTRUE(needs.properties)) {
+            if (is.null(formals(rdist)$show.properties))
+                stop("'rdist' must accept argument 'show.properties'.")
+        }
+        
+        ## --- parameters for distribution (used by 'rdist')
+
+        sub.params <- list()
+
+        if (missing(dist.params)) dist.params <- NULL
+        
+        ## Case: neither 'dist.params' nor 'gen.data' is provided
+        if (is.null(dist.params) && is.null(gen.data))
+            stop ("Argument 'dist.params' is missing, with no default")
+
+        ## Case: both 'dist.params' and 'gen.data' are provided
+        if (!is.null(dist.params) && !is.null(gen.data)) 
+            sub.params <- c(sub.params, dist.params)
+
+        ## Case: 'dist.params' is missing but 'gen.data' is provided
+        if (is.null(dist.params) && !is.null(gen.data))
+            ## use defaults from 'gen.data'
+            dist.params <- gen.data$dist.params
+
+        ## check argument
+        if (!is.list(dist.params) || identical(length(dist.params), 0L))
+            stop("Argument 'dist.params' invalid")
+            
+        if (is.null(names(dist.params)) || "" %in% names(dist.params))
+            ## distribution has unnamed parameters
+            stop("List entries in 'dist.params' must have names")
+            
+        unsorted <- lapply(1:length(dist.params), function(i){is.unsorted(dist.params[[i]])})
+        if (any(unsorted==TRUE))
+            stop("List entries in 'dist.params' must be sorted")
+
+        ## --- additional parameters for 'rdist' 
+
+        ## Case: both 'r.params' and 'gen.data' are provided
+        if (!identical(r.params, list()) && !is.null(gen.data)) 
+            sub.params <- c(sub.params, r.params)
+
+        if (identical(r.params, list()) && !is.null(gen.data))
+            ## use defaults from 'gen.data'
+            r.params <- gen.data$r.params
 
         if (!is.list(r.params))
                 stop("Argument 'r.params' invalid")
-                
-        ## --- parameters for distribution (used by 'rdist')
+        
+        ## --- check whether a subset of parameter values is given
 
-        ## check arguments for distributions
-        if (is.null(dist.params) ||
-            !is.list(dist.params) ||
-            identical(length(dist.params), 0L))
-                stop("Argument 'dist.params' missing or invalid")
-                
-        if (is.null(names(dist.params)) || "" %in% names(dist.params))
-                ## distribution has unnamed parameters
-                stop("List entries in 'dist.params' must have names")
-
-        unsorted <- lapply(1:length(dist.params), function(i){is.unsorted(dist.params[[i]])})
-        if (any(unsorted==TRUE))
-                stop("List entries in 'dist.params' must be sorted")
+        if (!identical(sub.params, list())) {
+            if (!isTRUE(all.equal(sub.params, c(gen.data$dist.params, gen.data$r.params)))) {
+                gen.data <- get.subrange(gen.data, sub.params, drop=TRUE)
+                dist.params <- gen.data$dist.params
+                r.params <- gen.data$r.params
+            }
+        }
 
         ## --- arguments for test
 
@@ -370,6 +434,9 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
                 }
         }
         if (timeout > 2^30) timeout <- 2^30  ## we cannot pass Inf to selectChildren
+
+        if (! is.numeric(timeout.val))
+                stop("Argument 'timeout.val' invalid.")
         
         ## --- arguments for multicore support
 
@@ -398,20 +465,28 @@ rvgt.range.engine <- function (rdist, dist.params, r.params=list(),
 
         ## --- expected marginal generation time
 
-        if (is.numeric(gen.time)) {
-                if (! (length(gen.time)==1L && isTRUE(gen.time>0)) )
-                        stop("Argument 'gen.time' invalid")
+        ## check argument
+        if (! missing(gen.time)) {
+            if (! (is.numeric(gen.time) && length(gen.time)==1L && isTRUE(gen.time>0)) )
+                stop("Argument 'gen.time' invalid")
+        }
+        
+        ## set defaults
+        if (missing(gen.time)) {
+            if (!is.null(gen.data))
+                gen.time <- gen.data
+            else
+                gen.time <- duration
+        }
 
+        if (is.numeric(gen.time)) {
                 ## 'gen.time' is a single number:
                 ## use 'gen.time' for each tuple of parameters
                 emgt <- .alloc.data(c(dist.params,r.params), value=gen.time)
 
         } else if (is(gen.time, "rvgt.range.time")) {
-
                 ## 'gen.time' is an object that contains
                 ## marginal generation times:
-                if (! isTRUE(all.equal(dist.params, gen.time$dist.params)))
-                        stop("Object 'gen.time' contains incompatible element 'dist.params'")
                 emgt <- gen.time$data
 
         } else {

@@ -1,5 +1,9 @@
 
-Version 0.10.0: 2014-??-??
+Version 0.10.0: 2014-05-05
+
+	- rvgt.range.engine():
+	  added new argument 'gen.data'; argument 'gen.time'
+	  now has to be either a single number or omitted.
 
 	- tests:
 	  moved unit tests from 'inst/unittests' to 'tests/testthat'.
@@ -8,7 +12,7 @@ Version 0.10.0: 2014-??-??
 Version 0.9.0: 2014-03-21
 
 	- get.subrange():
-          changed argument sub.params.
+          changed argument 'sub.params'.
 
 	- internal: 
           replaced package 'parallel' by package 'multicore'

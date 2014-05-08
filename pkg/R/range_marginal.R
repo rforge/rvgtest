@@ -21,54 +21,65 @@
 ##'
 ##' The scheduled sampling time for a particular combination of parameters
 ##' is given by parameter \code{duration}. Notice that it must not be too
-##' small compared to the resolution of the system clock.
+##' small compared to the resolution of the system clock (typically
+##' 0.001 seconds).
 ##'
 ##' The required sample size is estimated using the given \code{duration}
-##' and a (approximate) estimate of the marginal generation time.
+##' and an (approximate) estimate of the marginal generation time.
 ##' As the latter is not known at the first call to this routine we have a
 ##' chicken-and-egg situation. Thus one has to provide an (at least rough)
-##' estimate for the marginal generation time via argument \code{gen.time}.
-##' This is either a single numeric value or the result of a pilot run of
-##' routine \code{rvgt.range.marginal}. If no such value is given then
-##' the \code{duration} (which results in a sample of size 1)
-##' is used as a first guess.
-##' This information is then used to estimate the marginal running time in
-##' a sequence of tries where the sample size is \emph{increasing} after
-##' each run when the total running time for the sample is too small.
-##' (So the first guess of the marginal generation time should be rather too
-##' large than too small.)
-##' This iterative process is stopped if the total running time is close to
-##' \code{duration}.
+##' estimate for the marginal generation time via argument
+##' \code{gen.time}.
+##' It has to be a single positive numeric value. However, if there is
+##' already the result of a previous run of routine
+##' \code{rvgt.range.marginal} (e.g., a pilot study) then it
+##' is recommended to pass its result via argument \code{gen.data}
+##' (instead of providing argument \code{gen.time}).
+##' If neither \code{gen.time} nor \code{gen.data} is given, then 
+##' the \code{duration} is used as a first guess.
+##'
+##' The timing information is then used to estimate the marginal
+##' running time in a sequence of trials where the sample size is
+##' \emph{increased} after each run when the total running time for
+##' the sample is too small. 
+##' (So the first guess of the marginal generation time should be
+##' rather too large than too small.)
+##' This iterative process is stopped if the total running time is
+##' close to \code{duration}.
 ##'
 ##' \emph{Notice:}
-##' if \code{gen.time} contains the result of a pilot run, then tests
-##' for parameter values where the result was \code{NA} (i.e., the setup failed)
-##' or \code{Inf} (timeout was reached) are not performed any more and
-##' the old results are just copied.
+##' if \code{gen.data} is provided instead of \code{gen.time}, then
+##' tests for parameter values where the result was \code{NA} or
+##' \code{NaN} (i.e., the setup failed) or \code{Inf} (timeout was
+##' reached) are not performed any more and the old results are just
+##' copied.
 ##' 
 ##' An alternative approach works for random number generators that are based
 ##' on the rejection method. Then it is assumed that the running time for a
 ##' single acceptance-rejection loop does not depend on the parameters of the
-##' distribution and is provide by argument \code{el.time}.
+##' distribution. It can be provided by means of argument \code{el.time}.
 ##' Moreover, random variate generator \code{rdist} has to return a sample
 ##' with attribute \code{"trc"} (theoretical rejection constant) when
-##' argument \code{show.properties=TRUE}. Then the expected running time
-##' is approximated by the product of these two values.
+##' argument \code{show.properties=TRUE} is present. Then the expected
+##' running time is approximated by the product of these two values.
 ##'
-##' Notice that \code{el.time} is always used (instead of \code{gen.time})
-##' if it given. 
+##' Notice that \code{el.time} is always used (instead of
+##' \code{gen.time} or \code{gen.data}) if it given. 
 ##'
 ##' Timings can vary considerably. In order to get a more robust estimate
-##' one can repeat this test several times and use the median of all timings.
+##' one can repeat this test several times and use the median of all runs.
 ##' This can be achieved by means of argument \code{repetitions}.
 ##'
 ##' A big issue of tests on a large range of parameter settings is that the
 ##' running times may not be known in advance. Thus the total running time of
 ##' the test suite may be extremely long due to some unexpected long runs
-##' for some tests. 
+##' for some tests.
 ##' In order to avoid such problems the running times for each test can be
-##' limited by means of argument \code{timeout} which required to enable
-##' multicore support using \code{ncores}.
+##' limited by means of argument \code{timeout} which sets an upper limit
+##' for the running time of each test. Notice, however, that this
+##' feature requires multicore support and is thus available only on
+##' POSIX-compliant OSes (i.e., not on Windows OSes). It can be
+##' enabled by means of argument \code{ncores}.
 ##'
 ## --------------------------------------------------------------------------
 ##'
@@ -111,9 +122,10 @@
 ##' 
 ##' @param el.time
 ##'        running time for an accept-reject loop of a generator based on
-##'        the rejection method.
+##'        the rejection method. (numeric)
 ##' @param repetitions
-##'        number of repetitions of the test (positive integer).
+##'        number of repetitions of the test. (integer)
+##' 
 ##'        The marginal generation time is estimated by the median of
 ##'        all test results.
 ##'
@@ -128,8 +140,9 @@
 ##' 
 ## --------------------------------------------------------------------------
 
-rvgt.range.marginal <- function (rdist, dist.params, r.params=list(), el.time=NA,
-                                 duration=0.1, gen.time=duration, repetitions=1L,
+rvgt.range.marginal <- function (gen.data=NULL,
+                                 rdist, dist.params, r.params=list(),
+                                 el.time=NA, duration=0.1, gen.time, repetitions=1L,
                                  ncores=NULL, timeout=Inf, verbose=FALSE) {
         ## ..................................................................
 
@@ -159,7 +172,8 @@ rvgt.range.marginal <- function (rdist, dist.params, r.params=list(), el.time=NA
 
         test.routine <- if (isTRUE(repetitions > 1L)) .run.mgt.reps else .run.mgt.single
         
-        rvgt.range.engine(rdist = rdist,
+        rvgt.range.engine(gen.data = gen.data,
+                          rdist = rdist,
                           dist.params = dist.params,
                           r.params = r.params,
                           test.routine = test.routine,

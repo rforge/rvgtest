@@ -46,9 +46,9 @@
 ##  Arguments:
 ##
 ##' @param coord
-##'        vector of coordinates (vector of integers)
+##'        vector of coordinates. (vector of integers)
 ##' @param dims 
-##'        dimensions of the array (vector of integers).
+##'        dimensions of the array. (vector of integers)
 ##' 
 ## --------------------------------------------------------------------------
 ##'

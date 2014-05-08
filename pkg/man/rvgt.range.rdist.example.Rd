@@ -6,16 +6,16 @@
 rvgt.range.rdist.example(n, shape1, shape2, kind, show.properties = FALSE)
 }
 \arguments{
-\item{n}{size of random sample (number).}
+\item{n}{size of random sample. (numeric)}
 
-\item{shape1}{parameter 1 for distribution (number).}
+\item{shape1}{parameter 1 for distribution. (numeric)}
 
-\item{shape2}{parameter 2 for distribution (number).}
+\item{shape2}{parameter 2 for distribution. (numeric)}
 
 \item{kind}{parameter for generator (independent from the
-parameter for the distribution (number).}
+parameter for the distribution. (numeric)}
 
-\item{show.properties}{if TRUE properties of the generator and the generated
+\item{show.properties}{if \code{TRUE} properties of the generator and the generated
        samples (like the rejection constant) should be stored
        as attributes of the returned vector.}
 }
@@ -23,7 +23,7 @@ parameter for the distribution (number).}
 The function returns an array of size \code{n} that contains the
 requested random sample. If \code{show.properties=TRUE} then
 properties of the generator are stored as attributes of the
-returened vector. These are properties are required by (or at least
+returned vector. These properties are required by (or are at least
 optional for) some range tests.
 Currently the following properties (attributes) are set:
 \describe{
@@ -45,7 +45,7 @@ implementation of a random variate generator \code{rdist} that can
 be used with all range tests that make use of engine
 \code{\link{rvgt.range.engine}}.
 
-This prototype shows all obligatory and optional argument to
+This function shows all obligatory and optional arguments to
 \code{rdist} as well as all possible return values and attributes that
 are required by at least one of some tests.
 
@@ -58,13 +58,13 @@ Argument \code{kind} is an additional parameter for the generator
 function. Its values have to be passed by
 means of argument \code{r.params} to routine
 \code{\link{rvgt.range.engine}}. Of course there need not be such
-a parameter and there also can be no more than one such parameter.
+a parameter and there also can be more than one such parameter.
 
 Argument \code{show.properties} is used to enable storing properties
 of the generator as attributes of the returned random sample.
 
-Although this example generator returns beta random variates it only demonstrates
-the API for \code{rdist}.
+Although this example generator returns beta random variates it
+only demonstrates the API for \code{rdist}.
 }
 \author{
 Josef Leydold \email{josef.leydold@wu.ac.at}

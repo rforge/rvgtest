@@ -57,13 +57,13 @@
 ##'                            duration = 0.01)
 ##'
 ##' ## test rejection constants
-##' orc <- rvgt.range.orc(rdist = rvgt.range.rdist.example,
+##' orc <- rvgt.range.orc(gen.data = mgt,
 ##'                       dist.params = list(shape1=c(2,3), shape2=2),
-##'                       duration = 0.01, gen.time = mgt)
+##'                       duration = 0.01)
 ##'
 ##' ## print summary
 ##' summary(orc)
-##' 
+## 
 ## --------------------------------------------------------------------------
 ##'
 ##  Arguments:
@@ -83,29 +83,25 @@
 ##' 
 ## --------------------------------------------------------------------------
 
-rvgt.range.orc <- function (rdist, dist.params, r.params=list(), 
-                            duration=0.1, gen.time,
+rvgt.range.orc <- function (gen.data, rdist, dist.params, r.params=list(), 
+                            duration=0.1,
                             ncores=NULL, timeout=Inf, verbose=FALSE) {
         ## ..................................................................
 
-        ## --- function 'rdist' must have argument 'show.properties'
-        if (is.null(formals(rdist)$show.properties)) {
-                stop("'rdist' must have argument 'show.properties').")
-        }
-
-        ## --- argument 'gen.time' must be of class "rvgt.range.time"
-        if (! is(gen.time, "rvgt.range.time")) {
-                stop("Argument 'gen.time' must be of class \"rvgt.range.time\".")
+        ## --- argument 'gen.data' must be of class "rvgt.range.time"
+        if (! is(gen.data, "rvgt.range.time")) {
+                stop("Argument 'gen.data' must be of class \"rvgt.range.time\".")
         }
 
         ## --- run test engine
-        rvgt.range.engine(rdist = rdist,
+        rvgt.range.engine(gen.data = gen.data,
+                          rdist = rdist,
                           dist.params = dist.params,
                           r.params = r.params,
                           test.routine = .run.orc,
                           test.class = "gof.orc",
+                          needs.properties = TRUE,
                           duration = duration,
-                          gen.time = gen.time,
                           ncores = ncores,
                           timeout = timeout,
                           timeout.val = NA_real_,

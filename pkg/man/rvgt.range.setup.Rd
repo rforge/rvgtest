@@ -3,32 +3,55 @@
 \alias{rvgt.range.setup}
 \title{Estimate setup time of random variate generator}
 \usage{
-rvgt.range.setup(rdist, dist.params, r.params = list(), duration = 0.1,
-  gen.time = duration, repetitions = 1L, ncores = NULL, timeout = Inf,
-  verbose = FALSE)
+rvgt.range.setup(gen.data = NULL, rdist, dist.params, r.params = list(),
+  duration = 0.1, gen.time, repetitions = 1L, ncores = NULL,
+  timeout = Inf, verbose = FALSE)
 }
 \arguments{
-\item{repetitions}{number of repetitions of the test. Then the median of the
-       test results is used to estimate the setup time
-       (positive integer).}
+\item{repetitions}{number of repetitions of the test. (positive integer)
 
-\item{rdist}{random number generator for distribution (function).}
+       The marginal generation time is estimated by the median of
+       all test results.}
 
-\item{dist.params}{parameters for distribution (non-empty list).}
+\item{gen.data}{object of class \code{"rvgt.range.time"} that holds the
+result of a previous call to \code{\link{rvgt.range.marginal}}
+or \code{\link{rvgt.range.setup}}.
+It provides timing information and is used as defaults for some
+of the other arguments for this routine, see below.}
 
-\item{r.params}{additional arguments for \code{rdist} (list).}
+\item{rdist}{random number generator for distribution,
+default is read from \code{gen.data}.
+(function)}
 
-\item{duration}{scheduled duration for a single test in seconds (numeric).}
+\item{dist.params}{parameters for distribution,
+       default is read from \code{gen.data}.
+       (non-empty list)
+
+       If both \code{gen.data} and \code{dist.params} are provided, then
+       \code{dist.params} is used to extract a subset of parameter values
+       from \code{gen.data} via routine \code{\link{get.subrange}}.}
+
+\item{r.params}{additional arguments for \code{rdist},
+       default read from \code{gen.data}.
+       (list)
+
+       If both \code{gen.data} and \code{r.params} are provided, then
+       \code{r.params} is used to extract a subset of parameter values
+       from \code{gen.data} via routine \code{\link{get.subrange}}.}
+
+\item{duration}{scheduled duration for a single test in seconds. (numeric)}
 
 \item{gen.time}{(approximate) marginal generation time for \code{rdist}.
-       It must be either a single positive number (numeric) or
-       an object of class \code{"rvgt.range.time"} that holds the
-       result of a previous call to routine
-       \code{\link{rvgt.range.marginal}}.}
+       (positive numeric)
+
+       It has to have length 1.
+
+       Default is read from \code{gen.data} which is then an array
+       instead of a single number.}
 
 \item{ncores}{enable multicore support for performing tests in
        parallel and for setting timeout.
-       The following values are possible:
+       The following values are accepted:
        \itemize{
        \item \code{NULL}:
              the tests run sequentially on a single core.
@@ -44,16 +67,18 @@ rvgt.range.setup(rdist, dist.params, r.params = list(), duration = 0.1,
        Multicore support is only available on POSIX-compliant OSes
        (basically every but Windows OSes).}
 
-\item{timeout}{set a timeout in seconds for each test (numeric).
-This allows to protect against unexpected long running times
-or infinite loops.
-It requires multicore support which is enabled by setting
-argument \code{ncores}.
-(When a timeout is set then \code{ncores} is automatically
-set to \code{1L} if it is not already set by the user.)}
+\item{timeout}{set a timeout in seconds for each test. (numeric)
 
-\item{verbose}{if TRUE show progress.
-       Ignored when multicore support is enabled and 'ncores' > 1 (logical).}
+       This allows to protect against unexpected long running times
+       or infinite loops.
+
+       It requires multicore support.
+       Thus \code{ncores} defaults to \code{1L} (instead of \code{NULL})
+       if \code{timeout} is finite.}
+
+\item{verbose}{if \code{TRUE} show progress.
+       Ignored when multicore support is enabled and \code{ncores} > 1.
+       (logical)}
 }
 \value{
 The function returns an object of class \code{"rvgt.range.time.setup"}
@@ -77,8 +102,10 @@ For this purpose the running time returned by
 The scheduled sampling time for a particular combination of parameters
 is given by parameter \code{duration}. Notice that it must not be too
 small compared to the resolution of the system clock.
-The required sample size is then estimated in a sequence of tries where
-the sample size is increasing after each run.
+The required sample size is then estimated in a sequence of trials where
+the sample size is \emph{increased} after each run.
+(So the first guess of the marginal generation time should be
+rather too large than too small.)
 This iterative process is stopped if the total running time is close to
 \code{duration}.
 

@@ -43,9 +43,7 @@
 ##'                            duration = 0.01, gen.time = 1e-5)
 ##'
 ##' ## now run the test
-##' chisq <- rvgt.range.chisq(rdist = rbeta, dist.params = dp,
-##'                           n = 1e4, breaks = 100, qdist=qbeta,
-##'                           duration = 1, gen.time = mgt)
+##' chisq <- rvgt.range.chisq(gen.data = mgt, n = 1e4, breaks = 100, qdist=qbeta, duration = 1)
 ##'
 ##' ## print summary
 ##' summary(chisq)
@@ -56,20 +54,21 @@
 ##' @inheritParams rvgt.range.engine
 ##'
 ##' @param duration
-##'        maximal running time for drawing random sample.
+##'        maximal running time for drawing random sample. (numeric)
+##' 
 ##'        A test is not performed if sample size \code{n} times
-##'        marginal generation time (given by argument \code{gen.time})
+##'        marginal generation time (given by argument \code{gen.data})
 ##'        exceeds this value (numeric).
 ##' @param n
-##'        sample size for test (integer).
+##'        sample size for test. (integer)
 ##' @param breaks
 ##'        number of bins in histogram, i.e,
-##'        equidistributed break points for uniform scale
-##'        (integer).
+##'        equidistributed break points for uniform scale.
+##'        (integer)
 ##' @param qdist
-##'        quantile function for distribution (function).
+##'        quantile function for distribution. (function)
 ##' @param pdist
-##'        cumulative distribution function for distribution (function).
+##'        cumulative distribution function for distribution. (function)
 ##' 
 ## --------------------------------------------------------------------------
 ##'
@@ -85,9 +84,9 @@
 ##' 
 ## --------------------------------------------------------------------------
 
-rvgt.range.chisq <- function (rdist, dist.params, r.params=list(),
+rvgt.range.chisq <- function (gen.data, rdist, dist.params, r.params=list(),
                               n, breaks, qdist, pdist,
-                              duration=0.1, gen.time,
+                              duration=0.1,
                               ncores=NULL, timeout=Inf, verbose=FALSE) {
         ## ..................................................................
 
@@ -102,12 +101,12 @@ rvgt.range.chisq <- function (rdist, dist.params, r.params=list(),
         }
         breaks <- as.integer(breaks)
 
-        ## --- argument 'gen.time' must be of class "rvgt.range.time"
-        if (missing(gen.time)) {
-                stop ("Argument 'gen.time' is missing")
+        ## --- argument 'gen.data' must be of class "rvgt.range.time"
+        if (missing(gen.data)) {
+                stop ("Argument 'gen.data' is missing")
         }
-        if (! is(gen.time, "rvgt.range.time")) {
-                stop("Argument 'gen.time' must be of class \"rvgt.range.time\".")
+        if (! is(gen.data, "rvgt.range.time")) {
+                stop("Argument 'gen.data' must be of class \"rvgt.range.time\".")
         }
 
         ## --- quantile and distribution function
@@ -125,7 +124,8 @@ rvgt.range.chisq <- function (rdist, dist.params, r.params=list(),
         }
 
         ## --- run test engine
-        rvgt.range.engine(rdist = rdist,
+        rvgt.range.engine(gen.data = gen.data,
+                          rdist = rdist,
                           dist.params = dist.params,
                           r.params = r.params,
                           test.routine = .run.chisq,
@@ -136,7 +136,6 @@ rvgt.range.chisq <- function (rdist, dist.params, r.params=list(),
                                   qdist=qdist,
                                   pdist=pdist),
                           duration = duration,
-                          gen.time = gen.time,
                           ncores = ncores,
                           timeout = timeout,
                           timeout.val = NA_real_,
