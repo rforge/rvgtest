@@ -1,4 +1,9 @@
 
+Version 0.11.0: 2014-05-22
+
+	- internal: 
+          replaced package 'multicore' by package 'parallel' 
+
 Version 0.10.0: 2014-05-05
 
 	- rvgt.range.engine():

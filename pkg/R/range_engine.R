@@ -154,7 +154,7 @@
 ##' @author Josef Leydold \email{josef.leydold@@wu.ac.at}.
 ##'
 ##' Thanks to Simon Urbanek for helpful explanations of the low level
-##' functions of the \pkg{parallel}/\pkg{multicore} package.
+##' functions of the \pkg{parallel} package.
 ##' 
 ## --------------------------------------------------------------------------
 ##'
@@ -433,7 +433,7 @@ rvgt.range.engine <- function (gen.data=NULL,
                         ncores=1L
                 }
         }
-        if (timeout > 2^30) timeout <- 2^30  ## we cannot pass Inf to selectChildren
+        if (timeout > 2^30) timeout <- 2^15  ## we cannot pass Inf to selectChildren
 
         if (! is.numeric(timeout.val))
                 stop("Argument 'timeout.val' invalid.")
@@ -597,32 +597,12 @@ rvgt.range.engine <- function (gen.data=NULL,
 
 ## Remark:
 ## The author of this code gratefully thanks Simon Urbanek for helpful
-## explanations of the low level functions of the parallel/multicore package.
+## explanations of the low level functions of the parallel package.
 
 .run.engine.mc <- function (rdist, dist.params, r.params, emgt,
                             test.routine, test.params, duration,
                             ncores, timeout, timeout.val,
                             verbose) {
-
-        ## --- functions
-
-        ## Use (non-exported) functions from package 'parallel'.
-        ## Note, however, this does not work any more with R-devel (r65143)
-        ## my.mcparallel <- parallel::mcparallel
-        ## my.processID <- parallel:::processID
-        ## my.selectChildren <- parallel:::selectChildren
-        ## my.children <- parallel:::children
-        ## my.mckill <- parallel:::mckill
-        ## my.readChild <- parallel:::readChild
-
-        ## Use (exported) function from package 'multicore'.
-        ## Note, however, that this package is obsolete.
-        my.mcparallel <- multicore::mcparallel
-        my.processID <- multicore::processID
-        my.selectChildren <- multicore::selectChildren
-        my.children <- multicore::children
-        my.mckill <- multicore::kill
-        my.readChild <- multicore::readChild
 
 ## ..................................................................
         
@@ -667,7 +647,7 @@ rvgt.range.engine <- function (gen.data=NULL,
                         }
                         
                         ## start thread that performs a single test
-                        my.mcparallel(
+                        rvgt.mcparallel(
                           test.routine(rdist=rdist, dist.params=dp, r.params=rp,
                                        emgt=as.numeric(emgt[pos]),
                                        test.params=test.params, duration=duration,
@@ -676,13 +656,18 @@ rvgt.range.engine <- function (gen.data=NULL,
 
                 ## start all parallel threads
                 jobs <- lapply(run.idx, test.routine.mc)
-                jobIDs <- my.processID(jobs)
+                jobIDs <- rvgt.processID(jobs)
                 
                 ## get results from started jobs
                 while(TRUE) {
 
+                        ## We wait a little bit.
+                        ## Otherwise selectChildren() might return TRUE
+                        ## (i.e. timeout has reached) even if 'timeout' is a large.
+                        Sys.sleep(0.01)
+                    
                         ## check all children for available data
-                        s <- my.selectChildren(jobs,timeout)
+                        s <- rvgt.selectChildren(jobs,timeout)
 
                         if (is.null(s)) {
                                 ## no more childs
@@ -691,14 +676,14 @@ rvgt.range.engine <- function (gen.data=NULL,
                         
                         if (isTRUE(s)) {
                                 ## timeout --> kill all active jobs
-                                active.jobs <- my.children(jobs)
-                                my.mckill(active.jobs, tools::SIGTERM)
-                                for (ch in my.processID(active.jobs)) {
+                                active.jobs <- rvgt.children(jobs)
+                                rvgt.mckill(active.jobs, tools::SIGINT)
+                                for (ch in rvgt.processID(active.jobs)) {
                                         i <- run.idx[(which(jobIDs==ch)[1])]
                                         result[i] <- timeout.val
                                         finished[i] <- TRUE
                                         ## close pipe to (terminated) child process 
-                                        my.readChild(ch)
+                                        rvgt.readChild(ch)
                                 }
                                 if (verbose) cat("\t---> timeout!\n")
                                 break
@@ -712,7 +697,7 @@ rvgt.range.engine <- function (gen.data=NULL,
 
                         ## read all results
                         for (ch in s) {
-                                r <- my.readChild(ch)
+                                r <- rvgt.readChild(ch)
                                 i <- run.idx[(which(jobIDs==ch)[1])]
                                 if (is.raw(r)) {
                                         res <- unserialize(r)
