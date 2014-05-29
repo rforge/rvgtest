@@ -657,58 +657,61 @@ rvgt.range.engine <- function (gen.data=NULL,
                 ## start all parallel threads
                 jobs <- lapply(run.idx, test.routine.mc)
                 jobIDs <- rvgt.processID(jobs)
+                jobaborttime <- proc.time()[3] + timeout
                 
                 ## get results from started jobs
                 while(TRUE) {
 
-                        ## We wait a little bit.
-                        ## Otherwise selectChildren() might return TRUE
-                        ## (i.e. timeout has reached) even if 'timeout' is a large.
-                        Sys.sleep(0.01)
-                    
                         ## check all children for available data
-                        s <- rvgt.selectChildren(jobs,timeout)
+                        s <- rvgt.selectChildren(jobs, timeout=max(0, jobaborttime - proc.time()[3]))
 
                         if (is.null(s)) {
                                 ## no more childs
                                 break
                         }
-                        
-                        if (isTRUE(s)) {
-                                ## timeout --> kill all active jobs
-                                active.jobs <- rvgt.children(jobs)
-                                rvgt.mckill(active.jobs, tools::SIGINT)
-                                for (ch in rvgt.processID(active.jobs)) {
-                                        i <- run.idx[(which(jobIDs==ch)[1])]
-                                        result[i] <- timeout.val
-                                        finished[i] <- TRUE
-                                        ## close pipe to (terminated) child process 
-                                        rvgt.readChild(ch)
-                                }
-                                if (verbose) cat("\t---> timeout!\n")
-                                break
-                        }
 
-                        if (!is.integer(s)) {
-                                ## something is wrong --> retry
-                                ## Remark: Can this cause an infinite loop with too many childs?
-                                break
+                        if (is.logical(s)) {
+                            ## 3 Cases:
+                            ## (1) TRUE: timeout has been reached
+                            ## (2) TRUE: caught signal (before timeout has been reached)
+                            ##           (the help page for parallel:::selectChildren
+                            ##            is not accurate here.)
+                            ## (3) FALSE: an error has occured
+                            if (proc.time()[3] < jobaborttime) {
+                                ## Case (2) [ or maybe case (3) ]
+                                ## check again until we get data or timeout has been reached
+                                next
+                            }
+                            
+                            ## proc.time()[3] >= jobaborttime:
+                            ## Case (1): timeout --> kill all active jobs
+                            active.jobs <- rvgt.children(jobs)
+                            rvgt.mckill(active.jobs, tools::SIGINT)
+                            for (ch in rvgt.processID(active.jobs)) {
+                                i <- run.idx[(which(jobIDs==ch)[1])]
+                                result[i] <- timeout.val
+                                finished[i] <- TRUE
+                                ## close pipe to (terminated) child process 
+                                rvgt.readChild(ch)
+                            }
+                            if (verbose) cat("\t---> timeout!\n")
+                            break
                         }
 
                         ## read all results
                         for (ch in s) {
-                                r <- rvgt.readChild(ch)
-                                i <- run.idx[(which(jobIDs==ch)[1])]
-                                if (is.raw(r)) {
-                                        res <- unserialize(r)
-                                        if (! is.numeric(res)) {
-                                                if (verbose) cat("\t --> error!")
-                                                res <- NA_real_
-                                        }
-                                        result[i] <- res
-                                        finished[i] <- TRUE
-                                        if (verbose) cat("\n")
+                            r <- rvgt.readChild(ch)
+                            i <- run.idx[(which(jobIDs==ch)[1])]
+                            if (is.raw(r)) {
+                                res <- unserialize(r)
+                                if (! is.numeric(res)) {
+                                    if (verbose) cat("\t --> error!")
+                                    res <- NA_real_
                                 }
+                                result[i] <- res
+                                finished[i] <- TRUE
+                                if (verbose) cat("\n")
+                            }
                         }
                 }
         }
