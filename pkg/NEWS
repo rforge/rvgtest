@@ -1,4 +1,13 @@
 
+Version 0.14:   2014-06-11
+
+	- internal:
+	  get.subrange() has new logical argument 'asdouble'.
+	  If TRUE (the default) then integers are coerced to 
+	  doubles. The old behavior (available with "asdouble=FALSE") 
+	  was too confusing.
+
+
 Version 0.13:   2014-05-29
 
 	- removed revision number

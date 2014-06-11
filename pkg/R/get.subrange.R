@@ -21,7 +21,7 @@
 ##' The new object also is of class \code{"rvgt.range"} and 
 ##' corresponds to a test with the given subset of parameters.
 ##' This can be useful if one wants to \dQuote{zoom} into a region of interest,
-##' or if the number of dimensions have to be reduces (using \code{drop=TRUE})
+##' or if the number of dimensions have to be reduced (using \code{drop=TRUE})
 ##' in order to visualize the results.
 ##'
 ##' The submatrix corresponds to parameter values that are given by
@@ -72,12 +72,15 @@
 ##'                              shape2=c(0.1,1,10)),
 ##'                            duration = 0.01, gen.time = 1e-5)
 ##'
+##' ## extract an object where shape1 is 0.1
+##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=0.1))
+##' 
 ##' ## extract an object where shape1 is the second entry
-##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=2L))
+##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=2L), asdouble=FALSE)
 ##' 
 ##' ## extract an object where shape1 is the first and third entry
 ##' ## and shape2 has values 0.1 and 1
-##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=c(1L,3L), shape2=c(0.1,1)))
+##' rvgtest:::get.subrange(mgt, sub.params=list(shape1=c(1L,3L), shape2=c(0.1,1)), asdouble=FALSE)
 ##' 
 ##' ## extract an object where shape2 is in closed interval 0.1, 1
 ##' rvgtest:::get.subrange(mgt, sub.params=list(shape2.lim=c(0.1,1)))
@@ -100,6 +103,8 @@
 ##'        \code{.lim}.
 ##' @param drop
 ##'        if TRUE then dimensions with 1 entry are removed. (logical)
+##' @param asdouble
+##'        if TRUE then all numeric values are coerced into doubles. (logical)
 ##'
 ## --------------------------------------------------------------------------
 ##'
@@ -109,14 +114,23 @@
 ##' 
 ## --------------------------------------------------------------------------
 
-get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
+get.subrange <- function (obj, sub.params=list(), drop=TRUE, asdouble=TRUE) {
         ## ..................................................................
         
-        ## --- check object
+        ## --- check arguments
         
         if (missing(obj) || ! is(obj, "rvgt.range"))
                 stop("Argument 'obj' is missing or invalid.")
 
+        if (! is.list(sub.params))
+                stop("Argument 'sub.params' is invalid.")
+
+        if (!is.logical(drop))
+                stop("Argument 'drop' invalid.")
+        
+        if (!is.logical(asdouble))
+                stop("Argument 'asdouble' invalid.")
+        
         ## --- all indices of parameter lists
 
         params <- c(obj$dist.params, obj$r.params)
@@ -124,13 +138,13 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
 
         ## --- missing sub.params
 
-        if (identical(sub.params, list()))
-                sub.params <- idx.params
+        if (identical(sub.params, list())) {
+            if (!identical(drop,TRUE)) { return (obj) }
+            sub.params <- idx.params
+            asdouble <- FALSE
+        }
         
         ## --- subset of parameters
-
-        if (! is.list(sub.params))
-                stop("Argument 'sub.params' is invalid.")
 
         if (is.null(names(sub.params)) || "" %in% names(sub.params))
                 stop("Parameters in 'sub.params' must have names.")
@@ -151,21 +165,23 @@ get.subrange <- function (obj, sub.params=list(), drop=TRUE) {
                 ## get indices for particular parameter
                 if (isTRUE(str_detect(param.name, "\\.lim$"))) {
                         ## case: lower and uppper bound 
-                        if (! (is.numeric(param) && identical(length(param), 2L)))
+                        if (! (is.numeric(param) && identical(length(param), 2L)) ||
+                            (is.integer(param) && !identical(asdouble,TRUE)) )
                                 stop(paste("Argument 'sub.params$", param.name,
-                                           "' must be a pair of numerics.", sep=""))
+                                           "' must be a pair of doubles.", sep=""))
                         ## strip postfix '.lim'
                         param.name <- str_replace(param.name, "\\.lim$", "")
                         orig.param <- params[[param.name]]
                         ## get indices
                         iparam <- which(orig.param >= param[1] & orig.param <= param[2])
                         
-                } else if (is.integer(param)) {
+                } else if (is.integer(param) && !identical(asdouble, TRUE)) {
                         ## case: integer vector --> list of indices
                         iparam <- param
 
                 } else if (is.numeric(param)) {
                         ## case: numerics --> list of values
+                        ## (this also includes integers if asdouble is TRUE)
                         iparam <- floatmatch (param, orig.param, param.name)
                 } else {
                         stop(paste("Argument 'sub.params$", param.name,

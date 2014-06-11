@@ -27,18 +27,10 @@
 ##'
 ##' The entries of \code{sub.params} correspond to the parameters of the
 ##' distribution as given in argument \code{x}.
-##' Each member of this list is either
-##' \itemize{
-##'   \item
-##'   a list of indices given as a vector of type \code{"integer"}, or
-##'   \item
-##'   a list of values given as a vector of type \code{"double"}.
-##' }
 ##' Alternatively, a name in argument \code{sub.params} can also be one
 ##' of the names in \code{x$dist.params} or \code{x$r.params} with
 ##' suffix \code{.lim} appended and the corresponding entries must be
-##' pairs of type \code{"double"} for the lower and upper bound,
-##' resp., for the parameter values.
+##' pairs for the lower and upper bound, resp., for the parameter values.
 ##' 
 ##' Arguments \code{xscale}, \code{yscale}, and \code{zscale} allow to select
 ##' a particular scaling (\code{"linear"} or \code{"logarithmic"}) for the
@@ -75,12 +67,10 @@
 ##' ## Plot all samples, use logarithmic scale for parameter 'sd'
 ##' plot(samp, yscale="logarithmic")
 ##'
-##' ## Plot samples where 'sd' is the 5th entry (of 1:10).
-##' ## It is important that index 5 is given as integer 5L. 
-##' plot(samp, sub.params=list(sd=5L))
+##' ## Plot samples where 'sd' is 5.
+##' plot(samp, sub.params=list(sd=5))
 ##' 
-##' ## Plot samples where 'sd' is restricted to the 5th, 6th and 7th entry.
-##' ## Notice that 5:7 creates a vector of integers.
+##' ## Plot samples where 'sd' is restricted to 5, 6 and 7.
 ##' plot(samp, sub.params=list(sd=5:7))
 ##' 
 ##' ## Plot samples where 'mean' is between 7 and 9.
@@ -89,10 +79,6 @@
 ##' ## Notice that exact comparisons of floating point numbers can sometimes
 ##' ## have surprising results. So it is recommended to add some tolerance.
 ##' plot(samp, sub.params=list(mean.lim=c(6.99,9.01)))
-##'
-##' ## Plot samples where 'mean' equals 7
-##' ## (again we have to use a pair of numeric values).
-##' plot(samp, sub.params=list(mean=7))
 ##'
 ##' ## Zoom into the region with smalls values for 'mean' and 'sd'.
 ##' plot(samp, sub.params=list(mean.lim=c(0,5.01), sd.lim=c(0,5.01)))
@@ -104,11 +90,17 @@
 ## --------------------------------------------------------------------------
 ##'
 ##  Arguments:
-##' @inheritParams get.subrange
-##' 
 ##' @param x
 ##'        object of class \code{"rvgt.range"} to be plotted.
-##'
+##' @param sub.params
+##'        list that contains the subset of parameter values for the
+##'        distribution parameters or for additional parameters of the
+##'        random variate generator.
+##'        The named list entries must correspond to the names of the
+##'        parameters and must be numeric vectors.
+##'        Alternatively, lower and upper bounds for the parameter values
+##'        can be given as a pair of numeric values when the name of the
+##'        parameter is postfixed by \code{.lim}.
 ##' @param xscale
 ##'        type of scale used for first coordinate.
 ##' @param yscale
@@ -130,7 +122,7 @@ plot.rvgt.range <- function (x, sub.params=list(),
         ## ..................................................................
         
         ## --- maybe we only want to have a subset of parameter values 
-        obj <- get.subrange(x, sub.params, drop=TRUE)
+        obj <- get.subrange(x, sub.params, drop=TRUE, asdouble=TRUE)
 
         ## --- get number of dimensions
         dims <- length(dim(obj$data))

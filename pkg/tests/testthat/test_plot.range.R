@@ -20,7 +20,7 @@ test_that("[prr-101] calling plot.rvgt.range (dim=1)", {
                                  test.class="unittest"
                                  )
         plot(res, main="[prr-101] A")
-        plot(res, sub.params=list(alpha=c(30L:50L)), main="[prr-101] B")
+        plot(res, sub.params=list(alpha=30:50), main="[prr-101] B")
         plot(res, sub.params=list(alpha.lim=c(40,70)), main="[prr-101] C")
 
         plot(res, xscale="log", main="[prr-101] D")
@@ -62,10 +62,10 @@ test_that("[prr-104] calling plot.rvgt.range (dim=3)", {
                                  test.routine=trunit2,
                                  test.class="unittest"
                                  )
-        plot(res, sub.params=list(beta=3L), main="[prr-104] A")
+        plot(res, sub.params=list(beta=3), main="[prr-104] A")
         plot(res, sub.params=list(gamma.lim=c(1.5,2.5)), main="[prr-104] B")
 
-        plot(res, sub.params=list(alpha=5L,gamma.lim=c(1.5,2.5)), main="[prr-104] C")
+        plot(res, sub.params=list(alpha=5,gamma.lim=c(1.5,2.5)), main="[prr-104] C")
 })
         
 ## --------------------------------------------------------------------------
@@ -84,17 +84,17 @@ test_that("[prr-i01] calling plot.rvgt.range with invalid arguments", {
 
         msg <- "plot.rvgt.range\\(\\) handles arrays of order 1 or 2 only."
         expect_error(plot(res),  msg)
-        expect_error(plot(res, sub.params=list(alpha=1L,beta=3L,gamma=2L)),  msg)
+        expect_error(plot(res, sub.params=list(alpha=1,beta=7,gamma=13)),  msg)
 
         msg <- "'arg' must be NULL or a character vector"
-        expect_error(plot(res, sub.params=list(alpha=1L), xscale=1),  msg)
+        expect_error(plot(res, sub.params=list(alpha=1), xscale=1),  msg)
 
         msg <- "'arg' should be one of \"linear\", \"logarithmic\""
-        expect_error(plot(res, sub.params=list(alpha=1L), xscale="nix"),  msg)
-        expect_error(plot(res, sub.params=list(alpha=1L), yscale="nix"),  msg)
+        expect_error(plot(res, sub.params=list(alpha=1), xscale="nix"),  msg)
+        expect_error(plot(res, sub.params=list(alpha=1), yscale="nix"),  msg)
 
         msg <- "'arg' should be one of \"auto\", \"linear\", \"logarithmic\""
-        expect_error(plot(res, sub.params=list(alpha=1L), zscale="nix"),  msg)
+        expect_error(plot(res, sub.params=list(alpha=1), zscale="nix"),  msg)
 })
 
 ## Other tests are implicitly included in test_get.subrange.R.

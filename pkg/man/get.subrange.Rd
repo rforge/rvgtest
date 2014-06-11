@@ -4,7 +4,7 @@
 \title{Extract submatrix from an object of class "rvgt.range"
 (internal function)}
 \usage{
-get.subrange(obj, sub.params = list(), drop = TRUE)
+get.subrange(obj, sub.params = list(), drop = TRUE, asdouble = TRUE)
 }
 \arguments{
 \item{obj}{object of class \code{"rvgt.range"}.}
@@ -21,6 +21,8 @@ doubles when the name of the parameter is postfixed by
 \code{.lim}.}
 
 \item{drop}{if TRUE then dimensions with 1 entry are removed. (logical)}
+
+\item{asdouble}{if TRUE then all numeric values are coerced into doubles. (logical)}
 }
 \value{
 An object of class \code{"rvgt.range"} that contains the subset
@@ -38,7 +40,7 @@ class \code{"rvgt.range"}.
 The new object also is of class \code{"rvgt.range"} and
 corresponds to a test with the given subset of parameters.
 This can be useful if one wants to \dQuote{zoom} into a region of interest,
-or if the number of dimensions have to be reduces (using \code{drop=TRUE})
+or if the number of dimensions have to be reduced (using \code{drop=TRUE})
 in order to visualize the results.
 
 The submatrix corresponds to parameter values that are given by
@@ -75,12 +77,15 @@ mgt <- rvgt.range.marginal(rdist = rbeta,
                              shape2=c(0.1,1,10)),
                            duration = 0.01, gen.time = 1e-5)
 
+## extract an object where shape1 is 0.1
+rvgtest:::get.subrange(mgt, sub.params=list(shape1=0.1))
+
 ## extract an object where shape1 is the second entry
-rvgtest:::get.subrange(mgt, sub.params=list(shape1=2L))
+rvgtest:::get.subrange(mgt, sub.params=list(shape1=2L), asdouble=FALSE)
 
 ## extract an object where shape1 is the first and third entry
 ## and shape2 has values 0.1 and 1
-rvgtest:::get.subrange(mgt, sub.params=list(shape1=c(1L,3L), shape2=c(0.1,1)))
+rvgtest:::get.subrange(mgt, sub.params=list(shape1=c(1L,3L), shape2=c(0.1,1)), asdouble=FALSE)
 
 ## extract an object where shape2 is in closed interval 0.1, 1
 rvgtest:::get.subrange(mgt, sub.params=list(shape2.lim=c(0.1,1)))

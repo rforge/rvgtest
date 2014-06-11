@@ -65,12 +65,22 @@ test_that("[gsr-103] calling get.subrange", {
         res1$started <- NA
         res1$runtime <- NA
 
-        res1f <- get.subrange(res, sub.params=list(gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
-        expect_identical(res1, res1f)
+        res1ff <- get.subrange(res, sub.params=list(gamma.lim=c(15.0,18.0),beta=c(1L,3L)),
+                              drop=FALSE, asdouble=FALSE)
+        expect_identical(res1, res1ff)
 
-        res1t <- get.subrange(res, sub.params=list(gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
+        res1ft <- get.subrange(res, sub.params=list(gamma.lim=c(15.0,18.0),beta=c(3L,7L)),
+                              drop=FALSE) ## asdouble=TRUE
+        expect_identical(res1, res1ft)
+
+        res1tf <- get.subrange(res, sub.params=list(gamma.lim=c(15.0,18.0),beta=c(1L,3L)),
+                              drop=TRUE, asdouble=FALSE)
         res1$data <- res1$data[,,,drop=TRUE]
-        expect_identical(res1, res1t)
+        expect_identical(res1, res1tf)
+
+        res1tt <- get.subrange(res, sub.params=list(gamma.lim=c(15.0,18.0),beta=c(3L,7L)),
+                              drop=TRUE) ## asdouble=TRUE
+        expect_identical(res1, res1tt)
 })
 
 test_that("[gsr-104] calling get.subrange", {
@@ -93,10 +103,12 @@ test_that("[gsr-104] calling get.subrange", {
         res1$started <- NA
         res1$runtime <- NA
 
-        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
+        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)),
+                              drop=FALSE, asdouble=FALSE)
         expect_identical(res1, res1f)
 
-        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
+        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)),
+                              drop=TRUE, asdouble=FALSE)
         res1$data <- res1$data[,,,drop=TRUE]
         dim(res1$data) <- 2
         dimnames(res1$data) <- list(beta=c(3,7))
@@ -127,10 +139,12 @@ test_that("[gsr-114] calling get.subrange", {
         res1$started <- NA
         res1$runtime <- NA
 
-        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=FALSE)
+        res1f <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)),
+                              drop=FALSE, asdouble=FALSE)
         expect_identical(res1, res1f)
 
-        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)), drop=TRUE)
+        res1t <- get.subrange(res, sub.params=list(alpha=1L,gamma.lim=c(15.0,18.0),beta=c(1L,3L)),
+                              drop=TRUE, asdouble=FALSE)
         res1$data <- res1$data[,,,drop=TRUE]
         dim(res1$data) <- 2
         dimnames(res1$data) <- list(beta=c(3,7))
@@ -161,10 +175,12 @@ test_that("[gsr-201] calling get.subrange", {
         res1$started <- NA
         res1$runtime <- NA
 
-        res1f <- get.subrange(res, sub.params=list(alpha=c(2),gamma=c(13,19),beta=c(1L,3L)), drop=FALSE)
+        res1f <- get.subrange(res, sub.params=list(alpha=c(2),gamma=c(13,19),beta=c(1L,3L)),
+                              drop=FALSE, asdouble=FALSE)
         expect_identical(res1, res1f)
 
-        res1t <- get.subrange(res, sub.params=list(alpha=c(2),gamma=c(13,19),beta=c(1L,3L)), drop=TRUE)
+        res1t <- get.subrange(res, sub.params=list(alpha=c(2),gamma=c(13,19),beta=c(1L,3L)),
+                              drop=TRUE, asdouble=FALSE)
         res1$data <- res1$data[,,,drop=TRUE]
         expect_identical(res1, res1t)
 })
@@ -181,7 +197,22 @@ test_that("[gsr-i01] calling get.subrange with invalid arguments: obj", {
         expect_error(get.subrange(obj=1, sub.params=list(a=1)),  msg)
 })
 
-test_that("[gsr-i02] calling get.subrange with invalid arguments: sub.params", {
+test_that("[gsr-i02] calling get.subrange with invalid arguments: drop, asdouble", {
+    dp <- list(alpha=c(1,2), beta=c(5), gamma=c(11,13,17,19))
+    res <- rvgt.range.engine(rdist=rnorm,
+                             dist.params=dp,
+                             test.routine=trunit,
+                             test.class="unittest"
+                             )
+
+    msg <- "Argument 'drop' invalid."
+    expect_error(get.subrange(obj=res, sub.params=list(alpha=1), drop=1),  msg)
+
+    msg <- "Argument 'asdouble' invalid."
+    expect_error(get.subrange(obj=res, sub.params=list(alpha=1), asdouble=1),  msg)
+})
+
+test_that("[gsr-i03] calling get.subrange with invalid arguments: sub.params", {
         dp <- list(alpha=c(1,2), beta=c(3,5,7), gamma=c(11,13,17,19))
         rp <- list(delta=c(23,29))
         res <- rvgt.range.engine(rdist=rnorm,
@@ -195,25 +226,26 @@ test_that("[gsr-i02] calling get.subrange with invalid arguments: sub.params", {
         expect_error(get.subrange(res, sub.params=1),  msg)
 
         msg <- "Parameters in 'sub.params' must have names."
-        expect_error(get.subrange(res, sub.params=list(1:2)),  msg)
-        expect_error(get.subrange(res, sub.params=list(alpha=1:2, 3:4)),  msg)
+        expect_error(get.subrange(res, sub.params=list(1:2), asdouble=FALSE),  msg)
+        expect_error(get.subrange(res, sub.params=list(alpha=1:2, 3:4), asdouble=FALSE),  msg)
 
         msg <- "Parameter names in 'sub.params' must occur in 'obj'."
-        expect_error(get.subrange(res, sub.params=list(alpha=1:2, omega=1:2)),  msg)
+        expect_error(get.subrange(res, sub.params=list(alpha=1:2, omega=1:2), asdouble=FALSE),  msg)
 
         msg <- "Argument 'sub.params\\$alpha' has invalid type"
         expect_error(get.subrange(res, sub.params=list(alpha="a")),  msg)
 
         msg <- "Argument 'sub.params\\$alpha' out of range"
-        expect_error(get.subrange(res, sub.params=list(alpha=0L)),  msg)
-        expect_error(get.subrange(res, sub.params=list(alpha=c(1L,2L,3L))),  msg)
+        expect_error(get.subrange(res, sub.params=list(alpha=0L), asdouble=FALSE),  msg)
+        expect_error(get.subrange(res, sub.params=list(alpha=c(1L,2L,3L)), asdouble=FALSE),  msg)
 
-        msg <- "Argument 'sub.params\\$gamma\\.lim' must be a pair of numerics."
+        msg <- "Argument 'sub.params\\$gamma\\.lim' must be a pair of doubles."
         expect_error(get.subrange(res, sub.params=list(gamma.lim=1.0)),  msg)
         expect_error(get.subrange(res, sub.params=list(gamma.lim=c(1.0,2.0,3.0))),  msg)
         expect_error(get.subrange(res, sub.params=list(gamma.lim=c("a","b"))),  msg)
+        expect_error(get.subrange(res, sub.params=list(gamma.lim=c(10L,15L)), asdouble=FALSE),  msg)
 
-        msg <- "Argument 'sub.params\\$delta\\.lim' must be a pair of numerics."
+        msg <- "Argument 'sub.params\\$delta\\.lim' must be a pair of doubles."
         expect_error(get.subrange(res, sub.params=list(delta.lim=1.0)),  msg)
         expect_error(get.subrange(res, sub.params=list(delta.lim=c(1.0,2.0,3.0))),  msg)
         expect_error(get.subrange(res, sub.params=list(delta.lim=c("a","b"))),  msg)
